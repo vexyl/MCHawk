@@ -1,0 +1,69 @@
+#ifndef CLIENT_H_
+#define CLIENT_H_
+
+#include <string.h>
+#include <assert.h>
+
+#include <string>
+
+#include "Network/ClientStream.hpp"
+#include "Network/Packet.hpp"
+#include "Map.hpp"
+#include "Position.hpp"
+
+class Client {
+public:
+	ClientStream stream;
+	bool active;
+	bool authed;
+
+	Client();
+
+	std::string GetIpString();
+	std::string GetName() { return m_name; }
+	std::string GetChatName() { return m_chatName; }
+	int8_t GetPid() { return m_pid; }
+	uint8_t GetUserType() { return m_userType; }
+
+	Position GetPosition() { return m_position; }
+	uint8_t GetYaw() { return m_yaw; }
+	uint8_t GetPitch() { return m_pitch; }
+	std::string GetWorldName() { return m_worldName; }
+
+	bool IsActive() { return active; }
+
+	void SetName(std::string name);
+	void SetChatName(std::string name) { m_chatName = name; }
+	void SetPositionOrientation(Position position, uint8_t yaw, uint8_t pitch);
+	void SetUserType(uint8_t userType) { m_userType = userType; }
+	void SetChatMute(int32_t chatMuteTime=0);
+	void SetWorldName(std::string worldName) { m_worldName = worldName; }
+
+	bool IsChatMuted();
+
+	void QueuePacket(Packet& packet);
+
+	void ProcessPacketsInQueue();
+
+private:
+	static int8_t pid;
+
+	std::string m_name;
+	std::string m_chatName;
+	std::string m_ipString;
+	uint8_t m_pid;
+
+	uint8_t m_userType;
+	Position m_position;
+	uint8_t m_yaw, m_pitch;
+
+	std::vector<Packet*> m_packetQueue;
+
+	sf::Clock m_chatMuteClock;
+	bool m_chatMuted;
+	int32_t m_chatMuteTime;
+
+	std::string m_worldName;
+};
+
+#endif // CLIENT_H_
