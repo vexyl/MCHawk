@@ -17,9 +17,7 @@ public:
 		Server* server = Server::GetInstance();
 		std::vector<ClientInfo> infoList = server->GetAllClientInfo();
 
-		SendMessage(sender, "&ePlayer list:");
-
-		std::string message = "  &e";
+		std::string message = "&ePlayer list: ";
 		int size = (int)infoList.size();
 		for (int i = 0; i < size; ++i) {
 			message += infoList[i].name + "(" + infoList[i].worldName + ")";

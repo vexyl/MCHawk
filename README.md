@@ -28,4 +28,4 @@ make
 
 the binary will output to *./bin/Release*
 
-The release version sends a heartbeat to classicube by default. Edit *./bin/Release/config.ini* to change it.
+The release version sends a heartbeat request to http://www.classicube.net by default. Edit *./bin/Release/config.ini* to change it.

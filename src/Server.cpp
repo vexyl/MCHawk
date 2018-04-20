@@ -39,7 +39,6 @@
 
 
 #include "Commands/HelpCommand.hpp"
-#include "Commands/InfoCommand.hpp"
 #include "Commands/TeleportCommand.hpp"
 #include "Commands/SummonCommand.hpp"
 #include "Commands/BillNyeCommand.hpp"
@@ -67,7 +66,6 @@ Server::Server()
 	m_serverVerifyNames = false;
 
 	m_commandHandler.Register("help", new HelpCommand);
-	m_commandHandler.Register("info", new InfoCommand);
 	m_commandHandler.Register("tp", new TeleportCommand);
 	m_commandHandler.Register("summon", new SummonCommand);
 	m_commandHandler.Register("billnye", new BillNyeCommand);
@@ -257,7 +255,7 @@ void Server::OnAuth(Client* client, struct cauthp clientAuth)
 
 	world->AddClient(client);
 
-	SendMessage(client, "&eWelcome.");
+	SendMessage(client, "&9https://github.com/vexyl/MCHawk");
 	SendMessage(client, "&eTry /goto freebuild to get started.");
 }
 
