@@ -49,6 +49,7 @@
 #include "Commands/KickCommand.hpp"
 #include "Commands/SaveCommand.hpp"
 #include "Commands/AliasCommand.hpp"
+#include "Commands/WhoCommand.hpp"
 #include "Commands/WhoIsCommand.hpp"
 #include "Commands/GotoCommand.hpp"
 #include "Commands/WorldCommand.hpp"
@@ -76,6 +77,7 @@ Server::Server()
 	m_commandHandler.Register("kick", new KickCommand);
 	m_commandHandler.Register("save", new SaveCommand);
 	m_commandHandler.Register("alias", new AliasCommand);
+	m_commandHandler.Register("who", new WhoCommand);
 	m_commandHandler.Register("whois", new WhoIsCommand);
 	m_commandHandler.Register("goto", new GotoCommand);
 	m_commandHandler.Register("world", new WorldCommand);
@@ -543,6 +545,22 @@ Client* Server::GetClientByName(std::string name, bool exact)
 	}
 
 	return client;
+}
+
+std::vector<ClientInfo> Server::GetAllClientInfo() const
+{
+	std::vector<ClientInfo> infoList;
+
+	for (auto& obj : m_clients) {
+		ClientInfo info;
+		info.name = obj->GetName();
+		info.worldName = obj->GetWorldName();
+		info.ip = obj->GetIpString();
+
+		infoList.push_back(info);
+	}
+
+	return infoList;
 }
 
 bool Server::IsOperator(std::string name)

@@ -16,6 +16,12 @@
 #include "Position.hpp"
 #include "CommandHandler.hpp"
 
+struct ClientInfo {
+	std::string name;
+	std::string worldName;
+	std::string ip;
+};
+
 class Server {
 public:
 	Server();
@@ -48,7 +54,9 @@ public:
 	void SendSystemMessage(Client* client, std::string message);
 	void SendSystemWideMessage(std::string message);
 	void BroadcastMessage(std::string message);
+
 	Client* GetClientByName(std::string name, bool exact=true);
+	std::vector<ClientInfo> GetAllClientInfo() const;
 
 	bool IsOperator(std::string name);
 
