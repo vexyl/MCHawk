@@ -1,8 +1,8 @@
 # MCHawk
 
-This is a minecraft classic server written in C++.
+This is a Minecraft classic server written in C++.
 
-Libraries: SFML, Boost, openssl, and zlib
+Libraries: SFML, Boost, OpenSSL, and zlib
 
 ## Compile
 
@@ -20,12 +20,12 @@ pacman -S gcc make sfml boost openssl zlib
 apt-get install g++ make libsfml-dev libboost-all-dev libssl-dev libz-dev
 ```
 
-and then `cd` into source directory run
+and then `cd` into the source directory and run
 
 ```
 make
 ```
 
-the binary will output in *./bin/Release*
+the binary will output to *./bin/Release*
 
 The release version sends a heartbeat to classicube by default. Edit *./bin/Release/config.ini* to change it.
