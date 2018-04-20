@@ -25,16 +25,24 @@ HEADERS = \
 	./src/Utils/Utils.hpp \
 	./src/Commands/*.hpp
 
+TARGET = MCHawk
 LIBS = -lsfml-system -lsfml-network -lz -lboost_system -lcrypto
 OPTS = -Wall -Wextra -pedantic-errors -Wfatal-errors -std=c++11
 FLAGS = $(LIBS) $(OPTS)
-OUT = ./bin/Release/sfserver
+OUT = ./bin/Release/$(TARGET)
+DEBUG = ./bin/Debug/$(TARGET)
 CC = g++
 
 default: $(OUT)
 
+debug: $(DEBUG)
+
 $(OUT): $(SRC) $(HEADERS)
 	$(CC) -o $(OUT) $(SRC) $(FLAGS)
 
+$(DEBUG): $(SRC) $(HEADERS)
+	$(CC) -o $(DEBUG) $(SRC) $(FLAGS)
+
 clean:
 	rm $(OUT) -f
+	rm $(DEBUG) -f

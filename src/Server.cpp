@@ -81,6 +81,14 @@ Server::Server()
 	m_commandHandler.Register("world", new WorldCommand);
 }
 
+Server::~Server()
+{
+	for (auto& obj : m_clients) {
+		delete obj->stream.socket;
+		delete obj;
+	}
+}
+
 void Server::Init()
 {
 	// Turn off SFML errors
@@ -151,8 +159,6 @@ void Server::Init()
 	w->SetOption("build", "false");
 	w->SetOption("autosave", "false");
 	AddWorld(w);
-
-	std::cout << "salt=" << m_salt << std::endl;
 }
 
 void Server::OnConnect(sf::TcpSocket *sock)
@@ -185,7 +191,7 @@ void Server::OnAuth(Client* client, struct cauthp clientAuth)
 		uint32_t ip = sf::IpAddress(ipString).toInteger();
 		uint32_t netmask = 0xffffff00;
 
-		bool isLocalPlayer = ((ipString == "127.0.0.1" || ((localIp & netmask) == (ip & netmask))) ? 1 : 0);
+		bool isLocalPlayer = (ipString == "127.0.0.1" || ((localIp & netmask) == (ip & netmask)));
 
 		if (isLocalPlayer) {
 			LOG(INFO, "Bypassing name verification for local player %s", name.c_str());
@@ -376,7 +382,6 @@ void Server::Tick()
 	for (auto& obj : m_worlds)
 		obj.second->Tick();
 
-	// FIXME: no matching free
 	// Accept new sockets
 	sf::TcpSocket* socket = new sf::TcpSocket();
 

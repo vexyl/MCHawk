@@ -23,5 +23,7 @@ int main()
 		}
 	}
 
+	delete server;
+
 	return 0;
 }

@@ -19,6 +19,7 @@
 class Server {
 public:
 	Server();
+	~Server();
 
 	static Server* GetInstance()
 	{
