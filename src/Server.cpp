@@ -22,7 +22,12 @@
 
 #include "Server.hpp"
 
-#include <arpa/inet.h>
+#ifdef __linux__
+	#include <arpa/inet.h>
+#elif _WIN32
+	#include <winsock2.h>
+#endif
+
 #include <openssl/md5.h>
 
 #include <iostream>
@@ -65,20 +70,20 @@ Server::Server()
 	m_serverPublic = false;
 	m_serverVerifyNames = false;
 
-	m_commandHandler.Register("help", new HelpCommand);
+	m_commandHandler.Register("help", new HelpCommand, "h");
 	m_commandHandler.Register("tp", new TeleportCommand);
 	m_commandHandler.Register("summon", new SummonCommand);
 	m_commandHandler.Register("billnye", new BillNyeCommand);
-	m_commandHandler.Register("me", new EmoteCommand);
-	m_commandHandler.Register("pm", new PmCommand);
+	m_commandHandler.Register("me", new EmoteCommand, "emote");
+	m_commandHandler.Register("pm", new PmCommand, "msg");
 	m_commandHandler.Register("op", new OpCommand);
 	m_commandHandler.Register("kick", new KickCommand);
 	m_commandHandler.Register("save", new SaveCommand);
-	m_commandHandler.Register("alias", new AliasCommand);
-	m_commandHandler.Register("who", new WhoCommand);
-	m_commandHandler.Register("whois", new WhoIsCommand);
-	m_commandHandler.Register("goto", new GotoCommand);
-	m_commandHandler.Register("world", new WorldCommand);
+	m_commandHandler.Register("alias", new AliasCommand, "name");
+	m_commandHandler.Register("who", new WhoCommand, "players list");
+	m_commandHandler.Register("whois", new WhoIsCommand, "info");
+	m_commandHandler.Register("goto", new GotoCommand, "go g");
+	m_commandHandler.Register("world", new WorldCommand, "w map");
 }
 
 Server::~Server()

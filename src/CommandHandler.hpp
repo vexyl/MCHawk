@@ -18,22 +18,26 @@ public:
 	virtual unsigned int GetPermissionLevel() = 0;
 };
 
+typedef std::map<std::string, ICommand*> CommandMap;
+typedef std::map<std::string, std::string> AliasMap;
+
 class CommandHandler {
 public:
 	CommandHandler() {}
 
 	virtual ~CommandHandler();
 
-	typedef std::map<const std::string, ICommand*> CommandMap;
+	typedef std::map<std::string, ICommand*> CommandMap;
 
 	const CommandMap& GetCommandList() const { return m_commands; }
 
-	void Register(const std::string name, ICommand* command);
+	void Register(std::string name, ICommand* command, std::string aliases="");
 	void Execute(Client* sender, std::string name, const CommandArgs& args);
 	void Handle(Client* sender, std::string message);
 
 private:
-	std::map<const std::string, ICommand*> m_commands;
+	std::map<std::string, ICommand*> m_commands;
+	std::map<std::string, std::string> m_aliases;
 };
 
 #endif // COMMANDHANDLER_H_
