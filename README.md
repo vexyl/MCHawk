@@ -30,13 +30,9 @@ the binary will output to *./bin/Release*
 
 **Windows**
 
-First, clone the win32 git repo
+First, download the project files and dependencies from [Dropbox](https://www.dropbox.com/s/9lultfjwq4362j6/MCHawk_win32.zip?dl=0)
 
-```
-git clone https://github.com/vexyl/MCHawk_win32
-```
-
-Place the MCHawk_win32 folder into MCHawk's project folder and rename it to win32.
+Extract MCHawk_win32.zip into MCHawk's project folder. It should look like *MCHawk/win32*.
 
 Open the VS2017 project *MCHawk/win32/MCHawk.sln* and set the configuration to Release x86.
 
