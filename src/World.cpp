@@ -66,6 +66,15 @@ void World::SetOption(std::string option, std::string value)
 	m_options[option] = value;
 }
 
+std::vector<std::string> World::GetOptionNames()
+{
+	std::vector<std::string> options;
+
+	for (auto& option : m_options)
+		options.push_back(option.first);
+
+	return options;
+}
 std::string World::GetOption(std::string option)
 {
 	return m_options[option];

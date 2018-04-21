@@ -75,12 +75,38 @@ public:
 				return;
 			}
 
-			if (args.size() < 3) {
-				SendMessage(sender, "&c/world set <option> <value>");
+			World *w = server->GetWorld(sender->GetWorldName());
+
+			if (args.size() < 2) {
+				std::vector<std::string> options = w->GetOptionNames();
+				std::string message = "&eWorld options: ";
+
+				int size = (int)options.size();
+
+				if (size == 0) {
+					SendMessage(sender, "No options");
+					return;
+				}
+
+				for (int i = 0; i < size; ++i) {
+					message += options[i];
+					if (i < size - 1)
+						message += ", ";
+				}
+
+				Server::SendWrappedMessage(sender, message);
+
 				return;
 			}
 
 			std::string option = args[1];
+
+			if (args.size() == 2) {
+				std::string value = w->GetOption(option);
+				SendMessage(sender, "&e" + option + "=" + value);
+				return;
+			}
+
 			std::string value = args[2];
 
 			// FIXME: Temporary
@@ -95,7 +121,6 @@ public:
 				return;
 			}
 
-			World *w = server->GetWorld(sender->GetWorldName());
 			w->SetOption(option, value);
 
 			SendMessage(sender, "&eWorld option " + option + "=" + value);

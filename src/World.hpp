@@ -26,6 +26,7 @@ public:
 	void SetSpawnPosition(Position spawnPosition);
 	void SetOption(std::string option, std::string value);
 
+	std::vector<std::string> GetOptionNames();
 	std::string GetOption(std::string option);
 
 	void Tick();
