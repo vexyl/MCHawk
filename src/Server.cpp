@@ -114,23 +114,23 @@ void Server::Init()
 		m_serverVerifyNames = pt.get<bool>("Server.verify_names");
 		debug = pt.get<bool>("Server.debug");
 	} catch (std::runtime_error& e) {
-		LOG(WARNING, "%s", e.what());
+		LOG(LogLevel::kWarning, "%s", e.what());
 	}
 
 	if (!debug)
 		Logger::GetLogger()->SetVerbosityLevel(VerbosityLevel::kQuiet);
 
 	if (m_listener.listen(m_port) != sf::Socket::Done) {
-		LOG(ERROR, "Failed to listen on port %d", m_port);
+		LOG(LogLevel::kError, "Failed to listen on port %d", m_port);
 		exit(1);
 	}
 
 	m_listener.setBlocking(false);
 
-	LOG(INFO, "Server initialized and listening on port %d", m_port);
+	LOG(LogLevel::kInfo, "Server initialized and listening on port %d", m_port);
 
 	if (!m_serverVerifyNames)
-		LOG(WARNING, "Verify names is turned off! This is NOT secure and disabling it should only be necessary during server tests. After that, TURN IT BACK ON.");
+		LOG(LogLevel::kWarning, "Verify names is turned off! This is NOT secure and disabling it should only be necessary during server tests. After that, TURN IT BACK ON.");
 
 	m_salt = Utils::GetRandomSalt();
 
@@ -176,7 +176,7 @@ void Server::OnConnect(sf::TcpSocket *sock)
 
 	m_clients.push_back(client);
 
-	LOG(DEBUG, "Client connected (%s)", client->GetIpString().c_str());
+	LOG(LogLevel::kDebug, "Client connected (%s)", client->GetIpString().c_str());
 }
 
 void Server::OnAuth(Client* client, struct cauthp clientAuth)
@@ -199,7 +199,7 @@ void Server::OnAuth(Client* client, struct cauthp clientAuth)
 		bool isLocalPlayer = (ipString == "127.0.0.1" || ((localIp & netmask) == (ip & netmask)));
 
 		if (isLocalPlayer) {
-			LOG(INFO, "Bypassing name verification for local player %s", name.c_str());
+			LOG(LogLevel::kInfo, "Bypassing name verification for local player %s", name.c_str());
 		} else {
 			std::string saltName = m_salt + name;
 			unsigned char result[MD5_DIGEST_LENGTH];
@@ -214,7 +214,7 @@ void Server::OnAuth(Client* client, struct cauthp clientAuth)
 				sprintf(&mdString[i*2], "%02x", (unsigned int)result[i]);
 
 			if (strcmp(mdString, key.c_str()) != 0) {
-				LOG(DEBUG, "Refusing player %s (sent invalid key)", name.c_str());
+				LOG(LogLevel::kDebug, "Refusing player %s (sent invalid key)", name.c_str());
 				KickClient(client, "Invalid key");
 				return;
 			}
@@ -227,7 +227,7 @@ void Server::OnAuth(Client* client, struct cauthp clientAuth)
 
 	// Won't refuse client if replacing ghost player (see checkClient above)
 	if (m_numClients >= m_maxClients && checkClient == nullptr) {
-		LOG(DEBUG, "Refusing player %s (server is full)", name.c_str());
+		LOG(LogLevel::kDebug, "Refusing player %s (server is full)", name.c_str());
 		KickClient(client, "Server is full");
 		return;
 	}
@@ -243,10 +243,10 @@ void Server::OnAuth(Client* client, struct cauthp clientAuth)
 	if (IsOperator(name)) {
 		userType = 0x64;
 		BroadcastMessage("&e" + name + " joined the game");
-		LOG(INFO, "Operator %s (%s) authenticated", name.c_str(), ipString.c_str());
+		LOG(LogLevel::kInfo, "Operator %s (%s) authenticated", name.c_str(), ipString.c_str());
 	} else {
 		BroadcastMessage("&e" + name + " joined the game");
-		LOG(INFO, "Player %s (%s) authenticated", name.c_str(), ipString.c_str());
+		LOG(LogLevel::kInfo, "Player %s (%s) authenticated", name.c_str(), ipString.c_str());
 	}
 
 	client->SetUserType(userType);
@@ -274,13 +274,13 @@ void Server::OnMessage(Client* client, struct cmsgp clientMsg)
 
 	// Chat mute check--IsChatMuted() unmutes if timer expires
 	if (client->IsChatMuted()) {
-		LOG(INFO, "[Muted (%s)] %s", name.c_str(), message.c_str());
+		LOG(LogLevel::kInfo, "[Muted (%s)] %s", name.c_str(), message.c_str());
 		return;
 	}
 
 	// Is it a command or a chat message?
 	if (message.at(0) == '/') {
-		LOG(INFO, "[Command (%s)] %s", name.c_str(), message.c_str());
+		LOG(LogLevel::kInfo, "[Command (%s)] %s", name.c_str(), message.c_str());
 
 		// Prevents command spam/ClassicalSharp sending multiple lines on a command
 		client->SetChatMute(1000); // mutes for 1 second
@@ -295,7 +295,7 @@ void Server::OnMessage(Client* client, struct cmsgp clientMsg)
 		m_commandHandler.Handle(client, command);
 	} else {
 		// Done before message is modified for colors
-		LOG(INFO, "[BROADCAST] %s: %s", name.c_str(), message.c_str());
+		LOG(LogLevel::kInfo, "[BROADCAST] %s: %s", name.c_str(), message.c_str());
 
 		// Name colors for normal/op (temporary until plugins are implemented)
 		if (client->GetUserType() > 0)
@@ -332,7 +332,7 @@ void Server::HandlePacket(Client* client, uint8_t opcode)
 			if (clientAuth.Read(stream))
 				OnAuth(client, clientAuth);
 		} else {
-			LOG(DEBUG, "Dropped unauthorized client (%s)", client->GetIpString().c_str());
+			LOG(LogLevel::kDebug, "Dropped unauthorized client (%s)", client->GetIpString().c_str());
 			client->active = false;
 		}
 
@@ -369,7 +369,7 @@ void Server::HandlePacket(Client* client, uint8_t opcode)
 		break;
 	}
 	default:
-		LOG(WARNING, "Unknown opcode 0x%x from client (%s)", opcode, client->GetIpString().c_str());
+		LOG(LogLevel::kWarning, "Unknown opcode 0x%x from client (%s)", opcode, client->GetIpString().c_str());
 		KickClient(client, "Unknown opcode received");
 		break;
 	}
@@ -423,14 +423,14 @@ void Server::Tick()
 			it = m_clients.erase(it);
 
 			if (authed) {
-				LOG(INFO, "Player %s disconnected (%s)", name.c_str(), ipString.c_str());
+				LOG(LogLevel::kInfo, "Player %s disconnected (%s)", name.c_str(), ipString.c_str());
 				BroadcastMessage("&ePlayer " + name + " left the game.");
 				world->RemoveClient(pid);
 
 				if (m_numClients > 0)
 					m_numClients--;
 			} else {
-				LOG(INFO, "Client disconnected (%s)", ipString.c_str());
+				LOG(LogLevel::kInfo, "Client disconnected (%s)", ipString.c_str());
 			}
 		} else {
 			++it;
@@ -462,7 +462,7 @@ void Server::SendHeartbeat()
 	sf::Http::Response response = http.sendRequest(request);
 
 	if (response.getStatus() != sf::Http::Response::Status::Ok)
-		LOG(WARNING, "Failed to send heartbeat");
+		LOG(LogLevel::kWarning, "Failed to send heartbeat");
 }
 
 ///////////////////////////////////
@@ -480,9 +480,9 @@ void Server::KickClient(Client* client, std::string reason)
 	client->active = false;
 
 	if (client->authed) {
-		LOG(INFO, "Kicked player %s (%s | %s)", client->GetName().c_str(), client->GetIpString().c_str(), (reason.empty() ? "None" : reason.c_str()));
+		LOG(LogLevel::kInfo, "Kicked player %s (%s | %s)", client->GetName().c_str(), client->GetIpString().c_str(), (reason.empty() ? "None" : reason.c_str()));
 	} else {
-		LOG(INFO, "Kicked unauthorized player (%s | %s)", client->GetIpString().c_str(), (reason.empty() ? "None" : reason.c_str()));
+		LOG(LogLevel::kInfo, "Kicked unauthorized player (%s | %s)", client->GetIpString().c_str(), (reason.empty() ? "None" : reason.c_str()));
 	}
 }
 
@@ -572,7 +572,7 @@ bool Server::IsOperator(std::string name)
 	std::string operatorName;
 
 	if (!operatorFile.is_open())
-		LOG(DEBUG, "Couldn't open ops file");
+		LOG(LogLevel::kDebug, "Couldn't open ops file");
 
 	while (std::getline(operatorFile, operatorName)) {
 		if (name == operatorName)
@@ -594,13 +594,13 @@ void Server::AddWorld(World* world)
 	auto i = m_worlds.find(name);
 
 	if (i != m_worlds.end()) {
-		LOG(DEBUG, "World '%s' already exists", name.c_str());
+		LOG(LogLevel::kDebug, "World '%s' already exists", name.c_str());
 		return;
 	}
 
 	m_worlds.insert(std::make_pair(name, world));
 
-	LOG(DEBUG, "Added world '%s'", name.c_str());
+	LOG(LogLevel::kDebug, "Added world '%s'", name.c_str());
 }
 
 void Server::RemoveWorld(std::string name)
@@ -608,13 +608,13 @@ void Server::RemoveWorld(std::string name)
 	auto i = m_worlds.find(name);
 
 	if (i != m_worlds.end()) {
-		LOG(DEBUG, "World '%s' does not exist", name.c_str());
+		LOG(LogLevel::kDebug, "World '%s' does not exist", name.c_str());
 		return;
 	}
 
 	m_worlds.erase(i);
 
-	LOG(DEBUG, "Removed world '%s'", name.c_str());
+	LOG(LogLevel::kDebug, "Removed world '%s'", name.c_str());
 }
 
 World* Server::GetWorld(std::string name)
@@ -622,7 +622,7 @@ World* Server::GetWorld(std::string name)
 	auto i = m_worlds.find(name);
 
 	if (i == m_worlds.end()) {
-		LOG(DEBUG, "World '%s' does not exist", name.c_str());
+		LOG(LogLevel::kDebug, "World '%s' does not exist", name.c_str());
 		return nullptr;
 	}
 

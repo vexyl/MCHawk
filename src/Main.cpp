@@ -1,5 +1,9 @@
 #include "Server.hpp"
 
+#ifdef _WIN32
+	#pragma comment(lib, "Ws2_32.lib")
+#endif
+
 int main()
 {
 	srand(time(0));

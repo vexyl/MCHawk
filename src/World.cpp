@@ -12,7 +12,7 @@ World::World(std::string name) : m_name(name), m_mapChanged(true)
 
 void World::AddClient(Client* client)
 {
-	LOG(DEBUG, "Player with pid=%d added to world '%s'", client->GetPid(), m_name.c_str());
+	LOG(LogLevel::kDebug, "Player with pid=%d added to world '%s'", client->GetPid(), m_name.c_str());
 
 	SendMap(client, m_map);
 	SpawnClient(client, m_spawnPosition, m_clients);
@@ -29,7 +29,7 @@ void World::RemoveClient(int8_t pid)
 	while (iter != m_clients.end()) {
 		if ((*iter)->GetPid() == pid) {
 			m_clients.erase(iter);
-			LOG(DEBUG, "Player with pid=%d removed from world '%s'", pid, m_name.c_str());
+			LOG(LogLevel::kDebug, "Player with pid=%d removed from world '%s'", pid, m_name.c_str());
 			DespawnClient(pid, m_clients);
 			break;
 		}

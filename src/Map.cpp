@@ -5,7 +5,12 @@
 #include <zlib.h>
 
 #include "Utils/Logger.hpp"
-#include <arpa/inet.h>
+
+#ifdef __linux__
+	#include <arpa/inet.h>
+#elif _WIN32
+	#include <winsock2.h>
+#endif
 
 Map::Map()
 {
@@ -32,7 +37,7 @@ void Map::LoadFromFile(std::string filename)
 
 	FILE *fp = fopen(filename.c_str(), "rb");
 	if (fp == nullptr) {
-		LOG(ERROR, "Can't open map file for reading");
+		LOG(LogLevel::kError, "Can't open map file for reading");
 		exit(1);
 	}
 
@@ -42,18 +47,18 @@ void Map::LoadFromFile(std::string filename)
 
 	m_buffer = (uint8_t*)malloc(sizeof(uint8_t) * m_bufferSize);
 	if (m_buffer == nullptr) {
-		LOG(ERROR, "Couldn't allocate memory for map buffer");
+		LOG(LogLevel::kError, "Couldn't allocate memory for map buffer");
 		exit(1);
 	}
 
 	if (fread(m_buffer, sizeof(uint8_t), m_bufferSize, fp) != m_bufferSize) {
-		LOG(ERROR, "Couldn't read map from file");
+		LOG(LogLevel::kError, "Couldn't read map from file");
 		exit(1);
 	}
 
 	fclose(fp);
 
-	LOG(INFO, "Loaded map file %s (%d bytes)", filename.c_str(), m_bufferSize);
+	LOG(LogLevel::kInfo, "Loaded map file %s (%d bytes)", filename.c_str(), m_bufferSize);
 }
 
 void Map::GenerateFlatMap(short x, short y, short z)
@@ -82,7 +87,7 @@ void Map::GenerateFlatMap(short x, short y, short z)
 		}
 	}
 
-	LOG(DEBUG, "Generated flat map '%s'", m_filename.c_str());
+	LOG(LogLevel::kDebug, "Generated flat map '%s'", m_filename.c_str());
 }
 
 // TODO: Use C++ file streams
@@ -93,18 +98,18 @@ void Map::SaveToFile(std::string filename)
 
 	FILE *fp = fopen(filename.c_str(), "wb");
 	if (fp == nullptr) {
-		LOG(ERROR, "Can't open map file for writing");
+		LOG(LogLevel::kError, "Can't open map file for writing");
 		exit(1);
 	}
 
 	if (fwrite(m_buffer, sizeof(uint8_t), m_bufferSize, fp) != m_bufferSize) {
-		LOG(ERROR, "Couldn't write map to file");
+		LOG(LogLevel::kError, "Couldn't write map to file");
 		exit(1);
 	}
 
 	fclose(fp);
 
-	LOG(DEBUG, "Saved map file %s (%d bytes)", filename.c_str(), m_bufferSize);
+	LOG(LogLevel::kDebug, "Saved map file %s (%d bytes)", filename.c_str(), m_bufferSize);
 }
 
 bool Map::SetBlock(short x, short y, short z, int8_t type)
@@ -112,7 +117,7 @@ bool Map::SetBlock(short x, short y, short z, int8_t type)
 	int offset = calcMapOffset(x, y, z, m_x, m_z) + 4;
 
 	if ((offset + 1) > (int)m_bufferSize) {
-		LOG(WARNING, "Attempted map write passed buffer size");
+		LOG(LogLevel::kWarning, "Attempted map write passed buffer size");
 		return false;
 	}
 
@@ -126,7 +131,7 @@ int8_t Map::GetBlockType(short x, short y, short z)
 	int offset = calcMapOffset(x, y, z, m_x, m_z) + 4;
 
 	if ((offset + 1) > (int)m_bufferSize) {
-		LOG(WARNING, "Attempted map write passed buffer size");
+		LOG(LogLevel::kWarning, "Attempted map write passed buffer size");
 		return false;
 	}
 
@@ -139,7 +144,7 @@ void Map::CompressBuffer(uint8_t** outCompBuffer, size_t* outCompSize)
 
 	*outCompBuffer = (uint8_t*)malloc(sizeof(uint8_t) * m_bufferSize);
 	if (*outCompBuffer == nullptr) {
-		LOG(ERROR, "Couldn't allocate memory for map buffer");
+		LOG(LogLevel::kError, "Couldn't allocate memory for map buffer");
 		exit(1);
 	}
 
@@ -156,7 +161,7 @@ void Map::CompressBuffer(uint8_t** outCompBuffer, size_t* outCompSize)
 
 	int ret = deflateInit2(&strm, Z_BEST_COMPRESSION, Z_DEFLATED, (MAX_WBITS + 16), 8, Z_DEFAULT_STRATEGY);
 	if (ret != Z_OK) {
-		LOG(DEBUG, "Zlib error: deflateInit2()");
+		LOG(LogLevel::kDebug, "Zlib error: deflateInit2()");
 		exit(1);
 	}
 
@@ -169,7 +174,7 @@ void Map::CompressBuffer(uint8_t** outCompBuffer, size_t* outCompSize)
 		case Z_NEED_DICT:
 		case Z_DATA_ERROR:
 		case Z_MEM_ERROR:
-			LOG(ERROR, "Zlib error: inflate()");
+			LOG(LogLevel::kError, "Zlib error: inflate()");
 			exit(1);
 	}
 

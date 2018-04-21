@@ -7,7 +7,12 @@
 #include <vector>
 
 #include <stdint.h>
-#include <arpa/inet.h>
+
+#ifdef __linux__
+	#include <arpa/inet.h>
+#elif _WIN32
+	#include <winsock2.h>
+#endif
 
 #include "ClientStream.hpp"
 

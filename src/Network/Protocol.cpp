@@ -48,7 +48,7 @@ void SendMap(Client* client, Map& map)
 
 	map.CompressBuffer(&compBuffer, &compSize);
 
-	LOG(DEBUG, "Compressed map size: %d bytes", compSize);
+	LOG(LogLevel::kDebug, "Compressed map size: %d bytes", compSize);
 
 	size_t bytes = 0;
 	while (bytes < compSize) {

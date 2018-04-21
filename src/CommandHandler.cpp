@@ -104,6 +104,6 @@ void CommandHandler::Handle(Client* sender, std::string command)
 
 		Execute(sender, commandName, tokens);
 	} catch (std::runtime_error& e) {
-		LOG(DEBUG, "%s", e.what());
+		LOG(LogLevel::kDebug, "%s", e.what());
 	}
 }

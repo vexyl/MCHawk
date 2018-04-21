@@ -11,11 +11,6 @@
 #include <iostream>
 #include <fstream>
 
-#define INFO LogLevel::kInfo
-#define DEBUG LogLevel::kDebug
-#define WARNING LogLevel::kWarning
-#define ERROR LogLevel::kError
-
 #define LOGGER Logger::GetLogger();
 #define LOG(...) Logger::GetLogger()->Log(__VA_ARGS__);
 
