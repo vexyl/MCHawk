@@ -74,12 +74,14 @@ public:
 			}
 
 			//FIXME TEMPORARY
-			World* w = new World(worldName);
-			w->GetMap().GenerateFlatMap(x, y, z);
-			w->SetSpawnPosition(Position(x/2*32+51, y/2*32+51, z/2*32+51));
-			w->SetOption("autosave", "false");
+			World* world = new World(worldName);
 
-			server->AddWorld(w);
+			world->GetMap().GenerateFlatMap(x, y, z);
+			world->SetSpawnPosition(Position(x/2*32+51, y/2*32+51, z/2*32+51));
+			world->SetOption("autosave", "false");
+			world->SetActive(true);
+
+			server->AddWorld(world);
 
 			SendMessage(sender, "&eWorld " + worldName + " created (" + std::to_string(x) + "x" + std::to_string(y) + "x" + std::to_string(z) + ")");
 		} else if (subcommand == "set") {
