@@ -43,3 +43,6 @@ The same applies to Debug with the appropriate filename changes to the above ins
 ## Misc
 
 The release version sends a heartbeat request to http://www.classicube.net by default. Edit *./bin/Release/config.ini* to change it.
+
+
+Discord: https://discord.gg/xwDejUa
