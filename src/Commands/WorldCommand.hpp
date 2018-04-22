@@ -23,9 +23,22 @@ public:
 		if (subcommand == "list") {
 			std::vector<std::string> worldNames = server->GetWorldNames();
 
-			SendMessage(sender, "&eList of worlds:");
-			for (auto& name : worldNames)
-				SendMessage(sender, "&e- " + name);
+			int size = (int)worldNames.size();
+			std::string message = "&eWorlds: ";
+
+			for (int i = 0; i < size; ++i) {
+				if (server->GetWorld(worldNames[i])->GetActive())
+					message += "&a";
+				else
+					message += "&c";
+
+				message += worldNames[i];
+
+				if (i < size - 1)
+					message += "&e, ";
+			}
+
+			SendMessage(sender, message);
 		} else if (subcommand == "new") {
 			if (!isOperator) {
 				SendMessage(sender, "&cOnly operators can create new worlds at this time");
@@ -141,13 +154,14 @@ public:
 				return;
 			}
 
-			if (world->GetOption("active") == "true") {
+			if (world->GetActive()) {
 				SendMessage(sender, "&cWorld " + worldName + " is already active");
 				return;
 			}
 
-			world->GetMap().Load();
-			world->SetOption("active", "true");
+			world->Load();
+
+			SendMessage(sender, "&eLoaded world " + worldName);
 		} else {
 			SendMessage(sender, "&b" + GetDocString());
 			return;

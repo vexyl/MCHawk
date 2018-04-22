@@ -4,11 +4,17 @@
 #include "Network/Protocol.hpp"
 #include "Utils/Logger.hpp"
 
-World::World(std::string name) : m_name(name), m_mapChanged(true)
+World::World(std::string name) : m_name(name), m_active(false), m_mapChanged(true)
 {
 	SetOption("build", "true");
 	SetOption("autosave", "true");
-	SetOption("active", "true");
+	SetOption("autoload", "true");
+}
+
+void World::Load()
+{
+	m_map.Load();
+	SetActive(true);
 }
 
 void World::AddClient(Client* client)
@@ -48,6 +54,11 @@ bool World::SaveMapIfChanged()
 	}
 
 	return false;
+}
+
+void World::SetActive(bool active)
+{
+	m_active = active;
 }
 
 void World::SetSpawnPosition(Position spawnPosition)

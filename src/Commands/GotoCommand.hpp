@@ -25,7 +25,7 @@ public:
 			return;
 		}
 
-		if (world->GetOption("active") == "false") {
+		if (!world->GetActive()) {
 			SendMessage(sender, "&cWorld " + worldName + " is inactive");
 			return;
 		}

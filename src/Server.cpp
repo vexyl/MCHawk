@@ -137,17 +137,19 @@ void Server::Init()
 
 	SendHeartbeat();
 
-	//FIXME TEMPORARY
+	// Scrap = flat world that doesn't autosave
 	World* w = new World("scrap");
+
 	w->GetMap().GenerateFlatMap(512, 64, 512);
 	w->SetSpawnPosition(Position(512/2*32+51, 64/2*32+51, 512/2*32+51));
 	w->SetOption("autosave", "false");
+	w->SetActive(true);
+
 	AddWorld(w);
 
-	using namespace boost::filesystem;
-
-	for (directory_iterator itr("worlds/"); itr != directory_iterator(); ++itr) {
-		if (is_regular_file(itr->status())) {
+	// Load all worlds from config files
+	for (boost::filesystem::directory_iterator itr("worlds/"); itr != boost::filesystem::directory_iterator(); ++itr) {
+		if (boost::filesystem::is_regular_file(itr->status())) {
 			std::string filename = itr->path().filename().string();
 
 			try {
@@ -178,9 +180,9 @@ void Server::Init()
 				world->SetOption("active", active);
 
 				if (active == "true")
-					world->GetMap().Load();
+					world->Load();
 				else
-					LOG(LogLevel::kDebug, "Inactive world %s", name.c_str());
+					LOG(LogLevel::kDebug, "Unloaded world %s", name.c_str());
 
 				AddWorld(world);
 			} catch (std::runtime_error& e) {
