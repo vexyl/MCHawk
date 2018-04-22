@@ -14,15 +14,17 @@ public:
 	World(std::string name);
 
 	Map& GetMap() { return m_map; }
+	bool GetActive() { return m_active; }
 	Position GetSpawnPosition() { return m_spawnPosition; }
 	std::string GetName() { return m_name; }
 
 	void AddClient(Client* client);
 	void RemoveClient(int8_t pid);
 
-	void LoadMap(std::string filename, short x, short y, short z);
+	void Load();
 	bool SaveMapIfChanged();
 
+	void SetActive(bool active);
 	void SetSpawnPosition(Position spawnPosition);
 	void SetOption(std::string option, std::string value);
 
@@ -47,6 +49,7 @@ private:
 
 	sf::Clock m_autosaveClock;
 
+	bool m_active;
 	bool m_mapChanged;
 };
 

@@ -16,6 +16,7 @@ public:
 	~Map();
 
 	void SetDimensions(short x, short y, short z);
+	void SetFilename(std::string filename);
 
 	uint8_t* GetBuffer() { return m_buffer; }
 	size_t GetBufferSize() { return m_bufferSize; }
@@ -25,6 +26,7 @@ public:
 
 	void GenerateFlatMap(short x, short y, short z);
 
+	void Load();
 	void LoadFromFile(std::string filename);
 
 	void SaveToFile(std::string filename);

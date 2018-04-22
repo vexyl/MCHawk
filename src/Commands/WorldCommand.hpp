@@ -23,9 +23,22 @@ public:
 		if (subcommand == "list") {
 			std::vector<std::string> worldNames = server->GetWorldNames();
 
-			SendMessage(sender, "&eList of worlds:");
-			for (auto& name : worldNames)
-				SendMessage(sender, "&e- " + name);
+			int size = (int)worldNames.size();
+			std::string message = "&eWorlds: ";
+
+			for (int i = 0; i < size; ++i) {
+				if (server->GetWorld(worldNames[i])->GetActive())
+					message += "&a";
+				else
+					message += "&c";
+
+				message += worldNames[i];
+
+				if (i < size - 1)
+					message += "&e, ";
+			}
+
+			SendMessage(sender, message);
 		} else if (subcommand == "new") {
 			if (!isOperator) {
 				SendMessage(sender, "&cOnly operators can create new worlds at this time");
@@ -124,6 +137,31 @@ public:
 			w->SetOption(option, value);
 
 			SendMessage(sender, "&eWorld option " + option + "=" + value);
+		} else if (subcommand == "load") {
+			if (args.size() < 2) {
+				SendMessage(sender, "&cMust specify world name");
+				return;
+			}
+
+			std::string worldName = args[1];
+
+			boost::algorithm::to_lower(worldName);
+
+			World *world = server->GetWorld(worldName);
+
+			if (world == nullptr) {
+				SendMessage(sender, "&cWorld " + worldName + " does not exist");
+				return;
+			}
+
+			if (world->GetActive()) {
+				SendMessage(sender, "&cWorld " + worldName + " is already active");
+				return;
+			}
+
+			world->Load();
+
+			SendMessage(sender, "&eLoaded world " + worldName);
 		} else {
 			SendMessage(sender, "&b" + GetDocString());
 			return;

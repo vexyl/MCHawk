@@ -37,6 +37,7 @@
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/ini_parser.hpp>
 #include <boost/algorithm/string.hpp>
+#include <boost/filesystem.hpp>
 
 #include "Network/ClientStream.hpp"
 #include "Utils/Logger.hpp"
@@ -136,34 +137,59 @@ void Server::Init()
 
 	SendHeartbeat();
 
-	//FIXME TEMPORARY
-	World *w = new World("default");
-	w->LoadMap("default_64x16x64.raw", 64, 16, 64);
-	w->SetSpawnPosition(Position(64/2*32+51, 16/2*32+51, 64/2*32+51));
-	w->SetOption("build", "false");
-	w->SetOption("autosave", "false");
-	AddWorld(w);
+	// Scrap = flat world that doesn't autosave
+	World* w = new World("scrap");
 
-	//FIXME TEMPORARY
-	w = new World("freebuild");
-	w->LoadMap("freebuild_256x64x256.raw", 256, 64, 256);
-	w->SetSpawnPosition(Position(256/2*32+51, 64/2*32+51, 256/2*32+51));
-	AddWorld(w);
-
-	//FIXME TEMPORARY
-	w = new World("scrap");
 	w->GetMap().GenerateFlatMap(512, 64, 512);
 	w->SetSpawnPosition(Position(512/2*32+51, 64/2*32+51, 512/2*32+51));
 	w->SetOption("autosave", "false");
+	w->SetActive(true);
+
 	AddWorld(w);
 
-	//FIXME TEMPORARY
-	w = new World("archive");
-	w->LoadMap("archive_256x256x256.raw", 256, 256, 256);
-	w->SetSpawnPosition(Position(205*32+51, 166*32+51, 62*32+51));
-	w->SetOption("build", "false");
-	w->SetOption("autosave", "false");
-	AddWorld(w);
+	// Load all worlds from config files
+	for (boost::filesystem::directory_iterator itr("worlds/"); itr != boost::filesystem::directory_iterator(); ++itr) {
+		if (boost::filesystem::is_regular_file(itr->status())) {
+			std::string filename = itr->path().filename().string();
+
+			try {
+				boost::property_tree::ptree pt;
+				boost::property_tree::ini_parser::read_ini("worlds/" + filename, pt);
+
+				std::string name = pt.get<std::string>("World.name");
+				std::string map = pt.get<std::string>("World.map");
+
+				short x_size = pt.get<short>("Size.x");
+				short y_size = pt.get<short>("Size.y");
+				short z_size = pt.get<short>("Size.z");
+
+				short sx = pt.get<short>("Spawn.x");
+				short sy = pt.get<short>("Spawn.y");
+				short sz = pt.get<short>("Spawn.z");
+
+				std::string autosave = pt.get<std::string>("Options.autosave");
+				std::string build = pt.get<std::string>("Options.build");
+				std::string active = pt.get<std::string>("Options.active");
+
+				World* world = new World(name);
+				world->GetMap().SetDimensions(x_size, y_size, z_size);
+				world->GetMap().SetFilename("worlds/" + map);
+				world->SetSpawnPosition(Position(sx, sy, sz));
+				world->SetOption("autosave", autosave);
+				world->SetOption("build", build);
+				world->SetOption("active", active);
+
+				if (active == "true")
+					world->Load();
+				else
+					LOG(LogLevel::kDebug, "Unloaded world %s", name.c_str());
+
+				AddWorld(world);
+			} catch (std::runtime_error& e) {
+				LOG(LogLevel::kWarning, "%s", e.what());
+			}
+		}
+	}
 }
 
 void Server::OnConnect(sf::TcpSocket *sock)
