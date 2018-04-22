@@ -124,6 +124,30 @@ public:
 			w->SetOption(option, value);
 
 			SendMessage(sender, "&eWorld option " + option + "=" + value);
+		} else if (subcommand == "load") {
+			if (args.size() < 2) {
+				SendMessage(sender, "&cMust specify world name");
+				return;
+			}
+
+			std::string worldName = args[1];
+
+			boost::algorithm::to_lower(worldName);
+
+			World *world = server->GetWorld(worldName);
+
+			if (world == nullptr) {
+				SendMessage(sender, "&cWorld " + worldName + " does not exist");
+				return;
+			}
+
+			if (world->GetOption("active") == "true") {
+				SendMessage(sender, "&cWorld " + worldName + " is already active");
+				return;
+			}
+
+			world->GetMap().Load();
+			world->SetOption("active", "true");
 		} else {
 			SendMessage(sender, "&b" + GetDocString());
 			return;

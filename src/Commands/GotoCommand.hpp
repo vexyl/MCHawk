@@ -25,6 +25,11 @@ public:
 			return;
 		}
 
+		if (world->GetOption("active") == "false") {
+			SendMessage(sender, "&cWorld " + worldName + " is inactive");
+			return;
+		}
+
 		if (worldName == sender->GetWorldName()) {
 			SendMessage(sender, "&eWarp nine. Engage. &9*Woosh*");
 			return;

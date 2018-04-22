@@ -12,7 +12,7 @@
 	#include <winsock2.h>
 #endif
 
-Map::Map()
+Map::Map() : m_buffer(nullptr)
 {
 	SetDimensions(0, 0, 0);
 }
@@ -30,10 +30,22 @@ void Map::SetDimensions(short x, short y, short z)
 	m_z = z;
 }
 
+void Map::SetFilename(std::string filename)
+{
+	m_filename = filename;
+}
+
+void Map::Load()
+{
+	LoadFromFile(m_filename);
+}
+
 // TODO: Use C++ file streams
 void Map::LoadFromFile(std::string filename)
 {
-	m_filename = filename;
+	if (m_buffer != nullptr)
+		delete m_buffer;
+
 
 	FILE *fp = fopen(filename.c_str(), "rb");
 	if (fp == nullptr) {

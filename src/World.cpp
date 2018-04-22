@@ -8,6 +8,7 @@ World::World(std::string name) : m_name(name), m_mapChanged(true)
 {
 	SetOption("build", "true");
 	SetOption("autosave", "true");
+	SetOption("active", "true");
 }
 
 void World::AddClient(Client* client)
@@ -36,13 +37,6 @@ void World::RemoveClient(int8_t pid)
 
 		++iter;
 	}
-}
-
-void World::LoadMap(std::string filename, short x, short y, short z)
-{
-	m_map.LoadFromFile(filename);
-	m_map.SetDimensions(x, y, z);
-	m_mapChanged = false;
 }
 
 bool World::SaveMapIfChanged()

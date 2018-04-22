@@ -26,7 +26,7 @@ HEADERS = \
 	./src/Commands/*.hpp
 
 TARGET = MCHawk
-LIBS = -lsfml-system -lsfml-network -lz -lboost_system -lcrypto
+LIBS = -lsfml-system -lsfml-network -lz -lboost_system -lboost_filesystem -lcrypto
 OPTS = -Wall -Wextra -pedantic-errors -Wfatal-errors -std=c++11
 FLAGS = $(LIBS) $(OPTS)
 OUT = ./bin/Release/$(TARGET)
