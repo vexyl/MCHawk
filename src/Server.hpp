@@ -7,8 +7,10 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <functional>
 
 #include <SFML/Network.hpp>
+#include  <boost/signals2.hpp>
 
 #include "Network/Protocol.hpp"
 #include "Client.hpp"
@@ -65,6 +67,11 @@ public:
 	World* GetWorld(std::string name);
 	std::vector<std::string> GetWorldNames();
 
+	// Event stuff
+	enum EventType { kOnConnect, kOnAuth, kOnMessage, kOnPosition, kOnBlock };
+
+	void RegisterEvent(EventType type, std::function<void (Client*, void*)>);
+
 private:
 	enum { kHeartbeatTime = 60 /* seconds */, kSaveTime = 600 /* seconds */ };
 	enum { kMaxSetBlockDistance = 10 };
@@ -74,6 +81,11 @@ private:
 	sf::TcpListener m_listener;
 
 	int m_port;
+
+	// Event signals
+	boost::signals2::signal<void(Client*, void*)>
+		m_onConnectSignal, m_onAuthSignal, m_onMessageSignal,
+		m_onPositionSignal, m_onBlockSignal;
 
 	// Configuration
 	std::string m_serverName;

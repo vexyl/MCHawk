@@ -38,7 +38,7 @@ public:
 					message += "&e, ";
 			}
 
-			SendMessage(sender, message);
+			Server::SendWrappedMessage(sender, message);
 		} else if (subcommand == "new") {
 			if (!isOperator) {
 				SendMessage(sender, "&cOnly operators can create new worlds at this time");

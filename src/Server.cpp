@@ -70,7 +70,18 @@ Server::Server()
 	m_serverHeartbeat = false;
 	m_serverPublic = false;
 	m_serverVerifyNames = false;
+}
 
+Server::~Server()
+{
+	for (auto& obj : m_clients) {
+		delete obj->stream.socket;
+		delete obj;
+	}
+}
+
+void Server::Init()
+{
 	m_commandHandler.Register("help", new HelpCommand, "h");
 	m_commandHandler.Register("tp", new TeleportCommand);
 	m_commandHandler.Register("summon", new SummonCommand);
@@ -85,18 +96,7 @@ Server::Server()
 	m_commandHandler.Register("whois", new WhoIsCommand, "info");
 	m_commandHandler.Register("goto", new GotoCommand, "go g");
 	m_commandHandler.Register("world", new WorldCommand, "w map");
-}
 
-Server::~Server()
-{
-	for (auto& obj : m_clients) {
-		delete obj->stream.socket;
-		delete obj;
-	}
-}
-
-void Server::Init()
-{
 	// Turn off SFML errors
 	sf::err().rdbuf(nullptr);
 
@@ -190,6 +190,10 @@ void Server::Init()
 			}
 		}
 	}
+
+	//m_onConnectSignal.connect([this](Client* client, Packet&) { KickClient(client, "because events!"); });
+	//m_onConnectSignal.connect(boost::bind(&Server::OnConnect, this, _1));
+	//m_onConnectSignal.connect([this](sf::TcpSocket*) { BroadcastMessage("somebody connected"); });
 }
 
 void Server::OnConnect(sf::TcpSocket *sock)
@@ -203,6 +207,8 @@ void Server::OnConnect(sf::TcpSocket *sock)
 	m_clients.push_back(client);
 
 	LOG(LogLevel::kDebug, "Client connected (%s)", client->GetIpString().c_str());
+
+	m_onConnectSignal(client, nullptr);
 }
 
 void Server::OnAuth(Client* client, struct cauthp clientAuth)
@@ -355,8 +361,10 @@ void Server::HandlePacket(Client* client, uint8_t opcode)
 	if (!client->authed) {
 		if (opcode == CAUTH) {
 			struct cauthp clientAuth;
-			if (clientAuth.Read(stream))
+			if (clientAuth.Read(stream)) {
 				OnAuth(client, clientAuth);
+				m_onAuthSignal(client, &clientAuth);
+			}
 		} else {
 			LOG(LogLevel::kDebug, "Dropped unauthorized client (%s)", client->GetIpString().c_str());
 			client->active = false;
@@ -371,8 +379,10 @@ void Server::HandlePacket(Client* client, uint8_t opcode)
 	{
 		struct cmsgp clientMsg;
 
-		if (clientMsg.Read(stream))
+		if (clientMsg.Read(stream)) {
 			OnMessage(client, clientMsg);
+			m_onMessageSignal(client, &clientMsg);
+		}
 
 		break;
 	}
@@ -380,8 +390,10 @@ void Server::HandlePacket(Client* client, uint8_t opcode)
 	{
 		struct cposp clientPos;
 
-		if (clientPos.Read(stream))
+		if (clientPos.Read(stream)) {
 			GetWorld(client->GetWorldName())->OnPosition(client, clientPos);
+			m_onPositionSignal(client, &clientPos);
+		}
 
 		break;
 	}
@@ -389,9 +401,10 @@ void Server::HandlePacket(Client* client, uint8_t opcode)
 	{
 		struct cblockp clientBlock;
 
-		if (clientBlock.Read(stream))
+		if (clientBlock.Read(stream)) {
 			GetWorld(client->GetWorldName())->OnBlock(client, clientBlock);
-
+			m_onBlockSignal(client, &clientBlock);
+		}
 		break;
 	}
 	default:
@@ -663,4 +676,24 @@ std::vector<std::string> Server::GetWorldNames()
 		worldNames.push_back(obj.first);
 
 	return worldNames;
+}
+
+void Server::RegisterEvent(EventType type, std::function<void (Client*, void*)> f)
+{
+	if (type == EventType::kOnConnect) {
+		m_onConnectSignal.connect(f);
+		LOG(LogLevel::kDebug, "Registered event for OnConnect");
+	} else if (type == EventType::kOnAuth) {
+		m_onAuthSignal.connect(f);
+		LOG(LogLevel::kDebug, "Registered event for OnAuth");
+	} else if (type == EventType::kOnMessage) {
+		m_onMessageSignal.connect(f);
+		LOG(LogLevel::kDebug, "Registered event for OnMessage");
+	} else if (type == EventType::kOnPosition) {
+		m_onPositionSignal.connect(f);
+		LOG(LogLevel::kDebug, "Registered event for OnPosition");
+	} else if (type == EventType::kOnBlock) {
+		m_onBlockSignal.connect(f);
+		LOG(LogLevel::kDebug, "Registered event for OnBlock");
+	}
 }
