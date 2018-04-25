@@ -170,7 +170,7 @@ public:
 		}
 	}
 
-	virtual std::string GetDocString() { return "/world <list/new*/set*> - various world-related commands | * operator only"; }
+	virtual std::string GetDocString() { return "/world <list/load/new*/set*> - various world-related commands | * operator only"; }
 	virtual unsigned int GetArgumentAmount() { return 1; }
 	virtual unsigned int GetPermissionLevel() { return 0; }
 

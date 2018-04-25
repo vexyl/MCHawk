@@ -17,6 +17,7 @@
 #include "World.hpp"
 #include "Position.hpp"
 #include "CommandHandler.hpp"
+#include "LuaPlugins/LuaPluginHandler.hpp"
 
 struct ClientInfo {
 	std::string name;
@@ -67,11 +68,6 @@ public:
 	World* GetWorld(std::string name);
 	std::vector<std::string> GetWorldNames();
 
-	// Event stuff
-	enum EventType { kOnConnect, kOnAuth, kOnMessage, kOnPosition, kOnBlock };
-
-	void RegisterEvent(EventType type, std::function<void (Client*, void*)>);
-
 private:
 	enum { kHeartbeatTime = 60 /* seconds */, kSaveTime = 600 /* seconds */ };
 	enum { kMaxSetBlockDistance = 10 };
@@ -82,10 +78,7 @@ private:
 
 	int m_port;
 
-	// Event signals
-	boost::signals2::signal<void(Client*, void*)>
-		m_onConnectSignal, m_onAuthSignal, m_onMessageSignal,
-		m_onPositionSignal, m_onBlockSignal;
+	LuaPluginHandler m_pluginHandler;
 
 	// Configuration
 	std::string m_serverName;

@@ -59,6 +59,8 @@
 #include "Commands/GotoCommand.hpp"
 #include "Commands/WorldCommand.hpp"
 
+#include "LuaPlugins/LuaPluginAPI.hpp"
+
 Server* Server::m_thisPtr = nullptr;
 
 Server::Server()
@@ -191,9 +193,7 @@ void Server::Init()
 		}
 	}
 
-	//m_onConnectSignal.connect([this](Client* client, Packet&) { KickClient(client, "because events!"); });
-	//m_onConnectSignal.connect(boost::bind(&Server::OnConnect, this, _1));
-	//m_onConnectSignal.connect([this](sf::TcpSocket*) { BroadcastMessage("somebody connected"); });
+	m_pluginHandler.LoadPlugin("plugins/myplugin.lua");
 }
 
 void Server::OnConnect(sf::TcpSocket *sock)
@@ -207,8 +207,6 @@ void Server::OnConnect(sf::TcpSocket *sock)
 	m_clients.push_back(client);
 
 	LOG(LogLevel::kDebug, "Client connected (%s)", client->GetIpString().c_str());
-
-	m_onConnectSignal(client, nullptr);
 }
 
 void Server::OnAuth(Client* client, struct cauthp clientAuth)
@@ -363,7 +361,9 @@ void Server::HandlePacket(Client* client, uint8_t opcode)
 			struct cauthp clientAuth;
 			if (clientAuth.Read(stream)) {
 				OnAuth(client, clientAuth);
-				m_onAuthSignal(client, &clientAuth);
+
+				auto table = make_luatable(m_pluginHandler.GetLuaState());
+				m_pluginHandler.TriggerEvent(EventType::kOnAuth, client, table);
 			}
 		} else {
 			LOG(LogLevel::kDebug, "Dropped unauthorized client (%s)", client->GetIpString().c_str());
@@ -381,7 +381,9 @@ void Server::HandlePacket(Client* client, uint8_t opcode)
 
 		if (clientMsg.Read(stream)) {
 			OnMessage(client, clientMsg);
-			m_onMessageSignal(client, &clientMsg);
+
+			auto table = cmsgp_to_luatable(m_pluginHandler.GetLuaState(), clientMsg);
+			m_pluginHandler.TriggerEvent(EventType::kOnMessage, client, table);
 		}
 
 		break;
@@ -392,7 +394,6 @@ void Server::HandlePacket(Client* client, uint8_t opcode)
 
 		if (clientPos.Read(stream)) {
 			GetWorld(client->GetWorldName())->OnPosition(client, clientPos);
-			m_onPositionSignal(client, &clientPos);
 		}
 
 		break;
@@ -403,7 +404,6 @@ void Server::HandlePacket(Client* client, uint8_t opcode)
 
 		if (clientBlock.Read(stream)) {
 			GetWorld(client->GetWorldName())->OnBlock(client, clientBlock);
-			m_onBlockSignal(client, &clientBlock);
 		}
 		break;
 	}
@@ -676,24 +676,4 @@ std::vector<std::string> Server::GetWorldNames()
 		worldNames.push_back(obj.first);
 
 	return worldNames;
-}
-
-void Server::RegisterEvent(EventType type, std::function<void (Client*, void*)> f)
-{
-	if (type == EventType::kOnConnect) {
-		m_onConnectSignal.connect(f);
-		LOG(LogLevel::kDebug, "Registered event for OnConnect");
-	} else if (type == EventType::kOnAuth) {
-		m_onAuthSignal.connect(f);
-		LOG(LogLevel::kDebug, "Registered event for OnAuth");
-	} else if (type == EventType::kOnMessage) {
-		m_onMessageSignal.connect(f);
-		LOG(LogLevel::kDebug, "Registered event for OnMessage");
-	} else if (type == EventType::kOnPosition) {
-		m_onPositionSignal.connect(f);
-		LOG(LogLevel::kDebug, "Registered event for OnPosition");
-	} else if (type == EventType::kOnBlock) {
-		m_onBlockSignal.connect(f);
-		LOG(LogLevel::kDebug, "Registered event for OnBlock");
-	}
 }

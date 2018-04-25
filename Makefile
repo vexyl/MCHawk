@@ -5,6 +5,9 @@ SRC = \
 	./src/World.cpp \
 	./src/Map.cpp \
 	./src/CommandHandler.cpp \
+	./src/LuaPlugins/LuaPluginHandler.cpp \
+	./src/LuaPlugins/LuaPlugin.cpp \
+	./src/LuaPlugins/LuaPluginAPI.cpp \
 	./src/Network/Packet.cpp \
 	./src/Network/Protocol.cpp \
 	./src/Utils/BufferStream.cpp \
@@ -17,6 +20,10 @@ HEADERS = \
 	./src/Map.hpp \
 	./src/Position.hpp \
 	./src/CommandHandler.hpp \
+	./src/LuaPlugins/LuaPluginHandler.hpp \
+	./src/LuaPlugins/LuaPlugin.hpp \
+	./src/LuaPlugins/LuaPluginAPI.hpp \
+	./src/LuaPlugins/LuaStuff.hpp \
 	./src/Network/ClientStream.hpp \
 	./src/Network/Packet.hpp \
 	./src/Network/Protocol.hpp \
@@ -26,8 +33,8 @@ HEADERS = \
 	./src/Commands/*.hpp
 
 TARGET = MCHawk
-LIBS = -lsfml-system -lsfml-network -lz -lboost_system -lboost_filesystem -lcrypto
-OPTS = -Wall -Wextra -pedantic-errors -Wfatal-errors -std=c++11
+LIBS = -I./LuaBridge/Source/LuaBridge -lsfml-system -lsfml-network -lz -lboost_system -lboost_filesystem -lcrypto -llua5.2
+OPTS = -Wall -Wextra -pedantic-errors -Wfatal-errors -Wno-ignored-qualifiers -std=c++14
 FLAGS = $(LIBS) $(OPTS)
 OUT = ./bin/Release/$(TARGET)
 DEBUG = ./bin/Debug/$(TARGET)
