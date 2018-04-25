@@ -40,7 +40,7 @@ public:
 
 	void Init();
 
-	const CommandHandler& GetCommandHandler() const { return m_commandHandler; }
+	CommandHandler& GetCommandHandler() { return m_commandHandler; }
 
 	void OnConnect(sf::TcpSocket *sock);
 	void OnAuth(Client* client, struct cauthp clientAuth);

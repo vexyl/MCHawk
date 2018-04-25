@@ -1,7 +1,11 @@
 #include "LuaPluginAPI.hpp"
 
+#include <boost/algorithm/string.hpp>
+
+extern lua_State* L;
+
 // Struct to table stuff
-luabridge::LuaRef make_luatable(lua_State* L)
+luabridge::LuaRef make_luatable()
 {
 	luabridge::LuaRef table(L);
 	table = luabridge::newTable(L);
@@ -9,7 +13,7 @@ luabridge::LuaRef make_luatable(lua_State* L)
 	return table;
 }
 
-luabridge::LuaRef cauthp_to_luatable(lua_State* L, const struct cauthp clientAuth)
+luabridge::LuaRef cauthp_to_luatable(const struct cauthp clientAuth)
 {
 	luabridge::LuaRef table(L);
 	table = luabridge::newTable(L);
@@ -24,7 +28,7 @@ luabridge::LuaRef cauthp_to_luatable(lua_State* L, const struct cauthp clientAut
 	return table;
 }
 
-luabridge::LuaRef cmsgp_to_luatable(lua_State* L, const struct cmsgp clientMsg)
+luabridge::LuaRef cmsgp_to_luatable(const struct cmsgp clientMsg)
 {
 	luabridge::LuaRef table(L);
 	table = luabridge::newTable(L);

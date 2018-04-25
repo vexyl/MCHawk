@@ -252,7 +252,7 @@ void Server::OnAuth(Client* client, struct cauthp clientAuth)
 	}
 
 	// Pass authed player to events
-	auto table = cauthp_to_luatable(m_pluginHandler.GetLuaState(), clientAuth);
+	auto table = cauthp_to_luatable(clientAuth);
 	m_pluginHandler.TriggerEvent(EventType::kOnAuth, client, table);
 
 	// Don't use default if a plugin set flag
@@ -387,7 +387,7 @@ void Server::HandlePacket(Client* client, uint8_t opcode)
 		if (clientMsg.Read(stream)) {
 			OnMessage(client, clientMsg);
 
-			auto table = cmsgp_to_luatable(m_pluginHandler.GetLuaState(), clientMsg);
+			auto table = cmsgp_to_luatable(clientMsg);
 			m_pluginHandler.TriggerEvent(EventType::kOnMessage, client, table);
 		}
 

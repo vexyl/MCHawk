@@ -11,6 +11,8 @@
 
 enum EventType { kOnConnect, kOnAuth, kOnMessage, kOnPosition, kOnBlock, kEventTypeEnd };
 
+extern lua_State* L;
+
 class LuaPluginHandler {
 public:
 	LuaPluginHandler();
@@ -23,8 +25,6 @@ public:
 	void LoadPlugin(std::string filename);
 	static void RegisterEvent(int type, luabridge::LuaRef func);
 	void TriggerEvent(int type, Client* client, luabridge::LuaRef table);
-
-	lua_State* GetLuaState() { return L; }
 
 	int GetEventFlag(std::string name)
 	{
@@ -41,14 +41,13 @@ public:
 		int flag = t.cast<int>();
 
 		if (flag)
-			table[name] = false;
+			table[name] = 0;
 
-		std::cout << "flag=" << flag << std::endl;
 		return flag;
 	}
 
 private:
-	lua_State* L;
+	// lua_State* L;
 
 	std::vector<LuaPlugin*> m_plugins;
 };

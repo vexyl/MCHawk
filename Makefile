@@ -23,6 +23,7 @@ HEADERS = \
 	./src/LuaPlugins/LuaPluginHandler.hpp \
 	./src/LuaPlugins/LuaPlugin.hpp \
 	./src/LuaPlugins/LuaPluginAPI.hpp \
+	./src/LuaPlugins/LuaCommand.hpp \
 	./src/LuaPlugins/LuaStuff.hpp \
 	./src/Network/ClientStream.hpp \
 	./src/Network/Packet.hpp \
