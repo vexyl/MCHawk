@@ -20,7 +20,7 @@ public:
 		std::string message = "&ePlayer list: ";
 		int size = (int)infoList.size();
 		for (int i = 0; i < size; ++i) {
-			message += infoList[i].name + "(" + infoList[i].worldName + ")";
+			message += "&6" + infoList[i].name + "&e(&a" + infoList[i].worldName + "&e)";
 			if (i < size - 1)
 				message += ", ";
 		}
