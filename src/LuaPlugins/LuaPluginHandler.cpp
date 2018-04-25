@@ -1,7 +1,6 @@
 #include "LuaPluginHandler.hpp"
 
 #include "LuaPluginAPI.hpp"
-#include "LuaCommand.hpp"
 
 #include <iostream>
 
@@ -9,40 +8,12 @@ std::array<boost::signals2::signal<void(Client*, luabridge::LuaRef)>, kEventType
 
 lua_State* L;
 
-void AddCommand(std::string name, luabridge::LuaRef func, std::string docString,
-			unsigned argumentAmount, unsigned permissionLevel)
-{
-	if (!func.isFunction()) {
-		std::cerr << "Failed adding Lua command " << name << ": function does not exist" << std::endl;
-		return;
-	}
-
-	LuaCommand* command = new LuaCommand(name, func, docString, argumentAmount, permissionLevel);
-
-	Server::GetInstance()->GetCommandHandler().Register(name, command);
-}
-
 LuaPluginHandler::LuaPluginHandler()
 {
 	L = luaL_newstate();
 	luaL_openlibs(L);
 
-	luabridge::getGlobalNamespace(L)	
-		.addFunction("AddCommand", &AddCommand)
-		.addFunction("RegisterEvent", &LuaPluginHandler::RegisterEvent);
-
-	luabridge::getGlobalNamespace(L)
-		.beginClass<Client>("Client")
-			.addProperty("name", &Client::GetName)
-		.endClass();
-
-	luabridge::getGlobalNamespace(L)
-		.beginClass<LuaServer>("Server")
-			.addStaticFunction("SendMessage", &LuaServer::LuaSendMessage)
-			.addStaticFunction("BroadcastMessage", &LuaServer::LuaBroadcastMessage)
-			.addStaticFunction("KickClient", &LuaServer::LuaKickClient)
-			.addStaticFunction("GetClientByName", &LuaServer::LuaGetClientByName)
-		.endClass();
+	LuaServer::Init(L);
 
 	if (luaL_dofile(L, "plugins/init.lua") != 0)
 		std::cerr << "Failed to load init.lua" << std::endl;

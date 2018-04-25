@@ -4,6 +4,19 @@
 
 extern lua_State* L;
 
+void AddCommand(std::string name, luabridge::LuaRef func, std::string docString,
+			unsigned argumentAmount, unsigned permissionLevel)
+{
+	if (!func.isFunction()) {
+		std::cerr << "Failed adding Lua command " << name << ": function does not exist" << std::endl;
+		return;
+	}
+
+	LuaCommand* command = new LuaCommand(name, func, docString, argumentAmount, permissionLevel);
+
+	Server::GetInstance()->GetCommandHandler().Register(name, command);
+}
+
 // Struct to table stuff
 luabridge::LuaRef make_luatable()
 {

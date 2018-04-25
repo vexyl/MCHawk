@@ -4,8 +4,32 @@
 
 #include "../Server.hpp"
 #include "../Network/Protocol.hpp"
+#include "LuaCommand.hpp"
+
+void AddCommand(std::string name, luabridge::LuaRef func, std::string docString,
+			unsigned argumentAmount, unsigned permissionLevel);
 
 struct LuaServer {
+	static void Init(lua_State* L)
+	{
+		luabridge::getGlobalNamespace(L)	
+			.addFunction("AddCommand", &AddCommand)
+			.addFunction("RegisterEvent", &LuaPluginHandler::RegisterEvent);
+
+		luabridge::getGlobalNamespace(L)
+			.beginClass<Client>("Client")
+				.addProperty("name", &Client::GetName)
+			.endClass();
+
+		luabridge::getGlobalNamespace(L)
+			.beginClass<LuaServer>("Server")
+				.addStaticFunction("SendMessage", &LuaServer::LuaSendMessage)
+				.addStaticFunction("BroadcastMessage", &LuaServer::LuaBroadcastMessage)
+				.addStaticFunction("KickClient", &LuaServer::LuaKickClient)
+				.addStaticFunction("GetClientByName", &LuaServer::LuaGetClientByName)
+			.endClass();
+	}
+
 	static void LuaSendMessage(Client* client, std::string message)
 	{
 		::SendMessage(client, message);

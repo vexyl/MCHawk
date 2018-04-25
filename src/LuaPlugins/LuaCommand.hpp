@@ -7,7 +7,8 @@
 #include "../CommandHandler.hpp"
 #include "../Utils/Logger.hpp"
 #include "LuaStuff.hpp"
-#include "LuaPluginHandler.hpp"
+
+luabridge::LuaRef make_luatable();
 
 class LuaCommand : public ICommand {
 public:
