@@ -2,7 +2,7 @@ Plugin = {
 	name = "Test",
 
 	init = function()
-		AddCommand("ban", Plugin.BanCommand, "/ban <player>", 1, 1)
+		AddCommand("ban", Plugin.BanCommand, "/ban <player> - bans player from server", 1, 1)
 
 		RegisterEvent(ClassicProtocol.MessageEvent, Plugin.OnMessage)
 		RegisterEvent(ClassicProtocol.AuthEvent, Plugin.OnAuth)
@@ -19,8 +19,8 @@ Plugin = {
 			for line in io.lines("bans.txt") do
 				-- Use table.name because client.name isn't set yet
 				if (line == string.lower(table.name)) then
-					Server.KickClient(client, "Access denied: BANNED")
-					print("Denied banned player " .. table.name)
+					Server.KickClient(client, "Banned")
+					print("Denied banned player " .. table.name) -- TODO: Log to file
 					Flags.NoDefaultCall = 1
 				end
 			end
@@ -45,7 +45,7 @@ Plugin = {
 
 			f:write(string.lower(name) .. "\n")
 			Server.KickClient(player, "Banned")
-			Server.BroadcastMessage("&ePlayer " .. name .. " banned from server.")
+			Server.BroadcastMessage("&e" .. client.name .. " has banned " .. name .. " from the server.")
 
 			f:close()
 		end

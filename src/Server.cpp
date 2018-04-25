@@ -84,7 +84,7 @@ Server::~Server()
 
 void Server::Init()
 {
-	m_commandHandler.Register("help", new HelpCommand, "h");
+	m_commandHandler.Register("help", new HelpCommand, "h cmds");
 	m_commandHandler.Register("tp", new TeleportCommand);
 	m_commandHandler.Register("summon", new SummonCommand);
 	m_commandHandler.Register("billnye", new BillNyeCommand);

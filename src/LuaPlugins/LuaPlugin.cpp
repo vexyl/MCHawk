@@ -4,6 +4,7 @@
 
 #include <iostream>
 
+// TODO: Return value or throw exception and only Init() if no errors
 void LuaPlugin::LoadScript(lua_State* L, const std::string& filename, const std::string& tableName)
 {
 	if (luaL_dofile(L, filename.c_str()) == 0) {
