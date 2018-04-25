@@ -16,7 +16,7 @@ LuaPluginHandler::LuaPluginHandler()
 
 	luabridge::getGlobalNamespace(L)
 		.beginClass<Client>("Client")
-		.addProperty("name", &Client::GetName)
+			.addProperty("name", &Client::GetName)
 		.endClass();
 
 	luabridge::getGlobalNamespace(L)
@@ -63,5 +63,9 @@ void LuaPluginHandler::RegisterEvent(int type, luabridge::LuaRef func)
 
 void LuaPluginHandler::TriggerEvent(int type, Client* client, luabridge::LuaRef table)
 {
-	signalMap[type](client, table);
+	try {
+		signalMap[type](client, table);
+	} catch (luabridge::LuaException const& e) {
+		std::cerr << "LuaException: " << e.what() << std::endl;
+	}
 }

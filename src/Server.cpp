@@ -251,6 +251,14 @@ void Server::OnAuth(Client* client, struct cauthp clientAuth)
 		}
 	}
 
+	// Pass authed player to events
+	auto table = cauthp_to_luatable(m_pluginHandler.GetLuaState(), clientAuth);
+	m_pluginHandler.TriggerEvent(EventType::kOnAuth, client, table);
+
+	// Don't use default if a plugin set flag
+	if (m_pluginHandler.GetEventFlag("NoDefaultCall"))
+		return;
+
 	Client* checkClient = GetClientByName(name);
 	if (checkClient != nullptr)
 		KickClient(checkClient, "Logged in from somewhere else");
@@ -361,9 +369,6 @@ void Server::HandlePacket(Client* client, uint8_t opcode)
 			struct cauthp clientAuth;
 			if (clientAuth.Read(stream)) {
 				OnAuth(client, clientAuth);
-
-				auto table = make_luatable(m_pluginHandler.GetLuaState());
-				m_pluginHandler.TriggerEvent(EventType::kOnAuth, client, table);
 			}
 		} else {
 			LOG(LogLevel::kDebug, "Dropped unauthorized client (%s)", client->GetIpString().c_str());

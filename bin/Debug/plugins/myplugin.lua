@@ -8,11 +8,6 @@ Plugin = {
 
 	OnMessage = function(client, table)
 		print(client.name .. ": " .. table.message)
-		if (string.match(table.message, "fuck")) then
-			print("BAD WORD DETECTED!!!")
-			Server.KickClient(client, "Bad word")
-			Server.BroadcastMessage("Tsk tsk, " .. client.name .. ".");
-		end
 	end,
 
 	OnAuth = function(client, table)
@@ -20,9 +15,12 @@ Plugin = {
 		if f then
 			lines = {}
 			for line in io.lines("bans.txt") do
-				if (string.match(line, client.name)) then
+				-- Use table.name because client.name isn't set yet
+				print("name=" .. table.name .. " line=" .. line)
+				if (string.match(line, table.name)) then
 					Server.KickClient(client, "Access denied: BANNED");
-					print("Denied banned player " .. client.name)
+					print("Denied banned player " .. table.name)
+					Flags.NoDefaultCall = 1;
 				end
 			end
 

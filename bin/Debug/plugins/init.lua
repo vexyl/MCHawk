@@ -5,3 +5,7 @@ ClassicProtocol = {
 	PositionEvent = 3,
 	BlockEvent = 4
 }
+
+Flags = {
+	NoDefaultCall = 0
+}
