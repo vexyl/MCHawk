@@ -54,5 +54,6 @@ struct LuaServer {
 luabridge::LuaRef make_luatable();
 luabridge::LuaRef cauthp_to_luatable(const struct cauthp clientAuth);
 luabridge::LuaRef cmsgp_to_luatable(const struct cmsgp clientMsg);
+luabridge::LuaRef cblockp_to_luatable(const struct cblockp clientBlock);
 
 #endif // LUAPLUGINAPI_H_

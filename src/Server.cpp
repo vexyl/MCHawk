@@ -407,6 +407,9 @@ void Server::HandlePacket(Client* client, uint8_t opcode)
 		struct cposp clientPos;
 
 		if (clientPos.Read(stream)) {
+			auto table = make_luatable();
+			m_pluginHandler.TriggerEvent(EventType::kOnPosition, client, table);
+
 			GetWorld(client->GetWorldName())->OnPosition(client, clientPos);
 		}
 
@@ -417,6 +420,9 @@ void Server::HandlePacket(Client* client, uint8_t opcode)
 		struct cblockp clientBlock;
 
 		if (clientBlock.Read(stream)) {
+			auto table = cblockp_to_luatable(clientBlock);
+			m_pluginHandler.TriggerEvent(EventType::kOnBlock, client, table);
+
 			GetWorld(client->GetWorldName())->OnBlock(client, clientBlock);
 		}
 		break;

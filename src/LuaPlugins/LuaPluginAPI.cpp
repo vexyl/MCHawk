@@ -2,10 +2,6 @@
 
 #include <boost/algorithm/string.hpp>
 
-#ifdef __linux__
-	#include <sys/utsname.h>
-#endif
-
 extern lua_State* L;
 
 void AddCommand(std::string name, luabridge::LuaRef func, std::string docString,
@@ -56,6 +52,20 @@ luabridge::LuaRef cmsgp_to_luatable(const struct cmsgp clientMsg)
 	boost::trim_right(message);
 
 	table["message"] = message;
+
+	return table;
+}
+
+luabridge::LuaRef cblockp_to_luatable(const struct cblockp clientBlock)
+{
+	luabridge::LuaRef table(L);
+	table = luabridge::newTable(L);
+
+	table["type"] = clientBlock.type;
+	table["mode"] = clientBlock.mode;
+	table["x"] = clientBlock.x;
+	table["y"] = clientBlock.y;
+	table["z"] = clientBlock.z;
 
 	return table;
 }

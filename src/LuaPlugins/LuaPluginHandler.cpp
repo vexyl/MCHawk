@@ -46,7 +46,6 @@ void LuaPluginHandler::LoadPlugin(std::string filename)
 
 void LuaPluginHandler::RegisterEvent(int type, luabridge::LuaRef func)
 {
-	std::cout << "called RegisterEvent type=" << type << std::endl;
 	if (func.isFunction()) {
 		try {
 			signalMap[type].connect(boost::bind((std::function<void(Client*, luabridge::LuaRef)>)func, _1, _2));
