@@ -38,7 +38,7 @@ public:
 					message += "&e, ";
 			}
 
-			SendMessage(sender, message);
+			Server::SendWrappedMessage(sender, message);
 		} else if (subcommand == "new") {
 			if (!isOperator) {
 				SendMessage(sender, "&cOnly operators can create new worlds at this time");
@@ -170,7 +170,7 @@ public:
 		}
 	}
 
-	virtual std::string GetDocString() { return "/world <list/new*/set*> - various world-related commands | * operator only"; }
+	virtual std::string GetDocString() { return "/world <list/load/new*/set*> - various world-related commands | * operator only"; }
 	virtual unsigned int GetArgumentAmount() { return 1; }
 	virtual unsigned int GetPermissionLevel() { return 0; }
 

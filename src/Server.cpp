@@ -59,6 +59,8 @@
 #include "Commands/GotoCommand.hpp"
 #include "Commands/WorldCommand.hpp"
 
+#include "LuaPlugins/LuaPluginAPI.hpp"
+
 Server* Server::m_thisPtr = nullptr;
 
 Server::Server()
@@ -70,7 +72,21 @@ Server::Server()
 	m_serverHeartbeat = false;
 	m_serverPublic = false;
 	m_serverVerifyNames = false;
+}
 
+<<<<<<< HEAD
+=======
+Server::~Server()
+{
+	for (auto& obj : m_clients) {
+		delete obj->stream.socket;
+		delete obj;
+	}
+}
+
+void Server::Init()
+{
+>>>>>>> lua_plugins
 	m_commandHandler.Register("help", new HelpCommand, "h cmds");
 	m_commandHandler.Register("tp", new TeleportCommand);
 	m_commandHandler.Register("summon", new SummonCommand);
@@ -85,6 +101,7 @@ Server::Server()
 	m_commandHandler.Register("whois", new WhoIsCommand, "info");
 	m_commandHandler.Register("goto", new GotoCommand, "go g");
 	m_commandHandler.Register("world", new WorldCommand, "w map");
+<<<<<<< HEAD
 }
 
 Server::~Server()
@@ -97,9 +114,9 @@ Server::~Server()
 	for (auto& obj : m_worlds)
 		delete obj.second;
 }
+=======
+>>>>>>> lua_plugins
 
-void Server::Init()
-{
 	// Turn off SFML errors
 	sf::err().rdbuf(nullptr);
 
@@ -193,6 +210,18 @@ void Server::Init()
 			}
 		}
 	}
+
+	m_pluginHandler.LoadPlugin("plugins/core/core.lua"); // Load this first
+	m_pluginHandler.LoadPlugin("plugins/core/permission.lua"); // Load this first
+
+	// Load all plugins in folder
+	for (boost::filesystem::directory_iterator itr("plugins"); itr != boost::filesystem::directory_iterator(); ++itr) {
+		if (boost::filesystem::is_regular_file(itr->status())) {
+			std::string filename = itr->path().filename().string();
+
+			m_pluginHandler.LoadPlugin("plugins/" + filename);
+		}
+	}
 }
 
 void Server::OnConnect(sf::TcpSocket *sock)
@@ -249,6 +278,14 @@ void Server::OnAuth(Client* client, struct cauthp clientAuth)
 			}
 		}
 	}
+
+	// Pass authed player to events
+	auto table = cauthp_to_luatable(clientAuth);
+	m_pluginHandler.TriggerEvent(EventType::kOnAuth, client, table);
+
+	// Don't use default if a plugin set flag
+	if (m_pluginHandler.GetEventFlag("NoDefaultCall"))
+		return;
 
 	Client* checkClient = GetClientByName(name);
 	if (checkClient != nullptr)
@@ -358,8 +395,9 @@ void Server::HandlePacket(Client* client, uint8_t opcode)
 	if (!client->authed) {
 		if (opcode == CAUTH) {
 			struct cauthp clientAuth;
-			if (clientAuth.Read(stream))
+			if (clientAuth.Read(stream)) {
 				OnAuth(client, clientAuth);
+			}
 		} else {
 			LOG(LogLevel::kDebug, "Dropped unauthorized client (%s)", client->GetIpString().c_str());
 			client->active = false;
@@ -374,8 +412,12 @@ void Server::HandlePacket(Client* client, uint8_t opcode)
 	{
 		struct cmsgp clientMsg;
 
-		if (clientMsg.Read(stream))
+		if (clientMsg.Read(stream)) {
 			OnMessage(client, clientMsg);
+
+			auto table = cmsgp_to_luatable(clientMsg);
+			m_pluginHandler.TriggerEvent(EventType::kOnMessage, client, table);
+		}
 
 		break;
 	}
@@ -383,8 +425,12 @@ void Server::HandlePacket(Client* client, uint8_t opcode)
 	{
 		struct cposp clientPos;
 
-		if (clientPos.Read(stream))
+		if (clientPos.Read(stream)) {
+			auto table = make_luatable();
+			m_pluginHandler.TriggerEvent(EventType::kOnPosition, client, table);
+
 			GetWorld(client->GetWorldName())->OnPosition(client, clientPos);
+		}
 
 		break;
 	}
@@ -392,9 +438,12 @@ void Server::HandlePacket(Client* client, uint8_t opcode)
 	{
 		struct cblockp clientBlock;
 
-		if (clientBlock.Read(stream))
-			GetWorld(client->GetWorldName())->OnBlock(client, clientBlock);
+		if (clientBlock.Read(stream)) {
+			auto table = cblockp_to_luatable(clientBlock);
+			m_pluginHandler.TriggerEvent(EventType::kOnBlock, client, table);
 
+			GetWorld(client->GetWorldName())->OnBlock(client, clientBlock);
+		}
 		break;
 	}
 	default:

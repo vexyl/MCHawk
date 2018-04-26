@@ -7,14 +7,17 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <functional>
 
 #include <SFML/Network.hpp>
+#include  <boost/signals2.hpp>
 
 #include "Network/Protocol.hpp"
 #include "Client.hpp"
 #include "World.hpp"
 #include "Position.hpp"
 #include "CommandHandler.hpp"
+#include "LuaPlugins/LuaPluginHandler.hpp"
 
 struct ClientInfo {
 	std::string name;
@@ -37,7 +40,7 @@ public:
 
 	void Init();
 
-	const CommandHandler& GetCommandHandler() const { return m_commandHandler; }
+	CommandHandler& GetCommandHandler() { return m_commandHandler; }
 
 	void OnConnect(sf::TcpSocket *sock);
 	void OnAuth(Client* client, struct cauthp clientAuth);
@@ -74,6 +77,8 @@ private:
 	sf::TcpListener m_listener;
 
 	int m_port;
+
+	LuaPluginHandler m_pluginHandler;
 
 	// Configuration
 	std::string m_serverName;

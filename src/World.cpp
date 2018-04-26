@@ -109,12 +109,6 @@ void World::OnBlock(Client* client, struct cblockp clientBlock)
 	if (clientBlock.mode == 0x00) // Breaking mode
 		type = 0x00; // Air block type
 
-/*
-	Position cpos = client->GetPosition();
-	if (Utils::DistanceCheck(kMaxSetBlockDistance, cpos.x/32, cpos.y/32, cpos.z/32, clientBlock.x, clientBlock.y, clientBlock.z))
-		KickClient(client, "Cheat detected");
-*/
-
 	Position position(clientBlock.x, clientBlock.y, clientBlock.z);
 
 	if (GetOption("build") == "false") {
