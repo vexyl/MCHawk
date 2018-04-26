@@ -9,7 +9,7 @@
 #include  <boost/signals2.hpp>
 #include <iostream>
 
-enum EventType { kOnConnect, kOnAuth, kOnMessage, kOnPosition, kOnBlock, kEventTypeEnd };
+enum EventType { kOnConnect, kOnAuth, kOnMessage, kOnPosition, kOnBlock, kOnPluginLoaded, kEventTypeEnd };
 
 extern lua_State* L;
 

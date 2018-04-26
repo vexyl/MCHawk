@@ -15,7 +15,7 @@ LuaPluginHandler::LuaPluginHandler()
 
 	LuaServer::Init(L);
 
-	if (luaL_dofile(L, "plugins/init.lua") != 0)
+	if (luaL_dofile(L, "plugins/core/init.lua") != 0)
 		std::cerr << "Failed to load init.lua" << std::endl;
 }
 
@@ -36,6 +36,12 @@ void LuaPluginHandler::LoadPlugin(std::string filename)
 	LuaPlugin* plugin = new LuaPlugin;
 	plugin->LoadScript(L, filename, "Plugin");
 	AddPlugin(plugin);
+
+	auto table = make_luatable();
+
+	table["name"] = plugin->GetName();
+
+	TriggerEvent(EventType::kOnPluginLoaded, nullptr, table);
 }
 
 void LuaPluginHandler::RegisterEvent(int type, luabridge::LuaRef func)

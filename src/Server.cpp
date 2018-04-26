@@ -193,7 +193,16 @@ void Server::Init()
 		}
 	}
 
-	m_pluginHandler.LoadPlugin("plugins/myplugin.lua");
+	m_pluginHandler.LoadPlugin("plugins/core/core.lua"); // Load this first
+
+	// Load all plugins in folder
+	for (boost::filesystem::directory_iterator itr("plugins"); itr != boost::filesystem::directory_iterator(); ++itr) {
+		if (boost::filesystem::is_regular_file(itr->status())) {
+			std::string filename = itr->path().filename().string();
+
+			m_pluginHandler.LoadPlugin("plugins/" + filename);
+		}
+	}
 }
 
 void Server::OnConnect(sf::TcpSocket *sock)

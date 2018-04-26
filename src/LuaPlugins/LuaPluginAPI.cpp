@@ -2,6 +2,10 @@
 
 #include <boost/algorithm/string.hpp>
 
+#ifdef __linux__
+	#include <sys/utsname.h>
+#endif
+
 extern lua_State* L;
 
 void AddCommand(std::string name, luabridge::LuaRef func, std::string docString,

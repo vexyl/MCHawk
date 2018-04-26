@@ -1,15 +1,10 @@
 Plugin = {
-	name = "Test",
+	name = "Ban",
 
 	init = function()
-		AddCommand("ban", Plugin.BanCommand, "/ban <player> - bans player from server", 1, 1)
+		AddCommand("ban", Plugin.BanCommand, "&9/ban <player> - bans player from server", 1, 1)
 
-		RegisterEvent(ClassicProtocol.MessageEvent, Plugin.OnMessage)
 		RegisterEvent(ClassicProtocol.AuthEvent, Plugin.OnAuth)
-	end,
-
-	OnMessage = function(client, table)
-		print(client.name .. ": " .. table.message)
 	end,
 
 	OnAuth = function(client, table)

@@ -14,6 +14,8 @@ public:
 	void Init();
 	void Tick();
 
+	std::string GetName() const { return m_name; }
+
 private:
 	std::string m_name;
 	std::unique_ptr<luabridge::LuaRef> m_initFunc;
