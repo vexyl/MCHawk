@@ -46,7 +46,7 @@ Build the project and copy contents from MCHawk/win32/Release to MCHawk/bin/Rele
 
 The same applies to Debug with the appropriate filename changes to the above instructions.
 
-##Setup
+## Setup
 
 Copy the plugins folder into bin/Release/ and run bin/Release/MCHawk to start the server.
 
