@@ -2,7 +2,7 @@
 
 This is a Minecraft classic server written in C++.
 
-Libraries: SFML, Boost, OpenSSL, and zlib
+Libraries: SFML, Boost, LuaBridge, OpenSSL, and zlib
 
 ## Compile
 
