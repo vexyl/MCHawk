@@ -74,19 +74,19 @@ Server::Server()
 	m_serverVerifyNames = false;
 }
 
-<<<<<<< HEAD
-=======
 Server::~Server()
 {
 	for (auto& obj : m_clients) {
 		delete obj->stream.socket;
 		delete obj;
 	}
+
+	for (auto& obj : m_worlds)
+		delete obj.second;
 }
 
 void Server::Init()
 {
->>>>>>> lua_plugins
 	m_commandHandler.Register("help", new HelpCommand, "h cmds");
 	m_commandHandler.Register("tp", new TeleportCommand);
 	m_commandHandler.Register("summon", new SummonCommand);
@@ -101,21 +101,6 @@ void Server::Init()
 	m_commandHandler.Register("whois", new WhoIsCommand, "info");
 	m_commandHandler.Register("goto", new GotoCommand, "go g");
 	m_commandHandler.Register("world", new WorldCommand, "w map");
-<<<<<<< HEAD
-}
-
-Server::~Server()
-{
-	for (auto& obj : m_clients) {
-		delete obj->stream.socket;
-		delete obj;
-	}
-
-	for (auto& obj : m_worlds)
-		delete obj.second;
-}
-=======
->>>>>>> lua_plugins
 
 	// Turn off SFML errors
 	sf::err().rdbuf(nullptr);
