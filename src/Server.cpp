@@ -93,6 +93,9 @@ Server::~Server()
 		delete obj->stream.socket;
 		delete obj;
 	}
+
+	for (auto& obj : m_worlds)
+		delete obj.second;
 }
 
 void Server::Init()
