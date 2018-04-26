@@ -34,7 +34,7 @@ void LuaPluginHandler::AddPlugin(LuaPlugin* plugin)
 void LuaPluginHandler::LoadPlugin(std::string filename)
 {
 	LuaPlugin* plugin = new LuaPlugin;
-	plugin->LoadScript(L, filename, "Plugin");
+	plugin->LoadScript(L, filename);
 	AddPlugin(plugin);
 
 	auto table = make_luatable();

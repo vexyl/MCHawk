@@ -9,7 +9,7 @@
 
 class LuaPlugin {
 public:
-	void LoadScript(lua_State* L, const std::string& filename, const std::string& tableName);
+	void LoadScript(lua_State* L, const std::string& filename);
 
 	void Init();
 	void Tick();

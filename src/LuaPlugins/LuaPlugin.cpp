@@ -5,17 +5,18 @@
 #include <iostream>
 
 // TODO: Return value or throw exception and only Init() if no errors
-void LuaPlugin::LoadScript(lua_State* L, const std::string& filename, const std::string& tableName)
+void LuaPlugin::LoadScript(lua_State* L, const std::string& filename)
 {
 	if (luaL_dofile(L, filename.c_str()) == 0) {
-		luabridge::LuaRef table = luabridge::getGlobal(L, tableName.c_str());
+		luabridge::LuaRef name = luabridge::getGlobal(L, "this");
+
+		// TODO: check if name is string
+
+		m_name = name.cast<std::string>();
+std::cout << "m_name=" << m_name << std::endl;
+		luabridge::LuaRef table = luabridge::getGlobal(L, m_name.c_str());
 
 		if (table.isTable()) {
-			if (table["name"].isString())
-				m_name = table["name"].cast<std::string>();
-			else
-				m_name = "Undefined";
-
 			if (table["init"].isFunction()) {
 				m_initFunc = std::make_unique<luabridge::LuaRef>(table["init"]);
 			} else {

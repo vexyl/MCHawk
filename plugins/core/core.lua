@@ -1,34 +1,45 @@
-pluginCount = 0
-pluginNames = { }
+this = "CorePlugin"
 
-Plugin = {
-	name = "Core",
+CorePlugin = {}
 
-	init = function()
-		AddCommand("plugins", Plugin.PluginsCommand, "&9/plugins - show information about plugins", 0, 0)
-		AddCommand("serverinfo", Plugin.ServerInfoCommand, "&9/serverinfo - show information about the server", 0, 0)
-		AddCommand("reload", Plugin.ReloadCommand, "&9/reload - reloads server plugins", 0, 1)
+CorePlugin.pluginCount = 0
+CorePlugin.pluginNames = {}
 
-		RegisterEvent(ClassicProtocol.PluginLoadedEvent, Plugin.OnPluginLoaded)
-	end,
+CorePlugin.init = function()
+	AddCommand("plugins", CorePlugin.PluginsCommand, "&9/plugins - show information about plugins", 0, 0)
+	AddCommand("serverinfo", CorePlugin.ServerInfoCommand, "&9/serverinfo - show information about the server", 0, 0)
+	AddCommand("reload", CorePlugin.ReloadCommand, "&9/reload - reloads server plugins", 0, 1)
 
-	OnPluginLoaded = function(client, args)
-		pluginCount = pluginCount + 1
-		table.insert(pluginNames, args.name)
-	end,
+	RegisterEvent(ClassicProtocol.PluginLoadedEvent, CorePlugin.OnPluginLoaded)
+end
 
-	PluginsCommand = function(client, args)
-		Server.SendMessage(client, "&eLuaBridge/" .. _VERSION)
-		Server.SendMessage(client, "&e" .. pluginCount .. " plugin(s) loaded")
-		Server.SendMessage(client, "&ePlugins: &9" .. table.concat(pluginNames, "&e, &9"))
-		-- show plugins
-	end,
+CorePlugin.OnPluginLoaded = function(client, args)
+	CorePlugin.pluginCount = CorePlugin.pluginCount + 1
+	table.insert(CorePlugin.pluginNames, args.name)
+end
 
-	ServerInfoCommand = function(client, args)
-		Server.SendMessage(client, "&eNot yet")
-	end,
+CorePlugin.PluginsCommand = function(client, args)
+	Server.SendMessage(client, "&eLuaBridge/" .. _VERSION)
+	Server.SendMessage(client, "&e" .. CorePlugin.pluginCount .. " plugin(s) loaded")
+	Server.SendMessage(client, "&ePlugins: &9" .. table.concat(CorePlugin.pluginNames, "&e, &9"))
+end
 
-	ReloadCommand = function(client, args)
-		Server.SendMessage(client, "&eNot yet")
-	end
-}
+CorePlugin.ServerInfoCommand = function(client, args)
+	Server.SendMessage(client, "&eNot yet")
+end
+
+CorePlugin.ReloadCommand = function(client, args)
+	Server.SendMessage(client, "&eNot yet")
+end
+
+function mysplit(inputstr, sep)
+if sep == nil then
+        sep = "%s"
+end
+local t={} ; i=1
+for str in string.gmatch(inputstr, "([^"..sep.."]+)") do
+        t[i] = str
+        i = i + 1
+end
+return t
+end

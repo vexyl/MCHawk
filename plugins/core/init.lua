@@ -10,3 +10,5 @@ ClassicProtocol = {
 Flags = {
 	NoDefaultCall = 0
 }
+
+Plugin = {}

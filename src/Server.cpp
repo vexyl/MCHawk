@@ -194,6 +194,7 @@ void Server::Init()
 	}
 
 	m_pluginHandler.LoadPlugin("plugins/core/core.lua"); // Load this first
+	m_pluginHandler.LoadPlugin("plugins/core/permission.lua"); // Load this first
 
 	// Load all plugins in folder
 	for (boost::filesystem::directory_iterator itr("plugins"); itr != boost::filesystem::directory_iterator(); ++itr) {
