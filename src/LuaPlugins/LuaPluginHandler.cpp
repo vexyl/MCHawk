@@ -25,14 +25,15 @@ LuaPluginHandler::~LuaPluginHandler()
 void LuaPluginHandler::AddPlugin(LuaPlugin* plugin)
 {
 	m_plugins.push_back(plugin);
-	plugin->Init();
 }
 
 void LuaPluginHandler::LoadPlugin(std::string filename)
 {
 	LuaPlugin* plugin = new LuaPlugin;
+
 	plugin->LoadScript(L, filename);
 	AddPlugin(plugin);
+	plugin->Init();
 
 	auto table = make_luatable();
 

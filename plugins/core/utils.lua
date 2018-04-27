@@ -10,6 +10,8 @@ end
 return t
 end
 
+-- Do NOT use this to load plugins!
+-- Only for functions/variables in the plugin's table
 include = function(plugin, filename)
 	dofile("plugins/" .. plugin.name .. "/" .. filename)
 end
