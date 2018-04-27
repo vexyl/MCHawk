@@ -26,7 +26,7 @@ public:
 		}
 
 		if (!world->GetActive()) {
-			SendMessage(sender, "&cWorld " + worldName + " is inactive");
+			SendMessage(sender, "&cWorld " + worldName + " is not loaded");
 			return;
 		}
 

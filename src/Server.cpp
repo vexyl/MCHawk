@@ -174,7 +174,7 @@ void Server::Init()
 
 				std::string autosave = pt.get<std::string>("Options.autosave");
 				std::string build = pt.get<std::string>("Options.build");
-				std::string active = pt.get<std::string>("Options.active");
+				std::string autoload = pt.get<std::string>("Options.autoload");
 
 				World* world = new World(name);
 				world->GetMap().SetDimensions(x_size, y_size, z_size);
@@ -182,9 +182,9 @@ void Server::Init()
 				world->SetSpawnPosition(Position(sx, sy, sz));
 				world->SetOption("autosave", autosave);
 				world->SetOption("build", build);
-				world->SetOption("active", active);
+				world->SetOption("autoload", autoload);
 
-				if (active == "true")
+				if (autoload == "true")
 					world->Load();
 				else
 					LOG(LogLevel::kDebug, "Unloaded world %s", name.c_str());

@@ -157,7 +157,7 @@ public:
 			}
 
 			if (world->GetActive()) {
-				SendMessage(sender, "&cWorld " + worldName + " is already active");
+				SendMessage(sender, "&cWorld " + worldName + " is already loaded");
 				return;
 			}
 

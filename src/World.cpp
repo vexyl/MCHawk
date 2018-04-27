@@ -8,7 +8,7 @@ World::World(std::string name) : m_name(name), m_active(false), m_mapChanged(tru
 {
 	SetOption("build", "true");
 	SetOption("autosave", "true");
-	SetOption("autoload", "true");
+	SetOption("autoload", "false");
 }
 
 void World::Load()
