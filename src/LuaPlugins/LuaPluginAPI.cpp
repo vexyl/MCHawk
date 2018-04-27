@@ -4,7 +4,7 @@
 
 extern lua_State* L;
 
-void AddCommand(std::string name, luabridge::LuaRef func, std::string docString,
+void AddCommand(std::string name, std::string aliases, luabridge::LuaRef func, std::string docString,
 			unsigned argumentAmount, unsigned permissionLevel)
 {
 	if (!func.isFunction()) {
@@ -14,7 +14,7 @@ void AddCommand(std::string name, luabridge::LuaRef func, std::string docString,
 
 	LuaCommand* command = new LuaCommand(name, func, docString, argumentAmount, permissionLevel);
 
-	Server::GetInstance()->GetCommandHandler().Register(name, command);
+	Server::GetInstance()->GetCommandHandler().Register(name, command, aliases);
 }
 
 // Struct to table stuff

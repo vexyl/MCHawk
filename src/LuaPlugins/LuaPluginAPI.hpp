@@ -6,7 +6,7 @@
 #include "../Network/Protocol.hpp"
 #include "LuaCommand.hpp"
 
-void AddCommand(std::string name, luabridge::LuaRef func, std::string docString,
+void AddCommand(std::string name, std::string aliases, luabridge::LuaRef func, std::string docString,
 			unsigned argumentAmount, unsigned permissionLevel);
 
 struct LuaServer {
@@ -45,9 +45,9 @@ struct LuaServer {
 		Server::GetInstance()->KickClient(client, reason);
 	}
 
-	static Client* LuaGetClientByName(std::string name)
+	static Client* LuaGetClientByName(std::string name, bool exact)
 	{
-		return Server::GetInstance()->GetClientByName(name);
+		return Server::GetInstance()->GetClientByName(name, exact);
 	}
 };
 

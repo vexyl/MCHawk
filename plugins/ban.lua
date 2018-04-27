@@ -3,8 +3,8 @@ this = "BanPlugin"
 BanPlugin = {}
 
 BanPlugin.init = function()
-	AddCommand("ban", BanPlugin.BanCommand, "&9/ban <player> - bans player from server", 1, 1)
-	AddCommand("unban", BanPlugin.UnbanCommand, "&9/unban <player> - unbans player from server", 1, 1)
+	AddCommand("ban", "", BanPlugin.BanCommand, "&9/ban <player> - bans player from server", 1, 1)
+	AddCommand("unban", "", BanPlugin.UnbanCommand, "&9/unban <player> - unbans player from server", 1, 1)
 
 	RegisterEvent(ClassicProtocol.AuthEvent, BanPlugin.OnAuth)
 end
@@ -18,7 +18,7 @@ BanPlugin.BanCommand = function(client, args)
 
 	local f = io.open("bans.txt", "a")
 	if f then
-		player = Server.GetClientByName(name)
+		player = Server.GetClientByName(name, true)
 		if (player == nil) then
 			Server.SendMessage(client, "&cPlayer " .. name .. " not found")
 			f:close()

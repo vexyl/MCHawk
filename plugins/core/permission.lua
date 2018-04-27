@@ -7,9 +7,9 @@ PermissionPlugin = {}
 PermissionPlugin.permissionTable = {}
 
 PermissionPlugin.init = function()
-	AddCommand("grant", PermissionPlugin.GrantCommand, "&9/grant <player> <permission> - grants player permission", 2, 0)
-	AddCommand("revoke", PermissionPlugin.RevokeCommand, "&9/revoke <player> <permission> - revokes player permission", 2, 0)
-	AddCommand("permissions", PermissionPlugin.PermissionsCommand, "&9/permissions [player] - shows player permissions", 0, 0)
+	AddCommand("grant", "", PermissionPlugin.GrantCommand, "&9/grant <player> <permission> - grants player permission", 2, 0)
+	AddCommand("revoke", "", PermissionPlugin.RevokeCommand, "&9/revoke <player> <permission> - revokes player permission", 2, 0)
+	AddCommand("permissions", "p perm perms", PermissionPlugin.PermissionsCommand, "&9/permissions [player] - shows player permissions", 0, 0)
 
 	PermissionPlugin.LoadPermissions()
 
@@ -23,7 +23,7 @@ PermissionPlugin.GrantCommand = function(client, args)
 
 	targetName = args[1]
 	targetPerm = args[2]
-	target = Server.GetClientByName(targetName)
+	target = Server.GetClientByName(targetName, false)
 
 	if (target == nil) then
 		Server.SendMessage(client, "&cPlayer " .. targetName .. " not found")
@@ -51,7 +51,7 @@ PermissionPlugin.RevokeCommand = function(client, args)
 
 	targetName = args[1]
 	targetPerm = args[2]
-	target = Server.GetClientByName(targetName)
+	target = Server.GetClientByName(targetName, false)
 
 	if (target == nil) then
 		Server.SendMessage(client, "&cPlayer " .. targetName .. " not found")
@@ -78,7 +78,7 @@ PermissionPlugin.PermissionsCommand = function(client, args)
 	target = client
 
 	if (name ~= nil) then
-		target = Server.GetClientByName(name)
+		target = Server.GetClientByName(name, false)
 		if (target == nil) then
 			Server.SendMessage(client, "&cPlayer " .. name .. " not found")
 			return
