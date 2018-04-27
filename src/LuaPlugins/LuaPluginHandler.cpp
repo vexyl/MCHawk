@@ -14,9 +14,6 @@ LuaPluginHandler::LuaPluginHandler()
 	luaL_openlibs(L);
 
 	LuaServer::Init(L);
-
-	if (luaL_dofile(L, "plugins/core/init.lua") != 0)
-		std::cerr << "Failed to load init.lua" << std::endl;
 }
 
 LuaPluginHandler::~LuaPluginHandler()

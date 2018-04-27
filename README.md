@@ -14,6 +14,8 @@ git clone --recursive https://github.com/vexyl/MCHawk.git
 
 On Linux, install the above libraries with your distribution's package manager
 
+### Linux
+
 **Arch Linux:**
 
 ```
@@ -34,7 +36,7 @@ make
 
 the binary will output to *bin/Release*.
 
-**Windows**
+### Windows
 
 First, download the dependencies from [Dropbox](https://www.dropbox.com/s/t5lg7s7wom0ybft/MCHawk_dependencies.zip?dl=0).
 

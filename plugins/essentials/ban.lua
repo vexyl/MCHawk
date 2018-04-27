@@ -1,18 +1,5 @@
-this = "BanPlugin"
-
-BanPlugin = {}
-
-BanPlugin.init = function()
-	AddCommand("ban", "", BanPlugin.BanCommand, "&9/ban <player> - bans player from server", 1, 1)
-	AddCommand("unban", "", BanPlugin.UnbanCommand, "&9/unban <player> - unbans player from server", 1, 1)
-
-	RegisterEvent(ClassicProtocol.AuthEvent, BanPlugin.OnAuth)
-
-	PermissionPlugin.RequirePermission("ban")
-end
-
-BanPlugin.BanCommand = function(client, args)
-	if (not PermissionPlugin.CheckPermissionNotify(client, "ban")) then
+EssentialsPlugin.BanCommand = function(client, args)
+	if (not PermissionsPlugin.CheckPermissionNotify(client, "ban")) then
 		return
 	end
 
@@ -35,20 +22,20 @@ BanPlugin.BanCommand = function(client, args)
 	end
 end
 
-BanPlugin.UnbanCommand = function(client, args)
-	if (not PermissionPlugin.CheckPermissionNotify(client, "ban")) then
+EssentialsPlugin.UnbanCommand = function(client, args)
+	if (not PermissionsPlugin.CheckPermissionNotify(client, "ban")) then
 		return
 	end
 
 	Server.SendMessage(client, "&eNot yet")
 end
 
-BanPlugin.OnAuth = function(client, args)
+EssentialsPlugin.Ban_OnAuth = function(client, args)
 	local f = io.open("bans.txt", "r")
 	if f then
 		lines = {}
 		for line in io.lines("bans.txt") do
-			-- Use table.name because client.name isn't set yet
+			-- Use args.name because client.name isn't set yet
 			if (line == string.lower(args.name)) then
 				Server.KickClient(client, "Banned")
 				Flags.NoDefaultCall = 1

@@ -21,12 +21,12 @@ public:
 
 		World* world = server->GetWorld(worldName);
 		if (world == nullptr) {
-			SendMessage(sender, "&cWorld " + worldName + " does not exist");
+			SendMessage(sender, "&cWorld &f" + worldName + "&c does not exist");
 			return;
 		}
 
 		if (!world->GetActive()) {
-			SendMessage(sender, "&cWorld " + worldName + " is not loaded");
+			SendMessage(sender, "&cWorld &f" + worldName + "&c is not loaded");
 			return;
 		}
 
@@ -37,7 +37,7 @@ public:
 
 		server->GetWorld(sender->GetWorldName())->RemoveClient(sender->GetPid());
 		world->AddClient(sender);
-		SendMessage(sender, "&eWarped to " + worldName);
+		SendMessage(sender, "&eWarped to &a" + worldName);
 	}
 
 	virtual std::string GetDocString() { return "/goto <world name> - warps to world"; }

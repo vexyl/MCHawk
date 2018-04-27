@@ -196,15 +196,18 @@ void Server::Init()
 		}
 	}
 
-	m_pluginHandler.LoadPlugin("plugins/core/core.lua"); // Load this first
-	m_pluginHandler.LoadPlugin("plugins/core/permission.lua"); // Load this first
+	m_pluginHandler.LoadPlugin("plugins/core/init.lua"); // Load this first
 
 	// Load all plugins in folder
 	for (boost::filesystem::directory_iterator itr("plugins"); itr != boost::filesystem::directory_iterator(); ++itr) {
-		if (boost::filesystem::is_regular_file(itr->status())) {
-			std::string filename = itr->path().filename().string();
-
-			m_pluginHandler.LoadPlugin("plugins/" + filename);
+		if (boost::filesystem::is_directory(itr->status())) {
+			std::string path = itr->path().generic_string();
+			if (path != "plugins/core") {
+				std::string filename = path + "/init.lua";
+				if (boost::filesystem::exists(filename)) {
+					m_pluginHandler.LoadPlugin(filename);
+				}
+			}
 		}
 	}
 }

@@ -83,7 +83,7 @@ public:
 
 			server->AddWorld(world);
 
-			SendMessage(sender, "&eWorld " + worldName + " created (" + std::to_string(x) + "x" + std::to_string(y) + "x" + std::to_string(z) + ")");
+			SendMessage(sender, "World &a" + worldName + "&e created (" + std::to_string(x) + "x" + std::to_string(y) + "x" + std::to_string(z) + ")");
 		} else if (subcommand == "set") {
 			if (!isOperator) {
 				SendMessage(sender, "&cOnly operators can set world options");
@@ -152,18 +152,18 @@ public:
 			World *world = server->GetWorld(worldName);
 
 			if (world == nullptr) {
-				SendMessage(sender, "&cWorld " + worldName + " does not exist");
+				SendMessage(sender, "&cWorld &f" + worldName + "&c does not exist");
 				return;
 			}
 
 			if (world->GetActive()) {
-				SendMessage(sender, "&cWorld " + worldName + " is already loaded");
+				SendMessage(sender, "&cWorld &a" + worldName + "&c is already loaded");
 				return;
 			}
 
 			world->Load();
 
-			SendMessage(sender, "&eLoaded world " + worldName);
+			SendMessage(sender, "&eLoaded world &a" + worldName);
 		} else {
 			SendMessage(sender, "&b" + GetDocString());
 			return;
