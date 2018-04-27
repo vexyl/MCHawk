@@ -1,3 +1,5 @@
+-- TODO: Grant/Revoke comma-separated permissions, send message to granted/revoked player
+
 this = "PermissionPlugin"
 
 PermissionPlugin = {}
@@ -10,7 +12,6 @@ PermissionPlugin.init = function()
 	AddCommand("permissions", PermissionPlugin.PermissionsCommand, "&9/permissions [player] - shows player permissions", 0, 0)
 
 	PermissionPlugin.LoadPermissions()
-	PermissionPlugin.SavePermissions()
 
 	print("Permissions plugin init")
 end
@@ -30,8 +31,13 @@ PermissionPlugin.GrantCommand = function(client, args)
 	end
 
 	if (not PermissionPlugin.CheckPermission(target.name, targetPerm)) then
-		perms = PermissionPlugin.permissionTable[target.name]
-		table.insert(perms, targetPerm)
+		permsTable = PermissionPlugin.permissionTable
+
+		if (permsTable[target.name] == nil) then
+			permsTable[target.name]= {}
+		end
+
+		table.insert(permsTable[target.name], targetPerm)
 		PermissionPlugin.SavePermissions()
 	end
 
@@ -88,7 +94,7 @@ PermissionPlugin.PermissionsCommand = function(client, args)
 		end
 	end
 
-	Server.SendMessage(target, "&ePermissions: " .. permissions)
+	Server.SendMessage(client, "&ePermissions: " .. permissions)
 end
 
 PermissionPlugin.LoadPermissions = function()

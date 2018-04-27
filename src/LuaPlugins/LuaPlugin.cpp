@@ -13,7 +13,7 @@ void LuaPlugin::LoadScript(lua_State* L, const std::string& filename)
 		// TODO: check if name is string
 
 		m_name = name.cast<std::string>();
-std::cout << "m_name=" << m_name << std::endl;
+
 		luabridge::LuaRef table = luabridge::getGlobal(L, m_name.c_str());
 
 		if (table.isTable()) {
