@@ -87,21 +87,6 @@ Server::~Server()
 
 void Server::Init()
 {
-	m_commandHandler.Register("help", new HelpCommand, "h cmds");
-	m_commandHandler.Register("tp", new TeleportCommand);
-	m_commandHandler.Register("summon", new SummonCommand);
-	m_commandHandler.Register("billnye", new BillNyeCommand);
-	m_commandHandler.Register("me", new EmoteCommand, "emote");
-	m_commandHandler.Register("pm", new PmCommand, "msg");
-	m_commandHandler.Register("op", new OpCommand);
-	m_commandHandler.Register("kick", new KickCommand);
-	m_commandHandler.Register("save", new SaveCommand);
-	m_commandHandler.Register("alias", new AliasCommand, "name");
-	m_commandHandler.Register("who", new WhoCommand, "players list");
-	m_commandHandler.Register("whois", new WhoIsCommand, "info");
-	m_commandHandler.Register("goto", new GotoCommand, "go g");
-	m_commandHandler.Register("world", new WorldCommand, "w map");
-
 	// Turn off SFML errors
 	sf::err().rdbuf(nullptr);
 
@@ -195,6 +180,21 @@ void Server::Init()
 			}
 		}
 	}
+
+	m_commandHandler.Register("help", new HelpCommand, "h cmds");
+	m_commandHandler.Register("tp", new TeleportCommand);
+	m_commandHandler.Register("summon", new SummonCommand);
+	m_commandHandler.Register("billnye", new BillNyeCommand);
+	m_commandHandler.Register("me", new EmoteCommand, "emote");
+	m_commandHandler.Register("pm", new PmCommand, "msg");
+	m_commandHandler.Register("op", new OpCommand);
+	m_commandHandler.Register("kick", new KickCommand);
+	m_commandHandler.Register("save", new SaveCommand);
+	m_commandHandler.Register("alias", new AliasCommand, "name");
+	m_commandHandler.Register("who", new WhoCommand, "players list");
+	m_commandHandler.Register("whois", new WhoIsCommand, "info");
+	m_commandHandler.Register("goto", new GotoCommand, "go g");
+	m_commandHandler.Register("world", new WorldCommand, "w map");
 
 	m_pluginHandler.LoadPlugin("plugins/core/init.lua"); // Load this first
 	m_pluginHandler.LoadPlugin("plugins/core/permissions.lua"); // Load this first

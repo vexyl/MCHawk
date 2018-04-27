@@ -2,7 +2,7 @@
 
 this = "PermissionsPlugin" -- must match table name below
 PermissionsPlugin = {}
-PermissionsPlugin.name = "core" -- should match folder name!
+PermissionsPlugin.name = "permissions" -- should match folder name!
 
 PermissionsPlugin.permissionTable = {}
 PermissionsPlugin.permissionList = {}
