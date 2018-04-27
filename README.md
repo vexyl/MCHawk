@@ -12,9 +12,9 @@ When cloning this repository make sure the submodule LuaBridge is also cloned
 git clone --recursive https://github.com/vexyl/MCHawk.git
 ```
 
-On Linux, install the above libraries with your distribution's package manager
-
 ### Linux
+
+On Linux, install the above libraries with your distribution's package manager
 
 **Arch Linux:**
 
