@@ -1,6 +1,5 @@
 #include "CommandHandler.hpp"
 
-#include <iostream>
 #include <vector>
 #include <stdexcept>
 
@@ -23,14 +22,14 @@ void CommandHandler::Register(std::string name, ICommand* command, std::string a
 	std::pair<CommandMap::iterator, bool> res = m_commands.insert(std::make_pair(name, command));
 
 	if (!res.second) {
-		std::cout << "Command " << name << " already exists" << std::endl;
+		LOG(LogLevel::kWarning, "Command %s already exists", name.c_str());
 		return;
-	} else {
-		std::cout << "Registered command " << name;
 	}
 
+	std::string commandString = name;
+
 	if (!aliases.empty()) {
-		std::cout << " (";
+		commandString += " (";
 
 		std::vector<std::string> aliasList;
 
@@ -42,19 +41,19 @@ void CommandHandler::Register(std::string name, ICommand* command, std::string a
 
 			std::pair<AliasMap::iterator, bool> res = m_aliases.insert(std::make_pair(alias, name));
 
-			std::cout << alias;
+			commandString += alias;
 
 			if (!res.second)
-				std::cout << "[X]";
+				commandString += "[X]";
 
 			if (i < size - 1)
-				std::cout << ", ";
+				commandString += ", ";
 			else
-				std::cout << ")";
+				commandString += ")";
 		}
 	}
 
-	std::cout << std::endl;
+	LOG(LogLevel::kDebug, "Registered command %s", commandString.c_str());
 }
 
 void CommandHandler::Execute(Client* sender, std::string name, const CommandArgs& args)

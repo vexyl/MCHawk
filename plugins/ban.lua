@@ -7,6 +7,8 @@ BanPlugin.init = function()
 	AddCommand("unban", "", BanPlugin.UnbanCommand, "&9/unban <player> - unbans player from server", 1, 1)
 
 	RegisterEvent(ClassicProtocol.AuthEvent, BanPlugin.OnAuth)
+
+	PermissionPlugin.RequirePermission("ban")
 end
 
 BanPlugin.BanCommand = function(client, args)

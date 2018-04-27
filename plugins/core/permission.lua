@@ -5,6 +5,7 @@ this = "PermissionPlugin"
 PermissionPlugin = {}
 
 PermissionPlugin.permissionTable = {}
+PermissionPlugin.permissionList = {}
 
 PermissionPlugin.init = function()
 	AddCommand("grant", "", PermissionPlugin.GrantCommand, "&9/grant <player> <permission> - grants player permission", 2, 0)
@@ -12,6 +13,7 @@ PermissionPlugin.init = function()
 	AddCommand("permissions", "p perm perms", PermissionPlugin.PermissionsCommand, "&9/permissions [player] - shows player permissions", 0, 0)
 
 	PermissionPlugin.LoadPermissions()
+	PermissionPlugin.RequirePermission("permission")
 
 	print("Permissions plugin init")
 end
@@ -30,6 +32,10 @@ PermissionPlugin.GrantCommand = function(client, args)
 		return
 	end
 
+	if (not PermissionPlugin.PermissionExistsNotify(client, targetPerm)) then
+		return false
+	end
+
 	if (not PermissionPlugin.CheckPermission(target.name, targetPerm)) then
 		permsTable = PermissionPlugin.permissionTable
 
@@ -42,6 +48,7 @@ PermissionPlugin.GrantCommand = function(client, args)
 	end
 
 	Server.SendMessage(client, "&eGranted player " .. target.name ..": &9" .. targetPerm)
+	Server.SendMessage(target, "&e" .. client.name .. " granted you: &9" .. targetPerm)
 end
 
 PermissionPlugin.RevokeCommand = function(client, args)
@@ -58,6 +65,10 @@ PermissionPlugin.RevokeCommand = function(client, args)
 		return
 	end
 
+	if (not PermissionPlugin.PermissionExistsNotify(client, targetPerm)) then
+		return false
+	end
+
 	if (PermissionPlugin.CheckPermission(target.name, targetPerm)) then
 		perms = PermissionPlugin.permissionTable[target.name]
 
@@ -71,6 +82,7 @@ PermissionPlugin.RevokeCommand = function(client, args)
 	end
 
 	Server.SendMessage(client, "&eRevoked player " .. target.name ..": &9" .. targetPerm)
+	Server.SendMessage(target, "&e" .. client.name .. " revoked you: &9" .. targetPerm)
 end
 
 PermissionPlugin.PermissionsCommand = function(client, args)
@@ -133,6 +145,31 @@ PermissionPlugin.SavePermissions = function()
 	end
 end
 
+PermissionPlugin.RequirePermission = function(permission)
+	table.insert(PermissionPlugin.permissionList, permission)
+	print("PermissionPlugin new permission: " .. permission)
+end
+
+PermissionPlugin.PermissionExists = function(permission)
+	for k, perm in pairs(PermissionPlugin.permissionList) do
+		if (perm == permission) then
+			return true
+		end
+	end
+
+	return false
+end
+
+PermissionPlugin.PermissionExistsNotify = function(client, permission)
+	if (not PermissionPlugin.PermissionExists(permission)) then
+		Server.SendMessage(client, "&cInvalid permission " .. "&9" .. permission)
+		return false
+	end
+
+	return true
+end
+
+-- Doesn't check if permission exists
 PermissionPlugin.CheckPermission = function(name, permission)
 	result = false
 
@@ -152,6 +189,10 @@ PermissionPlugin.CheckPermission = function(name, permission)
 end
 
 PermissionPlugin.CheckPermissionNotify = function(client, permission)
+	if (not PermissionPlugin.PermissionExistsNotify(client, permission)) then
+		return false
+	end
+
 	result = PermissionPlugin.CheckPermission(client.name, permission)
 
 	if (not result) then
@@ -159,6 +200,10 @@ PermissionPlugin.CheckPermissionNotify = function(client, permission)
 	end
 
 	return result
+end
+
+PermissionPlugin.SendInvalidPermissionMessage = function(client, permission)
+	Server.SendMessage(client, "&cInvalid permission: &9" .. permission)
 end
 
 PermissionPlugin.SendNoPermissionMessage = function(client, permission)
