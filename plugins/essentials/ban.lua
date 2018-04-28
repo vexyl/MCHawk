@@ -1,5 +1,5 @@
 EssentialsPlugin.BanCommand = function(client, args)
-	if (not PermissionsPlugin.CheckPermissionNotify(client, "ban")) then
+	if (not PermissionsPlugin.CheckPermissionNotify(client, "admin")) then
 		return
 	end
 

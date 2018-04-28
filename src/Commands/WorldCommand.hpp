@@ -83,7 +83,7 @@ public:
 
 			server->AddWorld(world);
 
-			SendMessage(sender, "World &a" + worldName + "&e created (" + std::to_string(x) + "x" + std::to_string(y) + "x" + std::to_string(z) + ")");
+			SendMessage(sender, "&eWorld &a" + worldName + "&e created (" + std::to_string(x) + "x" + std::to_string(y) + "x" + std::to_string(z) + ")");
 		} else if (subcommand == "set") {
 			if (!isOperator) {
 				SendMessage(sender, "&cOnly operators can set world options");

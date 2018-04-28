@@ -130,7 +130,7 @@ void Server::Init()
 	// Scrap = flat world that doesn't autosave
 	World* w = new World("scrap");
 
-	w->GetMap().GenerateFlatMap(512, 64, 512);
+	w->GetMap().GenerateFlatMap(256, 16, 256);
 	w->SetSpawnPosition(Position(512/2*32+51, 64/2*32+51, 512/2*32+51));
 	w->SetOption("autosave", "false");
 	w->SetActive(true);
@@ -181,7 +181,7 @@ void Server::Init()
 		}
 	}
 
-	m_commandHandler.Register("help", new HelpCommand, "h cmds");
+	m_commandHandler.Register("help", new HelpCommand, "h cmds cmd");
 	m_commandHandler.Register("tp", new TeleportCommand);
 	m_commandHandler.Register("summon", new SummonCommand);
 	m_commandHandler.Register("billnye", new BillNyeCommand);
@@ -197,7 +197,6 @@ void Server::Init()
 	m_commandHandler.Register("world", new WorldCommand, "w map");
 
 	m_pluginHandler.LoadPlugin("plugins/core/init.lua"); // Load this first
-	m_pluginHandler.LoadPlugin("plugins/core/permissions.lua"); // Load this first
 
 	// Load all plugins in folder
 	for (boost::filesystem::directory_iterator itr("plugins"); itr != boost::filesystem::directory_iterator(); ++itr) {
@@ -315,7 +314,7 @@ void Server::OnAuth(Client* client, struct cauthp clientAuth)
 
 	world->AddClient(client);
 
-	SendMessage(client, "&9https://github.com/vexyl/MCHawk");
+	SendMessage(client, "https://github.com/vexyl/MCHawk");
 	SendMessage(client, "&eTry /goto freebuild to get started.");
 }
 

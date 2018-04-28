@@ -41,6 +41,7 @@ public:
 	void Init();
 
 	CommandHandler& GetCommandHandler() { return m_commandHandler; }
+	LuaPluginHandler& GetPluginHandler() { return m_pluginHandler; }
 
 	void OnConnect(sf::TcpSocket *sock);
 	void OnAuth(Client* client, struct cauthp clientAuth);

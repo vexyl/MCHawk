@@ -11,8 +11,6 @@ Flags = {
 	NoDefaultCall = 0
 }
 
-dofile("plugins/core/utils.lua")
-
 this = "CorePlugin" -- must match table name below
 CorePlugin = {}
 CorePlugin.name = "core" -- should match folder name!
@@ -28,5 +26,7 @@ CorePlugin.init = function()
 	RegisterEvent(ClassicProtocol.PluginLoadedEvent, CorePlugin.OnPluginLoaded)
 end
 
+dofile("plugins/core/utils.lua")
+
 include(CorePlugin, "core.lua")
--- TODO: Server.LoadPlugin("permissions.lua")
+LoadPlugin(CorePlugin, "permissions.lua")

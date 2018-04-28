@@ -36,6 +36,7 @@ public:
 	void OnPosition(Client* client, struct cposp clientPos);
 	void OnBlock(Client* client, struct cblockp clientBlock);
 	void BroadcastMessage(std::string message);
+	void SendBlockToClients(int type, short x, short y, short z);
 
 private:
 	enum { kAutosaveTime = 300 /* seconds */ };

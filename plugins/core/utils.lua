@@ -15,3 +15,7 @@ end
 include = function(plugin, filename)
 	dofile("plugins/" .. plugin.name .. "/" .. filename)
 end
+
+LoadPlugin = function(plugin, filename)
+	Server.LoadPlugin("plugins/" .. plugin.name .. "/" .. filename)
+end

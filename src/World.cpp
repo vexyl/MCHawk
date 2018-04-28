@@ -141,3 +141,9 @@ void World::BroadcastMessage(std::string message)
 	for (auto& obj : m_clients)
 		SendMessage(obj, "&e[WORLD]: " + message);
 }
+
+void World::SendBlockToClients(int type, short x, short y, short z)
+{
+	for (auto& obj : m_clients)
+		SendBlock(obj, Position(x, y, z), type);
+}

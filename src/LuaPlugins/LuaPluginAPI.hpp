@@ -9,12 +9,15 @@
 void AddCommand(std::string name, std::string aliases, luabridge::LuaRef func, std::string docString,
 			unsigned argumentAmount, unsigned permissionLevel);
 
+void PlaceBlock(Client* client, uint8_t type, short x, short y, short z);
+
 struct LuaServer {
 	static void Init(lua_State* L)
 	{
 		luabridge::getGlobalNamespace(L)	
 			.addFunction("AddCommand", &AddCommand)
-			.addFunction("RegisterEvent", &LuaPluginHandler::RegisterEvent);
+			.addFunction("RegisterEvent", &LuaPluginHandler::RegisterEvent)
+			.addFunction("PlaceBlock", &PlaceBlock);
 
 		luabridge::getGlobalNamespace(L)
 			.beginClass<Client>("Client")
@@ -27,6 +30,7 @@ struct LuaServer {
 				.addStaticFunction("BroadcastMessage", &LuaServer::LuaBroadcastMessage)
 				.addStaticFunction("KickClient", &LuaServer::LuaKickClient)
 				.addStaticFunction("GetClientByName", &LuaServer::LuaGetClientByName)
+				.addStaticFunction("LoadPlugin", &LuaServer::LuaLoadPlugin)
 			.endClass();
 	}
 
@@ -48,6 +52,11 @@ struct LuaServer {
 	static Client* LuaGetClientByName(std::string name, bool exact)
 	{
 		return Server::GetInstance()->GetClientByName(name, exact);
+	}
+
+	static void LuaLoadPlugin(std::string name)
+	{
+		Server::GetInstance()->GetPluginHandler().LoadPlugin(name);
 	}
 };
 

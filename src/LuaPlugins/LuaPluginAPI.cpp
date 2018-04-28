@@ -17,6 +17,20 @@ void AddCommand(std::string name, std::string aliases, luabridge::LuaRef func, s
 	Server::GetInstance()->GetCommandHandler().Register(name, command, aliases);
 }
 
+void PlaceBlock(Client* client, uint8_t type, short x, short y, short z)
+{
+	World* world = Server::GetInstance()->GetWorld(client->GetWorldName());
+
+	bool valid = world->GetMap().SetBlock(x, y, z, type);
+
+	if (!valid) {
+		// TODO: Send block back
+		return;
+	}
+
+	world->SendBlockToClients(type, x, y, z);
+}
+
 // Struct to table stuff
 luabridge::LuaRef make_luatable()
 {
