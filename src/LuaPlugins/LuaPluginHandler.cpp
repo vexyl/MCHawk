@@ -42,6 +42,19 @@ void LuaPluginHandler::LoadPlugin(std::string filename)
 	TriggerEvent(EventType::kOnPluginLoaded, nullptr, table);
 }
 
+void LuaPluginHandler::QueuePlugin(std::string filename)
+{
+	m_pluginQueue.push_back(filename);
+}
+
+void LuaPluginHandler::FlushPluginQueue()
+{
+	for (auto& filename : m_pluginQueue)
+		LoadPlugin(filename);
+
+	m_pluginQueue.clear();
+}
+
 void LuaPluginHandler::RegisterEvent(int type, luabridge::LuaRef func)
 {
 	if (func.isFunction()) {

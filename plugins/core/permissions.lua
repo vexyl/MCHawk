@@ -13,13 +13,13 @@ PermissionsPlugin.init = function()
 	AddCommand("permissions", "p perm perms", PermissionsPlugin.PermissionsCommand, "&9/permissions [player] - shows player permissions", 0, 0)
 
 	PermissionsPlugin.LoadPermissions()
-	PermissionsPlugin.RequirePermission("permission")
+	PermissionsPlugin.RequirePermission("permissions")
 
 	print("Permissions plugin init")
 end
 
 PermissionsPlugin.GrantCommand = function(client, args)
-	if (not PermissionsPlugin.CheckPermissionNotify(client, "permission")) then
+	if (not PermissionsPlugin.CheckPermissionNotify(client, "permissions")) then
 		return
 	end
 
@@ -52,7 +52,7 @@ PermissionsPlugin.GrantCommand = function(client, args)
 end
 
 PermissionsPlugin.RevokeCommand = function(client, args)
-	if (not PermissionsPlugin.CheckPermissionNotify(client, "permission")) then
+	if (not PermissionsPlugin.CheckPermissionNotify(client, "permissions")) then
 		return
 	end
 

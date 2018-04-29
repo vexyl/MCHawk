@@ -23,6 +23,8 @@ public:
 
 	void AddPlugin(LuaPlugin* plugin);
 	void LoadPlugin(std::string filename);
+	void QueuePlugin(std::string filename);
+	void FlushPluginQueue();
 	static void RegisterEvent(int type, luabridge::LuaRef func);
 	void TriggerEvent(int type, Client* client, luabridge::LuaRef table);
 
@@ -50,6 +52,7 @@ private:
 	// lua_State* L;
 
 	std::vector<LuaPlugin*> m_plugins;
+	std::vector<std::string> m_pluginQueue;
 };
 
 #endif // LUAPLUGINHANDLER_H_

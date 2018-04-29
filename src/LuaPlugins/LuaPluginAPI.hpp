@@ -54,9 +54,9 @@ struct LuaServer {
 		return Server::GetInstance()->GetClientByName(name, exact);
 	}
 
-	static void LuaLoadPlugin(std::string name)
+	static void LuaLoadPlugin(std::string filename)
 	{
-		Server::GetInstance()->GetPluginHandler().LoadPlugin(name);
+		Server::GetInstance()->GetPluginHandler().QueuePlugin(filename);
 	}
 };
 

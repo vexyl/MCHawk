@@ -16,7 +16,7 @@ EssentialsPlugin.Cuboid_OnBlock = function(client, block)
 		if (EssentialsPlugin.players[client.name] ~= nil) then
 			EssentialsPlugin.count[client.name] = EssentialsPlugin.count[client.name] + 1
 
-			Server.SendMessage(client, "&eSelected")
+			Server.SendMessage(client, "&eSelection " .. EssentialsPlugin.count[client.name])
 			-- TODO: Send block back
 			if (EssentialsPlugin.count[client.name] == 1) then
 				EssentialsPlugin.players[client.name]["1"] = block

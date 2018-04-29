@@ -198,6 +198,9 @@ void Server::Init()
 
 	m_pluginHandler.LoadPlugin("plugins/core/init.lua"); // Load this first
 
+	// Core scripts may load other plugins, load them now
+	m_pluginHandler.FlushPluginQueue();
+
 	// Load all plugins in folder
 	for (boost::filesystem::directory_iterator itr("plugins"); itr != boost::filesystem::directory_iterator(); ++itr) {
 		if (boost::filesystem::is_directory(itr->status())) {
@@ -210,6 +213,9 @@ void Server::Init()
 			}
 		}
 	}
+
+	// In case a script loaded another plugin while being loaded
+	m_pluginHandler.FlushPluginQueue();
 }
 
 void Server::OnConnect(sf::TcpSocket *sock)
