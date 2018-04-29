@@ -4,33 +4,6 @@
 
 extern lua_State* L;
 
-void AddCommand(std::string name, std::string aliases, luabridge::LuaRef func, std::string docString,
-			unsigned argumentAmount, unsigned permissionLevel)
-{
-	if (!func.isFunction()) {
-		std::cerr << "Failed adding Lua command " << name << ": function does not exist" << std::endl;
-		return;
-	}
-
-	LuaCommand* command = new LuaCommand(name, func, docString, argumentAmount, permissionLevel);
-
-	Server::GetInstance()->GetCommandHandler().Register(name, command, aliases);
-}
-
-void PlaceBlock(Client* client, uint8_t type, short x, short y, short z)
-{
-	World* world = Server::GetInstance()->GetWorld(client->GetWorldName());
-
-	bool valid = world->GetMap().SetBlock(x, y, z, type);
-
-	if (!valid) {
-		// TODO: Send block back
-		return;
-	}
-
-	world->SendBlockToClients(type, x, y, z);
-}
-
 // Struct to table stuff
 luabridge::LuaRef make_luatable()
 {

@@ -8,9 +8,9 @@ PermissionsPlugin.permissionTable = {}
 PermissionsPlugin.permissionList = {}
 
 PermissionsPlugin.init = function()
-	AddCommand("grant", "", PermissionsPlugin.GrantCommand, "&9/grant <player> <permission> - grants player permission", 2, 0)
-	AddCommand("revoke", "", PermissionsPlugin.RevokeCommand, "&9/revoke <player> <permission> - revokes player permission", 2, 0)
-	AddCommand("permissions", "p perm perms", PermissionsPlugin.PermissionsCommand, "&9/permissions [player] - shows player permissions", 0, 0)
+	Server.AddCommand("grant", "", PermissionsPlugin.GrantCommand, "&9/grant <player> <permission> - grants player permission", 2, 0)
+	Server.AddCommand("revoke", "", PermissionsPlugin.RevokeCommand, "&9/revoke <player> <permission> - revokes player permission", 2, 0)
+	Server.AddCommand("permissions", "p perm perms", PermissionsPlugin.PermissionsCommand, "&9/permissions [player] - shows player permissions", 0, 0)
 
 	PermissionsPlugin.LoadPermissions()
 	PermissionsPlugin.RequirePermission("permissions")
@@ -114,13 +114,13 @@ PermissionsPlugin.LoadPermissions = function()
 	if f then
 		lines = {}
 		for line in io.lines("permissions.txt") do
-			tokens = mysplit(line, ":")
+			tokens = split(line, ":")
 			if (tokens == nil or tokens[1] == nil or tokens[2] == nil) then
 				print("Permissions Plugin failed to load entry in permissions.txt")
 				break
 			end
 
-			perms = mysplit(tokens[2], ",")
+			perms = split(tokens[2], ",")
 			PermissionsPlugin.permissionTable[tokens[1]] = perms
 		end
 

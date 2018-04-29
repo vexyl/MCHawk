@@ -4,8 +4,6 @@
 
 #include <iostream>
 
-std::array<boost::signals2::signal<void(Client*, luabridge::LuaRef)>, kEventTypeEnd> LuaPluginHandler::signalMap;
-
 lua_State* L;
 
 LuaPluginHandler::LuaPluginHandler()
@@ -59,7 +57,7 @@ void LuaPluginHandler::RegisterEvent(int type, luabridge::LuaRef func)
 {
 	if (func.isFunction()) {
 		try {
-			signalMap[type].connect(boost::bind((std::function<void(Client*, luabridge::LuaRef)>)func, _1, _2));
+			m_signalMap[type].connect(boost::bind((std::function<void(Client*, luabridge::LuaRef)>)func, _1, _2));
 		} catch (luabridge::LuaException const& e) {
 			std::cerr << "LuaException: " << e.what() << std::endl;
 		}
@@ -69,7 +67,7 @@ void LuaPluginHandler::RegisterEvent(int type, luabridge::LuaRef func)
 void LuaPluginHandler::TriggerEvent(int type, Client* client, luabridge::LuaRef table)
 {
 	try {
-		signalMap[type](client, table);
+		m_signalMap[type](client, table);
 	} catch (luabridge::LuaException const& e) {
 		std::cerr << "LuaException: " << e.what() << std::endl;
 	}

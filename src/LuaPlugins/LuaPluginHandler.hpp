@@ -19,13 +19,11 @@ public:
 
 	~LuaPluginHandler();
 
-	static std::array<boost::signals2::signal<void (Client*, luabridge::LuaRef)>, kEventTypeEnd> signalMap;
-
 	void AddPlugin(LuaPlugin* plugin);
 	void LoadPlugin(std::string filename);
 	void QueuePlugin(std::string filename);
 	void FlushPluginQueue();
-	static void RegisterEvent(int type, luabridge::LuaRef func);
+	void RegisterEvent(int type, luabridge::LuaRef func);
 	void TriggerEvent(int type, Client* client, luabridge::LuaRef table);
 
 	int GetEventFlag(std::string name)
@@ -49,7 +47,7 @@ public:
 	}
 
 private:
-	// lua_State* L;
+	std::array<boost::signals2::signal<void(Client*, luabridge::LuaRef)>, kEventTypeEnd> m_signalMap;
 
 	std::vector<LuaPlugin*> m_plugins;
 	std::vector<std::string> m_pluginQueue;

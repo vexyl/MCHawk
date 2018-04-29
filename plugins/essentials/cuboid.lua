@@ -32,7 +32,6 @@ end
 
 EssentialsPlugin.DoCuboid = function(client)
 	blocks = EssentialsPlugin.players[client.name]
-	print("block1 type=" .. blocks["1"].type .. "\nblock2 type=" .. blocks["2"].type)
 
 	x1 = blocks["1"].x
 	y1 = blocks["1"].y
@@ -65,7 +64,6 @@ EssentialsPlugin.DoCuboid = function(client)
 	for x = x1, x2, xstep do
 		for y = y1, y2, ystep do
 			for z = z1, z2, zstep do
-				print("block: " .. btype .. ", " .. mode .. " at (" .. x .. ", " .. y .. ", " .. z .. ")")
 				PlaceBlock(client, btype, x, y, z)
 				blocksPlaced = blocksPlaced + 1
 			end

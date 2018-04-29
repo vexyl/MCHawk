@@ -1,13 +1,17 @@
-function mysplit(inputstr, sep)
-if sep == nil then
-        sep = "%s"
-end
-local t={} ; i=1
-for str in string.gmatch(inputstr, "([^"..sep.."]+)") do
-        t[i] = str
-        i = i + 1
-end
-return t
+split = function(str, delim)
+	local t = {}
+
+	if (delim == nil) then
+		delim = "%s" -- whitespace
+	end
+
+	i = 1
+	for s in string.gmatch(str, "([^" .. delim .. "]+)") do
+		t[i] = s
+		i = i + 1
+	end
+
+	return t
 end
 
 -- Do NOT use this to load plugins!
@@ -18,4 +22,13 @@ end
 
 LoadPlugin = function(plugin, filename)
 	Server.LoadPlugin("plugins/" .. plugin.name .. "/" .. filename)
+end
+
+GetTableLength = function(t)
+	local length = 0
+	for _ in pairs(t) do
+		length = length + 1
+	end
+
+	return length
 end

@@ -6,19 +6,9 @@
 #include "../Network/Protocol.hpp"
 #include "LuaCommand.hpp"
 
-void AddCommand(std::string name, std::string aliases, luabridge::LuaRef func, std::string docString,
-			unsigned argumentAmount, unsigned permissionLevel);
-
-void PlaceBlock(Client* client, uint8_t type, short x, short y, short z);
-
 struct LuaServer {
 	static void Init(lua_State* L)
 	{
-		luabridge::getGlobalNamespace(L)	
-			.addFunction("AddCommand", &AddCommand)
-			.addFunction("RegisterEvent", &LuaPluginHandler::RegisterEvent)
-			.addFunction("PlaceBlock", &PlaceBlock);
-
 		luabridge::getGlobalNamespace(L)
 			.beginClass<Client>("Client")
 				.addProperty("name", &Client::GetName)
@@ -31,6 +21,9 @@ struct LuaServer {
 				.addStaticFunction("KickClient", &LuaServer::LuaKickClient)
 				.addStaticFunction("GetClientByName", &LuaServer::LuaGetClientByName)
 				.addStaticFunction("LoadPlugin", &LuaServer::LuaLoadPlugin)
+				.addStaticFunction("RegisterEvent", &LuaServer::LuaRegisterEvent)
+				.addStaticFunction("AddCommand", &LuaServer::LuaAddCommand)
+				.addStaticFunction("PlaceBlock", &LuaServer::LuaPlaceBlock)
 			.endClass();
 	}
 
@@ -57,6 +50,38 @@ struct LuaServer {
 	static void LuaLoadPlugin(std::string filename)
 	{
 		Server::GetInstance()->GetPluginHandler().QueuePlugin(filename);
+	}
+
+	static void LuaRegisterEvent(int type, luabridge::LuaRef func)
+	{
+		Server::GetInstance()->GetPluginHandler().RegisterEvent(type, func);
+	}
+
+	static void LuaAddCommand(std::string name, std::string aliases, luabridge::LuaRef func, std::string docString,
+			unsigned argumentAmount, unsigned permissionLevel)
+	{
+		if (!func.isFunction()) {
+			std::cerr << "Failed adding Lua command " << name << ": function does not exist" << std::endl;
+			return;
+		}
+
+		LuaCommand* command = new LuaCommand(name, func, docString, argumentAmount, permissionLevel);
+
+		Server::GetInstance()->GetCommandHandler().Register(name, command, aliases);
+	}
+
+	static void LuaPlaceBlock(Client* client, int type, short x, short y, short z)
+	{
+		World* world = Server::GetInstance()->GetWorld(client->GetWorldName());
+
+		bool valid = world->GetMap().SetBlock(x, y, z, type);
+
+		if (!valid) {
+			// TODO: Send block back
+			return;
+		}
+
+		world->SendBlockToClients(type, x, y, z);
 	}
 };
 

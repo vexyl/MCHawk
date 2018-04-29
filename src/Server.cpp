@@ -1,25 +1,3 @@
-/*
- * Vexyl - March/April, 2017
- * TODO:
- *   Only send position updates if player moved--send on a regular basis, not when received
- *   Line wrapping should keep track of color codes and break on words
- *   Leaf decay/grass growth/fluids
- *   ClientStreams/Various sfml code should be abstracted away in a TcpStream class
- *   Implement singletons correctly (or find a way around using them)
- *   Opcodes should be an enum, not a chain of #defines
- *   Packet queue is inefficient and leaks memory (needs copy constructor?)
- *   Separate authed clients from pre-auth clients (two separate vectors would work)
- *   Learn about/use smart pointers
- *   Use Google C++ style guidelines (I just want to)
- * Eventually (ideally):
- *   Events/Scripts (boost::signals/Lua); use these for commands
- *   Have  a /set <setting name> <argument> command instead of command for each
- *   Improve Logger (e.g., multiple file support; replace with boost logger?)
- *   Support classic protocol extension
- *   Upload to GitHub/Use cmake
- *   Strive for platform independence and have a Visual Studio project file with dependencies
- */
-
 #include "Server.hpp"
 
 #ifdef __linux__
