@@ -73,10 +73,9 @@ void Map::LoadFromFile(std::string filename)
 	LOG(LogLevel::kInfo, "Loaded map file %s (%d bytes)", filename.c_str(), m_bufferSize);
 }
 
-void Map::GenerateFlatMap(short x, short y, short z)
+void Map::GenerateFlatMap(std::string filename, short x, short y, short z)
 {
-	// FIXME: Temporary
-	m_filename = "flatmap_" + std::to_string(x) + "x" + std::to_string(y) + "x" + std::to_string(z) + ".raw";
+	m_filename = filename;
 
 	SetDimensions(x, y, z);
 

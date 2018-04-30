@@ -23,8 +23,9 @@ public:
 	short GetXSize() { return m_x; }
 	short GetYSize() { return m_y; }
 	short GetZSize() { return m_z; }
+	std::string GetFilename() { return m_filename; }
 
-	void GenerateFlatMap(short x, short y, short z);
+	void GenerateFlatMap(std::string filename, short x, short y, short z);
 
 	void Load();
 	void LoadFromFile(std::string filename);

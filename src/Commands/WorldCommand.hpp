@@ -74,9 +74,12 @@ public:
 			}
 
 			//FIXME TEMPORARY
+			std::string filename = "worlds/maps/" + worldName + "_" + std::to_string(x) + "x" + std::to_string(y) + "x" + std::to_string(z) + ".raw";
+
 			World* world = new World(worldName);
 
-			world->GetMap().GenerateFlatMap(x, y, z);
+			world->GetMap().GenerateFlatMap(filename, x, y, z);
+			world->GetMap().SetFilename(filename);
 			world->SetSpawnPosition(Position(x/2*32+51, y/2*32+51, z/2*32+51));
 			world->SetOption("autosave", "false");
 			world->SetActive(true);
@@ -116,6 +119,12 @@ public:
 
 			std::string option = args[1];
 
+			bool validOption = w->IsValidOption(option);
+			if (!validOption) {
+				SendMessage(sender, "&cInvalid option");
+				return;
+			}
+
 			if (args.size() == 2) {
 				std::string value = w->GetOption(option);
 				SendMessage(sender, "&e" + option + "=" + value);
@@ -123,12 +132,6 @@ public:
 			}
 
 			std::string value = args[2];
-
-			// FIXME: Temporary
-			if (option != "autosave" && option != "build") {
-				SendMessage(sender, "&cInvalid option");
-				return;
-			}
 
 			// FIXME: Temporary
 			if (value != "true" && value != "false") {
@@ -164,13 +167,38 @@ public:
 			world->Load();
 
 			SendMessage(sender, "&eLoaded world &a" + worldName);
+		} else if (subcommand == "save") {
+			if (!isOperator) {
+				SendMessage(sender, "&cOnly operators can save worlds");
+				return;
+			}
+
+			if (args.size() < 2) {
+				SendMessage(sender, "&cMust specify world name");
+				return;
+			}
+
+			std::string worldName = args[1];
+
+			boost::algorithm::to_lower(worldName);
+
+			World *world = server->GetWorld(worldName);
+
+			if (world == nullptr) {
+				SendMessage(sender, "&cWorld &f" + worldName + "&c does not exist");
+				return;
+			}
+
+			world->Save();
+
+			SendMessage(sender, "&eSaved world &a" + worldName);
 		} else {
 			SendMessage(sender, "&b" + GetDocString());
 			return;
 		}
 	}
 
-	virtual std::string GetDocString() { return "/world <list/load/new*/set*> - various world-related commands | * operator only"; }
+	virtual std::string GetDocString() { return "/world <list/load/new*/save*/set*> - various world-related commands | * operator only"; }
 	virtual unsigned int GetArgumentAmount() { return 1; }
 	virtual unsigned int GetPermissionLevel() { return 0; }
 

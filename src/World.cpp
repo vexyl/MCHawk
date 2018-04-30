@@ -4,6 +4,9 @@
 #include "Network/Protocol.hpp"
 #include "Utils/Logger.hpp"
 
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/ini_parser.hpp>
+
 World::World(std::string name) : m_name(name), m_active(false), m_mapChanged(true)
 {
 	SetOption("build", "true");
@@ -15,6 +18,54 @@ void World::Load()
 {
 	m_map.Load();
 	SetActive(true);
+}
+
+void World::Save()
+{
+	try {
+		boost::property_tree::ptree pt;
+
+		std::string name = m_name;
+		std::string filename = m_map.GetFilename();
+
+		std::size_t pos = filename.find("worlds/");
+		if (pos != std::string::npos)
+			filename = filename.substr(pos + strlen("worlds/"));
+
+		short x_size = m_map.GetXSize();
+		short y_size = m_map.GetYSize();
+		short z_size = m_map.GetZSize();
+
+		short x_spawn = m_spawnPosition.x;
+		short y_spawn = m_spawnPosition.y;
+		short z_spawn = m_spawnPosition.z;
+
+		std::string autoload = GetOption("autoload");
+		std::string autosave = GetOption("autosave");
+		std::string build = GetOption("build");
+
+		pt.add("World.name", name);
+		pt.add("World.map", filename);
+
+		pt.add("Size.x", x_size);
+		pt.add("Size.y", y_size);
+		pt.add("Size.z", z_size);
+
+		pt.add("Spawn.x", x_spawn);
+		pt.add("Spawn.y", y_spawn);
+		pt.add("Spawn.z", z_spawn);
+
+		pt.add("Options.autoload", autoload);
+		pt.add("Options.autosave", autosave);
+		pt.add("Options.build", build);
+
+		boost::property_tree::ini_parser::write_ini("worlds/" + m_name + ".ini", pt);
+	} catch (std::runtime_error& e) {
+		LOG(LogLevel::kWarning, "%s", e.what());
+	}
+
+	if (GetActive())
+		SaveMapIfChanged();
 }
 
 void World::AddClient(Client* client)
@@ -80,9 +131,22 @@ std::vector<std::string> World::GetOptionNames()
 
 	return options;
 }
+
 std::string World::GetOption(std::string option)
 {
 	return m_options[option];
+}
+
+bool World::IsValidOption(std::string option)
+{
+	bool result = false;
+
+	for (auto& obj : m_options) {
+		if (option == obj.first)
+			result = true;
+	}
+
+	return result;
 }
 
 void World::Tick()

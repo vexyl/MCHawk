@@ -22,11 +22,13 @@ public:
 	void RemoveClient(int8_t pid);
 
 	void Load();
+	void Save();
 	bool SaveMapIfChanged();
 
 	void SetActive(bool active);
 	void SetSpawnPosition(Position spawnPosition);
 	void SetOption(std::string option, std::string value);
+	bool IsValidOption(std::string option);
 
 	std::vector<std::string> GetOptionNames();
 	std::string GetOption(std::string option);
