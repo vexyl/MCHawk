@@ -1,12 +1,13 @@
 EssentialsPlugin.players = {}
 EssentialsPlugin.count = {}
+EssentialsPlugin.Cuboid_maxBlocks = 32 ^ 3
 
 EssentialsPlugin.CuboidCommand = function(client, args)
 	if (not PermissionsPlugin.CheckPermissionNotify(client, "admin")) then
 		return
 	end
 
-	Server.SendMessage(client, "&eSelect two regions.")
+	Server.SendMessage(client, "&eMake two selections")
 	EssentialsPlugin.players[client.name] = {}
 	EssentialsPlugin.count[client.name] = 0
 end
@@ -16,16 +17,17 @@ EssentialsPlugin.Cuboid_OnBlock = function(client, block)
 		if (EssentialsPlugin.players[client.name] ~= nil) then
 			EssentialsPlugin.count[client.name] = EssentialsPlugin.count[client.name] + 1
 
-			Server.SendMessage(client, "&eSelection " .. EssentialsPlugin.count[client.name])
-			-- TODO: Send block back
 			if (EssentialsPlugin.count[client.name] == 1) then
 				EssentialsPlugin.players[client.name]["1"] = block
 			elseif (EssentialsPlugin.count[client.name] == 2) then
 				EssentialsPlugin.players[client.name]["2"] = block
 
-				Server.SendMessage(client, "&eOK")
 				EssentialsPlugin.DoCuboid(client)
 			end
+
+			-- reverse block change client-side
+			btype = Server.MapGetBlockType(client, block.x, block.y, block.z)
+			Server.SendBlock(client, block.x, block.y, block.z, btype)
 		end
 	end
 end
@@ -60,17 +62,30 @@ EssentialsPlugin.DoCuboid = function(client)
 		zstep = -1
 	end
 
+	dx = math.abs(x2 - x1) + 1
+	dy = math.abs(y2 - y1) + 1
+	dz = math.abs(z2 - z1) + 1
+
+	blockCount = dx * dy * dz
+
+	maxBlocks = EssentialsPlugin.Cuboid_maxBlocks
+	if (blockCount > maxBlocks) then
+		Server.SendMessage(client, "&cToo many blocks. Max=" .. maxBlocks)
+		return
+	end
+
 	blocksPlaced = 0
 	for x = x1, x2, xstep do
 		for y = y1, y2, ystep do
 			for z = z1, z2, zstep do
-				PlaceBlock(client, btype, x, y, z)
+				Server.PlaceBlock(client, btype, x, y, z)
 				blocksPlaced = blocksPlaced + 1
 			end
 		end
 	end
 
-	Server.SendMessage(client, "&ePlaced " .. blocksPlaced .. " blocks")
+	print("Placed " .. blocksPlaced .. " blocks (" .. blockCount .. ")")
+	Server.SendMessage(client, "&ePlaced " .. blockCount .. " blocks")
 
 	EssentialsPlugin.players[client.name] = nil
 	EssentialsPlugin.count[client.name] = nil

@@ -18,12 +18,14 @@ struct LuaServer {
 			.beginClass<LuaServer>("Server")
 				.addStaticFunction("SendMessage", &LuaServer::LuaSendMessage)
 				.addStaticFunction("BroadcastMessage", &LuaServer::LuaBroadcastMessage)
+				.addStaticFunction("SendBlock", &LuaServer::LuaSendBlock)
 				.addStaticFunction("KickClient", &LuaServer::LuaKickClient)
 				.addStaticFunction("GetClientByName", &LuaServer::LuaGetClientByName)
 				.addStaticFunction("LoadPlugin", &LuaServer::LuaLoadPlugin)
 				.addStaticFunction("RegisterEvent", &LuaServer::LuaRegisterEvent)
 				.addStaticFunction("AddCommand", &LuaServer::LuaAddCommand)
 				.addStaticFunction("PlaceBlock", &LuaServer::LuaPlaceBlock)
+				.addStaticFunction("MapGetBlockType", &LuaServer::LuaMapGetBlockType)
 			.endClass();
 	}
 
@@ -40,6 +42,11 @@ struct LuaServer {
 	static void LuaKickClient(Client* client, std::string reason)
 	{
 		Server::GetInstance()->KickClient(client, reason);
+	}
+
+	static void LuaSendBlock(Client* client, short x, short y, short z, int type)
+	{
+		::SendBlock(client, Position(x, y, z), type);
 	}
 
 	static Client* LuaGetClientByName(std::string name, bool exact)
@@ -77,12 +84,20 @@ struct LuaServer {
 		bool valid = world->GetMap().SetBlock(x, y, z, type);
 
 		if (!valid) {
-			// TODO: Send block back
+			int type = LuaServer::LuaMapGetBlockType(client, x, y, z);
+			SendBlock(client, Position(x, y, z), type);
 			return;
 		}
 
 		world->SendBlockToClients(type, x, y, z);
 	}
+
+	static int LuaMapGetBlockType(Client* client, short x, short y, short z)
+	{
+		Map& map = Server::GetInstance()->GetWorld(client->GetWorldName())->GetMap();
+		return map.GetBlockType(x, y, z);
+	}
+		
 };
 
 luabridge::LuaRef make_luatable();
