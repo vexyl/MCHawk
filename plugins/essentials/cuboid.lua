@@ -13,22 +13,20 @@ EssentialsPlugin.CuboidCommand = function(client, args)
 end
 
 EssentialsPlugin.Cuboid_OnBlock = function(client, block)
-	for k, v in pairs(EssentialsPlugin.players) do
-		if (EssentialsPlugin.players[client.name] ~= nil) then
-			EssentialsPlugin.count[client.name] = EssentialsPlugin.count[client.name] + 1
+	if (EssentialsPlugin.players[client.name] ~= nil) then
+		EssentialsPlugin.count[client.name] = EssentialsPlugin.count[client.name] + 1
 
-			if (EssentialsPlugin.count[client.name] == 1) then
-				EssentialsPlugin.players[client.name]["1"] = block
-			elseif (EssentialsPlugin.count[client.name] == 2) then
-				EssentialsPlugin.players[client.name]["2"] = block
+		if (EssentialsPlugin.count[client.name] == 1) then
+			EssentialsPlugin.players[client.name]["1"] = block
+		elseif (EssentialsPlugin.count[client.name] == 2) then
+			EssentialsPlugin.players[client.name]["2"] = block
 
-				EssentialsPlugin.DoCuboid(client)
-			end
-
-			-- reverse block change client-side
-			btype = Server.MapGetBlockType(client, block.x, block.y, block.z)
-			Server.SendBlock(client, block.x, block.y, block.z, btype)
+			EssentialsPlugin.DoCuboid(client)
 		end
+
+		-- reverse block change client-side
+		btype = Server.MapGetBlockType(client, block.x, block.y, block.z)
+		Server.SendBlock(client, block.x, block.y, block.z, btype)
 	end
 end
 
@@ -75,7 +73,7 @@ EssentialsPlugin.DoCuboid = function(client)
 
 	maxBlocks = EssentialsPlugin.Cuboid_maxBlocks
 	if (blockCount > maxBlocks) then
-		Server.SendMessage(client, "&cToo many blocks. Max=" .. maxBlocks)
+		Server.SendMessage(client, "&cToo many blocks; Max=" .. maxBlocks)
 		return
 	end
 
