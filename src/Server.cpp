@@ -25,9 +25,6 @@
 #include "Commands/HelpCommand.hpp"
 #include "Commands/TeleportCommand.hpp"
 #include "Commands/SummonCommand.hpp"
-#include "Commands/BillNyeCommand.hpp"
-#include "Commands/EmoteCommand.hpp"
-#include "Commands/PmCommand.hpp"
 #include "Commands/OpCommand.hpp"
 #include "Commands/KickCommand.hpp"
 #include "Commands/SaveCommand.hpp"
@@ -167,9 +164,6 @@ void Server::Init()
 	m_commandHandler.Register("help", new HelpCommand, "h cmds cmd");
 	m_commandHandler.Register("tp", new TeleportCommand);
 	m_commandHandler.Register("summon", new SummonCommand);
-	m_commandHandler.Register("billnye", new BillNyeCommand);
-	m_commandHandler.Register("me", new EmoteCommand, "emote");
-	m_commandHandler.Register("pm", new PmCommand, "msg");
 	m_commandHandler.Register("op", new OpCommand);
 	m_commandHandler.Register("kick", new KickCommand);
 	m_commandHandler.Register("save", new SaveCommand);
