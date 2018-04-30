@@ -54,6 +54,7 @@ public:
 
 	// Client helper functions
 	void KickClient(Client* client, std::string reason="");
+	static void SendWrappedMessageB(Client* client, std::string message);
 	static void SendWrappedMessage(Client* client, std::string message);
 	void SendSystemMessage(Client* client, std::string message);
 	void SendSystemWideMessage(std::string message);

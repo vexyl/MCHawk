@@ -7,8 +7,6 @@ extern "C" {
 	#include <lua5.2/lualib.h>
 }
 
-#include <memory>
-
 #include <LuaBridge.h>
 
 #endif // LUASTUFF_H_

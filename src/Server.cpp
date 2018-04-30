@@ -536,23 +536,103 @@ void Server::KickClient(Client* client, std::string reason)
 	}
 }
 
-// This does not handle color codes on split lines nor breaking after words
-void Server::SendWrappedMessage(Client* client, std::string message)
+// FIXME: This is temporary, it works for the most part but is horribly messy and inefficient
+void Server::SendWrappedMessageB(Client* client, std::string message)
 {
 	int max = 64;
 	int pos = 0;
+
+	std::string color;
 
 	int length = message.length();
 	while (pos < length) {
 		int diff = length - pos;
 		int count = std::min(diff, max);
 
-		std::string partialMessage = message.substr(pos, count);
+		std::string partialMessage;
 
-		SendMessage(client, partialMessage);
+		if (pos > 0)
+			partialMessage = "> ";
+
+		if (!color.empty()) {
+			partialMessage += color;
+			color = "";
+		}
+
+		partialMessage += message.substr(pos, count);
+
+		bool colorFound = false;
+		for (int j = 0; j < (int)partialMessage.size(); ++j) {
+			if (colorFound) {
+				color = "&";
+				color += partialMessage.at(j); // Why can't I do "&" + word.at(j)?!
+				colorFound = false;
+			}
+
+			if (partialMessage[j] == '&')
+				colorFound = true;
+		}
+
+		::SendMessage(client, partialMessage);
 
 		pos += count;
 	}
+}
+
+// FIXME: This is temporary, it works for the most part but is horribly messy and inefficient
+void Server::SendWrappedMessage(Client* client, std::string message)
+{
+	std::vector<std::string> tokens;
+
+	boost::split(tokens, message, boost::is_any_of(" "));
+
+	size_t MAX_SIZE = 64;
+
+	std::string s = "";
+	if (tokens.empty())
+		s = message;
+
+	std::string color="";
+	std::vector<std::string> messages;
+	for (int i = 0; i < (int)tokens.size(); ++i) {
+		std::string word = tokens[i];
+
+		if (s.size() + word.size() <= MAX_SIZE) {
+			s += word;
+
+			bool colorFound = false;
+			for (int j = 0; j < (int)word.size(); ++j) {
+				if (colorFound) {
+					color = "&";
+					color += word.at(j); // Why can't I do "&" + word.at(j)?!
+					colorFound = false;
+				}
+
+				if (word[j] == '&')
+					colorFound = true;
+			}
+
+			if ((i + 1) != (int)tokens.size())
+				s += " ";
+
+		} else {
+			messages.push_back(s);
+
+			s = "> " + color;
+
+			if ((i + 1) == (int)tokens.size()) {
+				s += word;
+				break;
+			}
+
+			i--;
+			continue;
+		}
+	}
+	messages.push_back(s);
+
+	for (auto& obj : messages)
+		::SendMessage(client, obj);
 }
 
 void Server::SendSystemMessage(Client* client, std::string message)
