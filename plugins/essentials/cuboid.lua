@@ -46,6 +46,11 @@ EssentialsPlugin.DoCuboid = function(client)
 	btype = blocks["1"].type
 	mode = blocks["1"].mode
 
+	-- Set block type to air if player is breaking a block
+	if (mode == 0) then
+		btype = 0
+	end
+
 	xstep = 1
 	ystep = 1
 	zstep = 1
