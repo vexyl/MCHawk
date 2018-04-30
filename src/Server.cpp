@@ -632,7 +632,7 @@ void Server::SendWrappedMessage(Client* client, std::string message)
 	messages.push_back(s);
 
 	for (auto& obj : messages)
-		::SendMessage(client, obj);
+		SendWrappedMessageB(client, obj);
 }
 
 void Server::SendSystemMessage(Client* client, std::string message)
