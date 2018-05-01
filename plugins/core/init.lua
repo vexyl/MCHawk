@@ -28,10 +28,14 @@ CorePlugin.init = function()
 end
 
 CorePlugin.tick = function()
-	for k,v in pairs(CorePlugin.timerList) do
-		a,b = coroutine.resume(v[1], v[2])
-		if (a == false or b == nil) then
-			CorePlugin.timerList[k] = nil
+	for timerName in pairs(CorePlugin.timerList) do
+		t = CorePlugin.timerList[timerName]
+		for k,v in pairs(t) do
+			a,b = coroutine.resume(v[1], v[2])
+
+			if (a == false or b == nil) then
+				t[k] = nil
+			end
 		end
 	end
 end

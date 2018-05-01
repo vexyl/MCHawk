@@ -24,7 +24,11 @@ CorePlugin.AddTimer = function(name, func, time)
 	co = coroutine.create(timer)
 	coroutine.resume(co, time, func)
 
-	CorePlugin.timerList[name] = { co, time }
+	if (CorePlugin.timerList[name] == nil) then
+		CorePlugin.timerList[name] = {}
+	end
+
+	table.insert(CorePlugin.timerList[name], { co, time })
 end
 
 CorePlugin.RemoveTimer = function(name)
