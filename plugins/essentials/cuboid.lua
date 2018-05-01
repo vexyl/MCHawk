@@ -39,6 +39,8 @@ EssentialsPlugin.Cuboid_OnBlock = function(client, block)
 		-- reverse block change client-side
 		btype = Server.MapGetBlockType(client, block.x, block.y, block.z)
 		Server.SendBlock(client, block.x, block.y, block.z, btype)
+		
+		Flags.NoDefaultCall = 1
 	end
 end
 

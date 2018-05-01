@@ -419,7 +419,9 @@ void Server::HandlePacket(Client* client, uint8_t opcode)
 			auto table = cblockp_to_luatable(clientBlock);
 			m_pluginHandler.TriggerEvent(EventType::kOnBlock, client, table);
 
-			GetWorld(client->GetWorldName())->OnBlock(client, clientBlock);
+			// Don't use default if a plugin set flag
+			if (!m_pluginHandler.GetEventFlag("NoDefaultCall"))
+				GetWorld(client->GetWorldName())->OnBlock(client, clientBlock);
 		}
 		break;
 	}
