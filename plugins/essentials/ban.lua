@@ -35,8 +35,10 @@ EssentialsPlugin.Ban_UnbanCommand = function(client, args)
 		return
 	end
 
+	name = args[1]
+	
 	if (EssentialsPlugin.Ban_banList[name] == nil) then
-		Server.SendMessage(client, "&cPlayer &f" .. name .. " not banned")
+		Server.SendMessage(client, "&cPlayer &f" .. name .. "&c not banned")
 		return
 	end
 
