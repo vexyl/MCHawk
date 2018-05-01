@@ -1,45 +1,67 @@
+EssentialsPlugin.Ban_banList = {}
+
 EssentialsPlugin.Ban_BanCommand = function(client, args)
 	if (not PermissionsPlugin.CheckPermissionNotify(client, "admin")) then
 		return
 	end
 
-	name = args[1]
+	name = string.lower(args[1])
 
-	local f = io.open("bans.txt", "a")
+	player = Server.GetClientByName(name, true)
+	if (player == nil) then
+		Server.SendMessage(client, "&cPlayer " .. name .. " not found")
+		return
+	end
+
+	Server.KickClient(player, "Banned")
+	Server.BroadcastMessage("&e" .. client.name .. " has banned " .. name .. " from the server.")
+
+	EssentialsPlugin.Ban_banList[name] = 1
+	EssentialsPlugin.Ban_SaveBans()
+end
+
+EssentialsPlugin.Ban_UnbanCommand = function(client, args)
+	if (not PermissionsPlugin.CheckPermissionNotify(client, "admin")) then
+		return
+	end
+
+	if (EssentialsPlugin.Ban_banList[name] == nil) then
+		Server.SendMessage(client, "&cPlayer &f" .. name .. " not banned")
+		return
+	end
+
+	EssentialsPlugin.Ban_banList[name] = nil
+	EssentialsPlugin.Ban_SaveBans()
+
+	Server.SendMessage(client, "&eUnbanned player " .. name)
+end
+
+EssentialsPlugin.Ban_OnAuth = function(client, args)
+	-- Use args.name because client.name isn't set yet
+	name = string.lower(args.name)
+
+	if (EssentialsPlugin.Ban_banList[name] ~= nil) then
+		Server.KickClient(client, "Banned")
+		Flags.NoDefaultCall = 1
+	end
+end
+
+EssentialsPlugin.Ban_SaveBans = function()
+	local f = io.open("bans.txt", "w")
 	if f then
-		player = Server.GetClientByName(name, true)
-		if (player == nil) then
-			Server.SendMessage(client, "&cPlayer " .. name .. " not found")
-			f:close()
-			return
+		for name,_ in pairs(EssentialsPlugin.Ban_banList) do
+			f:write(name .. "\n")
 		end
-
-		f:write(string.lower(name) .. "\n")
-		Server.KickClient(player, "Banned")
-		Server.BroadcastMessage("&e" .. client.name .. " has banned " .. name .. " from the server.")
 
 		f:close()
 	end
 end
-
-EssentialsPlugin.Ban_UnbanCommand = function(client, args)
-	if (not PermissionsPlugin.CheckPermissionNotify(client, "ban")) then
-		return
-	end
-
-	Server.SendMessage(client, "&eNot yet")
-end
-
-EssentialsPlugin.Ban_OnAuth = function(client, args)
+EssentialsPlugin.Ban_LoadBans = function()
 	local f = io.open("bans.txt", "r")
 	if f then
 		lines = {}
 		for line in io.lines("bans.txt") do
-			-- Use args.name because client.name isn't set yet
-			if (line == string.lower(args.name)) then
-				Server.KickClient(client, "Banned")
-				Flags.NoDefaultCall = 1
-			end
+			EssentialsPlugin.Ban_banList[line] = 1
 		end
 
 		f:close()
@@ -47,3 +69,5 @@ EssentialsPlugin.Ban_OnAuth = function(client, args)
 		print("Couldn't open bans.txt")
 	end
 end
+
+EssentialsPlugin.Ban_LoadBans()
