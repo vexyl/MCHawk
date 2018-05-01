@@ -15,9 +15,16 @@ struct LuaServer {
 			.endClass();
 
 		luabridge::getGlobalNamespace(L)
+			.beginClass<World>("World")
+				.addFunction("Save", &World::Save)
+				.addFunction("GetOption", &World::GetOption)
+			.endClass();
+
+		luabridge::getGlobalNamespace(L)
 			.beginClass<LuaServer>("Server")
 				.addStaticFunction("SendMessage", &LuaServer::LuaSendMessage)
 				.addStaticFunction("BroadcastMessage", &LuaServer::LuaBroadcastMessage)
+				.addStaticFunction("SystemWideMessage", &LuaServer::LuaSystemWideMessage)
 				.addStaticFunction("SendBlock", &LuaServer::LuaSendBlock)
 				.addStaticFunction("KickClient", &LuaServer::LuaKickClient)
 				.addStaticFunction("GetClientByName", &LuaServer::LuaGetClientByName)
@@ -26,12 +33,21 @@ struct LuaServer {
 				.addStaticFunction("AddCommand", &LuaServer::LuaAddCommand)
 				.addStaticFunction("PlaceBlock", &LuaServer::LuaPlaceBlock)
 				.addStaticFunction("MapGetBlockType", &LuaServer::LuaMapGetBlockType)
+				.addStaticFunction("SendKick", &LuaServer::LuaSendKick)
+				.addStaticFunction("GetClients", &LuaServer::LuaGetClients)
+				.addStaticFunction("GetWorlds", &LuaServer::LuaGetWorlds)
+				.addStaticFunction("Shutdown", &LuaServer::LuaServerShutdown)
 			.endClass();
 	}
 
 	static void LuaSendMessage(Client* client, std::string message)
 	{
 		::SendMessage(client, message);
+	}
+
+	static void LuaSystemWideMessage(std::string message)
+	{
+		Server::GetInstance()->SendSystemWideMessage(message);
 	}
 
 	static void LuaBroadcastMessage(std::string message)
@@ -96,6 +112,44 @@ struct LuaServer {
 	{
 		Map& map = Server::GetInstance()->GetWorld(client->GetWorldName())->GetMap();
 		return map.GetBlockType(x, y, z);
+	}
+
+	static void LuaSendKick(Client* client, std::string reason)
+	{
+		::SendKick(client, reason);
+	}
+
+	static luabridge::LuaRef LuaGetClients()
+	{
+		std::vector<Client*> clients = Server::GetInstance()->GetClients();
+
+		auto table = make_luatable();
+		int i = 1;
+		for (auto& obj : clients) {
+			table[i] = obj;
+			++i;
+		}
+
+		return table;
+	}
+
+	static luabridge::LuaRef LuaGetWorlds()
+	{
+		std::map<std::string, World*> worlds = Server::GetInstance()->GetWorlds();
+
+		auto table = make_luatable();
+		int i = 1;
+		for (auto& obj : worlds) {
+			table[i] = obj.second;
+			++i;
+		}
+
+		return table;
+	}
+
+	static void LuaServerShutdown()
+	{
+		Server::GetInstance()->Shutdown();
 	}
 		
 };

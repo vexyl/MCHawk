@@ -3,6 +3,7 @@ EssentialsPlugin = {}
 EssentialsPlugin.name = "essentials" -- should match folder name!
 
 EssentialsPlugin.init = function()
+	Server.AddCommand("shutdown", "", EssentialsPlugin.Server_ShutdownCommand, "&9/shutdown - shutdowns the server", 0, 1)
 	Server.AddCommand("ban", "", EssentialsPlugin.Ban_BanCommand, "&9/ban <player> - bans player from server", 1, 1)
 	Server.AddCommand("unban", "", EssentialsPlugin.Ban_UnbanCommand, "&9/unban <player> - unbans player from server", 1, 1)
 	Server.AddCommand("cuboid", "z", EssentialsPlugin.Cuboid_CuboidCommand, "&9/cuboid - places blocks in a cuboid region", 0, 0)
@@ -13,10 +14,12 @@ EssentialsPlugin.init = function()
 	Server.RegisterEvent(ClassicProtocol.AuthEvent, EssentialsPlugin.Ban_OnAuth)
 	Server.RegisterEvent(ClassicProtocol.BlockEvent, EssentialsPlugin.Cuboid_OnBlock)
 
+	PermissionsPlugin.RequirePermission("server")
 	PermissionsPlugin.RequirePermission("admin")
 	PermissionsPlugin.RequirePermission("cuboid")
 end
 
+include (EssentialsPlugin, "server.lua")
 include(EssentialsPlugin, "ban.lua")
 include(EssentialsPlugin, "cuboid.lua")
 include(EssentialsPlugin, "emote.lua")

@@ -22,7 +22,7 @@ int main()
 	while (running) {
 		clock.restart();
 
-		server->Tick();
+		running = server->Tick();
 
 		// Sleep up to 33ms
 		sf::Time time = clock.getElapsedTime();
@@ -32,7 +32,9 @@ int main()
 		}
 	}
 
-	delete server;
+	server->FreeInstance();
+
+	std::cout << "Exiting normally." << std::endl;
 
 	return 0;
 }

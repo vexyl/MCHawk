@@ -38,17 +38,22 @@ public:
 		return m_thisPtr;
 	}
 
+	void FreeInstance();
+
 	void Init();
 
 	CommandHandler& GetCommandHandler() { return m_commandHandler; }
 	LuaPluginHandler& GetPluginHandler() { return m_pluginHandler; }
+
+	std::vector<Client*> GetClients() { return m_clients; }
+	std::map<std::string, World*> GetWorlds() { return m_worlds; }
 
 	void OnConnect(sf::TcpSocket *sock);
 	void OnAuth(Client* client, struct cauthp clientAuth);
 	void OnMessage(Client* client, struct cmsgp clientMsg);
 
 	void HandlePacket(Client* client, uint8_t opcode);
-	void Tick();
+	bool Tick();
 
 	void SendHeartbeat();
 
@@ -64,6 +69,7 @@ public:
 	std::vector<ClientInfo> GetAllClientInfo() const;
 
 	bool IsOperator(std::string name);
+	void Shutdown();
 
 	void AddWorld(World* world);
 	void RemoveWorld(std::string name);
@@ -79,6 +85,8 @@ private:
 	sf::TcpListener m_listener;
 
 	int m_port;
+
+	bool m_running;
 
 	LuaPluginHandler m_pluginHandler;
 

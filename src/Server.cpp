@@ -38,7 +38,7 @@
 
 Server* Server::m_thisPtr = nullptr;
 
-Server::Server()
+Server::Server() : m_running(true)
 {
 	m_port = 25565;
 	m_version = 0x07;
@@ -58,6 +58,12 @@ Server::~Server()
 
 	for (auto& obj : m_worlds)
 		delete obj.second;
+}
+
+void Server::FreeInstance()
+{
+	delete m_thisPtr;
+	m_thisPtr = nullptr;
 }
 
 void Server::Init()
@@ -244,7 +250,7 @@ void Server::OnAuth(Client* client, struct cauthp clientAuth)
 
 			if (strcmp(mdString, key.c_str()) != 0) {
 				LOG(LogLevel::kDebug, "Refusing player %s (sent invalid key)", name.c_str());
-				KickClient(client, "Invalid key");
+				KickClient(client, "Invalid key: Refresh server list");
 				return;
 			}
 		}
@@ -424,7 +430,7 @@ void Server::HandlePacket(Client* client, uint8_t opcode)
 	}
 }
 
-void Server::Tick()
+bool Server::Tick()
 {
 	// Send heartbeat to server list
 	if (m_heartbeatClock.getElapsedTime().asSeconds() >= kHeartbeatTime) {
@@ -485,6 +491,8 @@ void Server::Tick()
 			++it;
 		}
 	}
+
+	return m_running;
 }
 
 // Doesn't use https
@@ -709,6 +717,12 @@ bool Server::IsOperator(std::string name)
 	}
 
 	return false;
+}
+
+void Server::Shutdown()
+{
+	LOG(LogLevel::kDebug, "Server shutting down")
+	m_running = false;
 }
 
 /////////////////////////////////
