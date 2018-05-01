@@ -4,7 +4,7 @@
 
 int8_t Client::pid = 0;
 
-Client::Client()
+Client::Client() : m_world(nullptr)
 {
 	m_pid = pid++;
 	m_userType = 0;

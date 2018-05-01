@@ -12,6 +12,7 @@ struct LuaServer {
 		luabridge::getGlobalNamespace(L)
 			.beginClass<Client>("Client")
 				.addProperty("name", &Client::GetName)
+				.addFunction("GetWorld", &Client::GetWorld)
 			.endClass();
 
 		luabridge::getGlobalNamespace(L)

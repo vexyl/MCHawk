@@ -77,6 +77,7 @@ void World::AddClient(Client* client)
 	SendClientsTo(client, m_clients);
 
 	client->SetWorldName(m_name);
+	client->SetWorld(this);
 
 	m_clients.push_back(client);
 }
