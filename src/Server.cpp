@@ -440,6 +440,9 @@ bool Server::Tick()
 		m_heartbeatClock.restart();
 	}
 
+	// Plugins tick
+	m_pluginHandler.TickPlugins();
+
 	// World tick
 	for (auto& obj : m_worlds)
 		obj.second->Tick();

@@ -32,3 +32,15 @@ GetTableLength = function(t)
 
 	return length
 end
+
+-- Stolen from https://stackoverflow.com/questions/6118799/creating-a-timer-using-lua
+timer = function(time, func)
+	local init = os.time()
+	local diff = os.difftime(os.time(), init)
+	while diff < time do
+		coroutine.yield(diff)
+		diff = os.difftime(os.time(), init)
+	end
+
+	func()
+end

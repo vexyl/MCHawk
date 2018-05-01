@@ -72,3 +72,9 @@ void LuaPluginHandler::TriggerEvent(int type, Client* client, luabridge::LuaRef 
 		std::cerr << "LuaException: " << e.what() << std::endl;
 	}
 }
+
+void LuaPluginHandler::TickPlugins()
+{
+	for (auto& obj : m_plugins)
+		obj->Tick();
+}

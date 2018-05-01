@@ -27,6 +27,9 @@ void LuaPlugin::LoadScript(lua_State* L, const std::string& filename)
 				std::cerr << "Couldn't find init function for plugin " << m_name << " (" << filename << ")" << std::endl;
 				return;
 			}
+
+			if (pluginTable["tick"].isFunction())
+				m_tickFunc = std::make_unique<luabridge::LuaRef>(pluginTable["tick"]);
 		} else {
 			std::cerr << "Couldn't find Plugin table for plugin " << m_name << " (" << filename << ")" << std::endl;
 			return;
@@ -51,5 +54,11 @@ void LuaPlugin::Init()
 
 void LuaPlugin::Tick()
 {
-
+	if (m_tickFunc != nullptr) {
+		try {
+			(*m_tickFunc)();
+		} catch (luabridge::LuaException const& e) {
+			std::cerr << "LuaException: " << e.what() << std::endl;
+		}
+	}
 }

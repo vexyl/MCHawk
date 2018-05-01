@@ -25,6 +25,7 @@ public:
 	void FlushPluginQueue();
 	void RegisterEvent(int type, luabridge::LuaRef func);
 	void TriggerEvent(int type, Client* client, luabridge::LuaRef table);
+	void TickPlugins();
 
 	int GetEventFlag(std::string name)
 	{

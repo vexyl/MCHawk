@@ -99,17 +99,14 @@ EssentialsPlugin.Cuboid_DoCuboid = function(client)
 		return
 	end
 
-	blocksPlaced = 0
 	for x = x1, x2, xstep do
 		for y = y1, y2, ystep do
 			for z = z1, z2, zstep do
 				Server.PlaceBlock(client, btype, x, y, z)
-				blocksPlaced = blocksPlaced + 1
 			end
 		end
 	end
 
-	print("Placed " .. blocksPlaced .. " blocks (" .. blockCount .. ")")
 	Server.SendMessage(client, "&ePlaced " .. blockCount .. " blocks")
 
 	EssentialsPlugin.Cuboid_players[client.name] = nil

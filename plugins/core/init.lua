@@ -17,6 +17,7 @@ CorePlugin = {}
 CorePlugin.name = "core" -- should match folder name!
 
 CorePlugin.pluginNames = {}
+CorePlugin.timerList = {}
 
 CorePlugin.init = function()
 	Server.AddCommand("plugins", "plugin pl", CorePlugin.PluginsCommand, "&9/plugins - show information about plugins", 0, 0)
@@ -24,6 +25,15 @@ CorePlugin.init = function()
 	Server.AddCommand("reload", "", CorePlugin.ReloadCommand, "&9/reload - reloads server plugins", 0, 1)
 
 	Server.RegisterEvent(ClassicProtocol.PluginLoadedEvent, CorePlugin.Plugins_OnPluginLoaded)
+end
+
+CorePlugin.tick = function()
+	for k,v in pairs(CorePlugin.timerList) do
+		a,b = coroutine.resume(v[1], v[2])
+		if (a == false or b == nil) then
+			CorePlugin.timerList[k] = nil
+		end
+	end
 end
 
 dofile("plugins/core/utils.lua")

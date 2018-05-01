@@ -1,4 +1,3 @@
--- TODO: Add an optional shutdown timer
 EssentialsPlugin.Server_ShutdownCommand = function(client, args)
 	if (not PermissionsPlugin.CheckPermissionNotify(client, "server")) then
 		return
@@ -9,16 +8,33 @@ EssentialsPlugin.Server_ShutdownCommand = function(client, args)
 		name = client.name
 	end
 
-	message = "(" .. name .. ")" .. " Server shutting down..."
+	index = 1 -- used to concatenate reason message
+
+	time = 5
+	if (args[1] == "-t" and args[2] ~= nil) then
+		time = tonumber(args[2])
+		index = 3 -- skip time arguments
+	elseif (args[1] == "-a") then
+		Server.SystemWideMessage(client.name .. " aborted server shutdown.")
+		CorePlugin.RemoveTimer("server_timers")
+		return
+	end
+
+	message = "(" .. name .. ")" .. " Server shutting down in " .. time .. " seconds..."
 	reason = "Server shut down"
 
-	if (args[1] ~= nil) then
-		reason = table.concat(args, " ")
+	if (args[index] ~= nil) then
+		reason = table.concat(args, " ", index)
 		message = message .. " (" .. reason .. ")"
 	end
  
 	Server.SystemWideMessage(message)
-	EssentialsPlugin.Server_SafeShutdown(reason);
+
+	if (time > 5) then
+		CorePlugin.AddTimer("server_timers", function() Server.SystemWideMessage("Server shutting down in 5 seconds!") end, time - 5)
+	end
+
+	CorePlugin.AddTimer("server_timers", function() EssentialsPlugin.Server_SafeShutdown(reason) end, time)
 end
 
 EssentialsPlugin.Server_SafeShutdown = function(reason)

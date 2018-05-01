@@ -19,3 +19,14 @@ end
 CorePlugin.GetPluginCount = function()
 	return GetTableLength(CorePlugin.pluginNames)
 end
+
+CorePlugin.AddTimer = function(name, func, time)
+	co = coroutine.create(timer)
+	coroutine.resume(co, time, func)
+
+	CorePlugin.timerList[name] = { co, time }
+end
+
+CorePlugin.RemoveTimer = function(name)
+	CorePlugin.timerList[name] = nil
+end
