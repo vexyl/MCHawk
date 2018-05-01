@@ -192,6 +192,14 @@ public:
 			world->Save();
 
 			SendMessage(sender, "&eSaved world &a" + worldName);
+		} else if (subcommand == "spawn") {
+			// FIXME: Temporary
+			Position pos = sender->GetPosition();
+			World *w = server->GetWorld(sender->GetWorldName());
+
+			w->SetSpawnPosition(pos);
+
+			SendMessage(sender, "&eSpawn position set (" + std::to_string(pos.x) + ", " + std::to_string(pos.y) + ", " + std::to_string(pos.z) + ")");
 		} else {
 			SendMessage(sender, "&b" + GetDocString());
 			return;
