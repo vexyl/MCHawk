@@ -8,12 +8,6 @@ EssentialsPlugin.Cuboid_CuboidCommand = function(client, args)
 		return
 	end
 
-	world = client:GetWorld()
-	if (world:GetOption("build") == "false") then
-		Server.SendMessage(client, "&cCuboid disabled in no-build worlds")
-		return
-	end
-
 	Server.SendMessage(client, "&eMake two selections")
 
 	EssentialsPlugin.Cuboid_players[client.name] = {}
@@ -45,6 +39,12 @@ EssentialsPlugin.Cuboid_OnBlock = function(client, block)
 end
 
 EssentialsPlugin.Cuboid_DoCuboid = function(client)
+	world = client:GetWorld()
+	if (world:GetOption("build") == "false") then
+		Server.SendMessage(client, "&cCuboid disabled in no-build worlds")
+		return
+	end
+
 	blocks = EssentialsPlugin.Cuboid_players[client.name]
 
 	x1 = blocks["1"].x

@@ -1,3 +1,9 @@
+EssentialsPlugin.Emote_EmoteCommand = function(client, args)
+	message = "&9* " .. client.name
+	message = message .. " " .. table.concat(args, " ")
+	Server.BroadcastMessage(message)
+end
+
 EssentialsPlugin.Pm_PmCommand = function(client, args)
 	name = args[1]
 
@@ -16,4 +22,13 @@ EssentialsPlugin.Pm_PmCommand = function(client, args)
 
 	Server.SendMessage(client, "&d[You -> " .. target.name .. "] " .. message)
 	Server.SendMessage(target, "&d[" .. client.name .. "] " .. message)
+end
+
+-- Yes, this is an essential command
+EssentialsPlugin.BillNye_BillNyeCommand = function(client, args)
+	message = table.concat(args, " ")
+
+	Server.BroadcastMessage("&cBill Nye&f: DID YOU KNOW THAT")
+	Server.BroadcastMessage("&cBill Nye&f: " .. message .. "?")
+	Server.BroadcastMessage("&cBill Nye&f: NOW YOU KNOW!")
 end

@@ -22,6 +22,4 @@ end
 include (EssentialsPlugin, "server.lua")
 include(EssentialsPlugin, "ban.lua")
 include(EssentialsPlugin, "cuboid.lua")
-include(EssentialsPlugin, "emote.lua")
-include(EssentialsPlugin, "pm.lua")
-include(EssentialsPlugin, "billnye.lua")
+include(EssentialsPlugin, "misc.lua")
