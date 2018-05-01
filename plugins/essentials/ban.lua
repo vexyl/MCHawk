@@ -1,4 +1,4 @@
-EssentialsPlugin.BanCommand = function(client, args)
+EssentialsPlugin.Ban_BanCommand = function(client, args)
 	if (not PermissionsPlugin.CheckPermissionNotify(client, "admin")) then
 		return
 	end
@@ -22,7 +22,7 @@ EssentialsPlugin.BanCommand = function(client, args)
 	end
 end
 
-EssentialsPlugin.UnbanCommand = function(client, args)
+EssentialsPlugin.Ban_UnbanCommand = function(client, args)
 	if (not PermissionsPlugin.CheckPermissionNotify(client, "ban")) then
 		return
 	end

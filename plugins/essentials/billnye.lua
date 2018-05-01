@@ -1,5 +1,5 @@
 -- Yes, this is an essential command
-EssentialsPlugin.BillNyeCommand = function(client, args)
+EssentialsPlugin.BillNye_BillNyeCommand = function(client, args)
 	message = table.concat(args, " ")
 
 	Server.BroadcastMessage("&cBill Nye&f: DID YOU KNOW THAT")

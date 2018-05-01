@@ -169,6 +169,7 @@ PermissionsPlugin.PermissionExistsNotify = function(client, permission)
 	return true
 end
 
+-- TODO: Allow operators to override permissions: if (Server.IsOperator(name)) then return true end
 -- Doesn't check if permission exists
 PermissionsPlugin.CheckPermission = function(name, permission)
 	result = false

@@ -1,27 +1,33 @@
-EssentialsPlugin.players = {}
-EssentialsPlugin.count = {}
+EssentialsPlugin.Cuboid_players = {}
+EssentialsPlugin.Cuboid_count = {}
 EssentialsPlugin.Cuboid_maxBlocks = 32 ^ 3
+EssentialsPlugin.Cuboid_destroy = {}
 
-EssentialsPlugin.CuboidCommand = function(client, args)
-	if (not PermissionsPlugin.CheckPermissionNotify(client, "admin")) then
+EssentialsPlugin.Cuboid_CuboidCommand = function(client, args)
+	if (not PermissionsPlugin.CheckPermissionNotify(client, "cuboid")) then
 		return
 	end
 
 	Server.SendMessage(client, "&eMake two selections")
-	EssentialsPlugin.players[client.name] = {}
-	EssentialsPlugin.count[client.name] = 0
+
+	EssentialsPlugin.Cuboid_players[client.name] = {}
+	EssentialsPlugin.Cuboid_count[client.name] = 0
+
+	if (args[1] == "air") then
+		EssentialsPlugin.Cuboid_destroy[client.name] = 1
+	end
 end
 
 EssentialsPlugin.Cuboid_OnBlock = function(client, block)
-	if (EssentialsPlugin.players[client.name] ~= nil) then
-		EssentialsPlugin.count[client.name] = EssentialsPlugin.count[client.name] + 1
+	if (EssentialsPlugin.Cuboid_players[client.name] ~= nil) then
+		EssentialsPlugin.Cuboid_count[client.name] = EssentialsPlugin.Cuboid_count[client.name] + 1
 
-		if (EssentialsPlugin.count[client.name] == 1) then
-			EssentialsPlugin.players[client.name]["1"] = block
-		elseif (EssentialsPlugin.count[client.name] == 2) then
-			EssentialsPlugin.players[client.name]["2"] = block
+		if (EssentialsPlugin.Cuboid_count[client.name] == 1) then
+			EssentialsPlugin.Cuboid_players[client.name]["1"] = block
+		elseif (EssentialsPlugin.Cuboid_count[client.name] == 2) then
+			EssentialsPlugin.Cuboid_players[client.name]["2"] = block
 
-			EssentialsPlugin.DoCuboid(client)
+			EssentialsPlugin.Cuboid_DoCuboid(client)
 		end
 
 		-- reverse block change client-side
@@ -30,8 +36,8 @@ EssentialsPlugin.Cuboid_OnBlock = function(client, block)
 	end
 end
 
-EssentialsPlugin.DoCuboid = function(client)
-	blocks = EssentialsPlugin.players[client.name]
+EssentialsPlugin.Cuboid_DoCuboid = function(client)
+	blocks = EssentialsPlugin.Cuboid_players[client.name]
 
 	x1 = blocks["1"].x
 	y1 = blocks["1"].y
@@ -44,8 +50,8 @@ EssentialsPlugin.DoCuboid = function(client)
 	btype = blocks["1"].type
 	mode = blocks["1"].mode
 
-	-- Set block type to air if player is breaking a block
-	if (mode == 0) then
+	-- Set block type to air if player is used /z air
+	if (EssentialsPlugin.Cuboid_destroy[client.name] == 1) then
 		btype = 0
 	end
 
@@ -90,6 +96,8 @@ EssentialsPlugin.DoCuboid = function(client)
 	print("Placed " .. blocksPlaced .. " blocks (" .. blockCount .. ")")
 	Server.SendMessage(client, "&ePlaced " .. blockCount .. " blocks")
 
-	EssentialsPlugin.players[client.name] = nil
-	EssentialsPlugin.count[client.name] = nil
+	EssentialsPlugin.Cuboid_players[client.name] = nil
+	EssentialsPlugin.Cuboid_count[client.name] = nil
+	EssentialsPlugin.Cuboid_destroy[client.name] = nil
 end
+

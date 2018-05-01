@@ -167,7 +167,7 @@ void Server::Init()
 	m_commandHandler.Register("op", new OpCommand);
 	m_commandHandler.Register("kick", new KickCommand);
 	m_commandHandler.Register("save", new SaveCommand);
-	m_commandHandler.Register("alias", new AliasCommand, "name");
+	m_commandHandler.Register("alias", new AliasCommand, "nick name");
 	m_commandHandler.Register("who", new WhoCommand, "players list");
 	m_commandHandler.Register("whois", new WhoIsCommand, "info");
 	m_commandHandler.Register("goto", new GotoCommand, "go g");

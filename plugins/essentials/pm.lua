@@ -1,4 +1,4 @@
-EssentialsPlugin.PmCommand = function(client, args)
+EssentialsPlugin.Pm_PmCommand = function(client, args)
 	name = args[1]
 
 	target = Server.GetClientByName(name)

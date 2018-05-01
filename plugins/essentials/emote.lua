@@ -1,9 +1,5 @@
-EssentialsPlugin.EmoteCommand = function(client, args)
+EssentialsPlugin.Emote_EmoteCommand = function(client, args)
 	message = "&9* " .. client.name
-	
-	for _, v in pairs(args) do
-		message = message .. " " .. v
-	end
-	
+	message = message .. " " .. table.concat(args, " ")
 	Server.BroadcastMessage(message)
 end
