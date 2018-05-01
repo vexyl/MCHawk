@@ -1,3 +1,5 @@
+-- TODO: Save ban reasons to file
+
 EssentialsPlugin.Ban_banList = {}
 
 EssentialsPlugin.Ban_BanCommand = function(client, args)
@@ -13,8 +15,16 @@ EssentialsPlugin.Ban_BanCommand = function(client, args)
 		return
 	end
 
-	Server.KickClient(player, "Banned")
-	Server.BroadcastMessage("&e" .. client.name .. " has banned " .. name .. " from the server.")
+	message = "&e" .. client.name .. " has banned " .. name .. " from the server."
+	reason = ""
+
+	if (args[2] ~= nil) then
+		reason = table.concat(args, " ", 2) -- skip name argument
+		message = message .. " (" .. reason .. ")"
+	end
+
+	Server.KickClient(player, "Banned: " .. reason)
+	Server.BroadcastMessage(message)
 
 	EssentialsPlugin.Ban_banList[name] = 1
 	EssentialsPlugin.Ban_SaveBans()
