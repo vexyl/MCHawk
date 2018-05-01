@@ -1,6 +1,6 @@
 # MCHawk
 
-This is a Minecraft classic server written in C++.
+This is a Minecraft classic server written in C++ and Lua for plugins.
 
 Libraries: SFML, Boost, LuaBridge, OpenSSL, and zlib
 
@@ -42,9 +42,9 @@ First, download the dependencies from [Dropbox](https://www.dropbox.com/s/t5lg7s
 
 Extract MCHawk_dependencies into the MCHawk win32 folder. It should look like *MCHawk/win32/dependencies*.
 
-Open the VS2017 project *MCHawk/win32/MCHawk.sln* and set the configuration to Release x86.
+Open the VS2017 project *win32/MCHawk.sln* and set the configuration to Release x86.
 
-Build the project and copy contents from *MCHawk/win32/Release* to *MCHawk/bin/Release*.
+Build the project and copy contents from *win32/Release* to *bin/Release*.
 
 The same applies to Debug with the appropriate filename changes to the above instructions.
 
