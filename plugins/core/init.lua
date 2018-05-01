@@ -4,7 +4,8 @@ ClassicProtocol = {
 	MessageEvent = 2,
 	PositionEvent = 3,
 	BlockEvent = 4,
-	PluginLoadedEvent = 5
+	PluginLoadedEvent = 5,
+	DisconnectEvent = 6
 }
 
 Flags = {

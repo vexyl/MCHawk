@@ -475,6 +475,11 @@ bool Server::Tick()
 			int8_t pid = (*it)->GetPid();
 			World* world = GetWorld((*it)->GetWorldName());
 
+			if (authed) {
+				auto table = make_luatable();
+				m_pluginHandler.TriggerEvent(EventType::kOnDisconnect, (*it), table);
+			}
+
 			// Client removed here because DespawnClient() would send to this inactive client as well
 			delete (*it)->stream.socket;
 			it = m_clients.erase(it);

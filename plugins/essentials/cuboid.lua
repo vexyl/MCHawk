@@ -38,6 +38,14 @@ EssentialsPlugin.Cuboid_OnBlock = function(client, block)
 	end
 end
 
+EssentialsPlugin.Cuboid_OnDisconnect = function(client, t)
+	if (EssentialsPlugin.Cuboid_players[client.name] ~= nil) then
+		EssentialsPlugin.Cuboid_players[client.name] = nil
+		EssentialsPlugin.Cuboid_count[client.name] = nil
+		EssentialsPlugin.Cuboid_destroy[client.name] = nil
+	end
+end
+
 EssentialsPlugin.Cuboid_DoCuboid = function(client)
 	world = client:GetWorld()
 	if (world:GetOption("build") == "false") then

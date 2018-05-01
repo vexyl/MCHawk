@@ -13,6 +13,7 @@ EssentialsPlugin.init = function()
 
 	Server.RegisterEvent(ClassicProtocol.AuthEvent, EssentialsPlugin.Ban_OnAuth)
 	Server.RegisterEvent(ClassicProtocol.BlockEvent, EssentialsPlugin.Cuboid_OnBlock)
+	Server.RegisterEvent(ClassicProtocol.DisconnectEvent, EssentialsPlugin.Cuboid_OnDisconnect)
 
 	PermissionsPlugin.RequirePermission("server")
 	PermissionsPlugin.RequirePermission("admin")
