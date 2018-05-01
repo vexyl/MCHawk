@@ -34,3 +34,11 @@ end
 CorePlugin.RemoveTimer = function(name)
 	CorePlugin.timerList[name] = nil
 end
+
+CorePlugin.TimerExists = function(name)
+	if (CorePlugin.timerList[name] == nil) then
+		return false
+	end
+
+	return true
+end

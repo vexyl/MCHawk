@@ -15,8 +15,13 @@ EssentialsPlugin.Server_ShutdownCommand = function(client, args)
 		time = tonumber(args[2])
 		index = 3 -- skip time arguments
 	elseif (args[1] == "-a") then
-		Server.SystemWideMessage(client.name .. " aborted server shutdown.")
-		CorePlugin.RemoveTimer("server_timers")
+		if (CorePlugin.TimerExists("server_timers")) then
+			CorePlugin.RemoveTimer("server_timers")
+			Server.SystemWideMessage(client.name .. " aborted server shutdown.")
+		else
+			Server.SendMessage(client, "&cNo shutdown to abort")
+		end
+
 		return
 	end
 

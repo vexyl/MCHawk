@@ -40,77 +40,80 @@ end
 
 EssentialsPlugin.Cuboid_OnDisconnect = function(client, t)
 	if (EssentialsPlugin.Cuboid_players[client.name] ~= nil) then
-		EssentialsPlugin.Cuboid_players[client.name] = nil
-		EssentialsPlugin.Cuboid_count[client.name] = nil
-		EssentialsPlugin.Cuboid_destroy[client.name] = nil
+		EssentialsPlugin.Cuboid_Remove(client.name)
 	end
 end
 
 EssentialsPlugin.Cuboid_DoCuboid = function(client)
 	world = client:GetWorld()
-	if (world:GetOption("build") == "false") then
-		Server.SendMessage(client, "&cCuboid disabled in no-build worlds")
-		return
-	end
 
-	blocks = EssentialsPlugin.Cuboid_players[client.name]
+	if (world:GetOption("build") ~= "false") then
+		blocks = EssentialsPlugin.Cuboid_players[client.name]
 
-	x1 = blocks["1"].x
-	y1 = blocks["1"].y
-	z1 = blocks["1"].z
+		x1 = blocks["1"].x
+		y1 = blocks["1"].y
+		z1 = blocks["1"].z
 
-	x2 = blocks["2"].x
-	y2 = blocks["2"].y
-	z2 = blocks["2"].z
+		x2 = blocks["2"].x
+		y2 = blocks["2"].y
+		z2 = blocks["2"].z
 
-	btype = blocks["1"].type
-	mode = blocks["1"].mode
+		btype = blocks["1"].type
+		mode = blocks["1"].mode
 
-	-- Set block type to air if player is used /z air
-	if (EssentialsPlugin.Cuboid_destroy[client.name] == 1) then
-		btype = 0
-	end
+		-- Set block type to air if player is used /z air
+		if (EssentialsPlugin.Cuboid_destroy[client.name] == 1) then
+			btype = 0
+		end
 
-	xstep = 1
-	ystep = 1
-	zstep = 1
+		xstep = 1
+		ystep = 1
+		zstep = 1
 
-	if (x1 > x2) then
-		xstep = -1
-	end
+		if (x1 > x2) then
+			xstep = -1
+		end
 
-	if (y1 > y2) then
-		ystep = -1
-	end
+		if (y1 > y2) then
+			ystep = -1
+		end
 
-	if (z1 > z2) then
-		zstep = -1
-	end
+		if (z1 > z2) then
+			zstep = -1
+		end
 
-	dx = math.abs(x2 - x1) + 1
-	dy = math.abs(y2 - y1) + 1
-	dz = math.abs(z2 - z1) + 1
+		dx = math.abs(x2 - x1) + 1
+		dy = math.abs(y2 - y1) + 1
+		dz = math.abs(z2 - z1) + 1
 
-	blockCount = dx * dy * dz
+		blockCount = dx * dy * dz
 
-	maxBlocks = EssentialsPlugin.Cuboid_maxBlocks
-	if (blockCount > maxBlocks) then
-		Server.SendMessage(client, "&cToo many blocks; Max=" .. maxBlocks)
-		return
-	end
+		maxBlocks = EssentialsPlugin.Cuboid_maxBlocks
+		if (blockCount > maxBlocks) then
+			Server.SendMessage(client, "&cToo many blocks; Max=" .. maxBlocks)
+			return
+		end
 
-	for x = x1, x2, xstep do
-		for y = y1, y2, ystep do
-			for z = z1, z2, zstep do
-				Server.PlaceBlock(client, btype, x, y, z)
+		for x = x1, x2, xstep do
+			for y = y1, y2, ystep do
+				for z = z1, z2, zstep do
+					Server.PlaceBlock(client, btype, x, y, z)
+				end
 			end
 		end
+
+		Server.SendMessage(client, "&ePlaced " .. blockCount .. " blocks")
+	else
+		-- No building here
+		Server.SendMessage(client, "&cCuboid disabled in no-build worlds")
 	end
 
-	Server.SendMessage(client, "&ePlaced " .. blockCount .. " blocks")
-
-	EssentialsPlugin.Cuboid_players[client.name] = nil
-	EssentialsPlugin.Cuboid_count[client.name] = nil
-	EssentialsPlugin.Cuboid_destroy[client.name] = nil
+	-- Cleanup
+	EssentialsPlugin.Cuboid_Remove(client.name)
 end
 
+EssentialsPlugin.Cuboid_Remove = function(name)
+	EssentialsPlugin.Cuboid_players[name] = nil
+	EssentialsPlugin.Cuboid_count[name] = nil
+	EssentialsPlugin.Cuboid_destroy[name] = nil
+end
