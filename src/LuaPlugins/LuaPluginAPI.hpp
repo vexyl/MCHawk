@@ -43,7 +43,7 @@ struct LuaServer {
 
 	static void LuaSendMessage(Client* client, std::string message)
 	{
-		::SendMessage(client, message);
+		Server::GetInstance()->SendWrappedMessage(client, message);
 	}
 
 	static void LuaSystemWideMessage(std::string message)

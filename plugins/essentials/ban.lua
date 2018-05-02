@@ -54,6 +54,7 @@ EssentialsPlugin.Ban_OnAuth = function(client, args)
 
 	if (EssentialsPlugin.Ban_banList[name] ~= nil) then
 		Server.KickClient(client, "Banned")
+		print("Ban plugin prevented player " .. name .. " from joining.")
 		Flags.NoDefaultCall = 1
 	end
 end

@@ -17,7 +17,7 @@ public:
 
 		Client* client = server->GetClientByName(name, false);
 		if (client == nullptr) {
-			SendMessage(sender, "&cPlayer " + name + " does not exist");
+			SendMessage(sender, "&cPlayer &f" + name + "&c does not exist");
 			return;
 		}
 

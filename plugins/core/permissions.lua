@@ -1,4 +1,5 @@
--- TODO: Grant/Revoke comma-separated permissions, send message to granted/revoked player
+-- FIXME: Grant/Revoke commands say they granted permissions even if they the permissions were invalid and not granted/revoked
+-- FIXME: Show invalid permissions as a comma-separated list in grant/revoke instead of sending a new line for each
 
 this = "PermissionsPlugin" -- must match table name below
 PermissionsPlugin = {}
@@ -24,7 +25,6 @@ PermissionsPlugin.GrantCommand = function(client, args)
 	end
 
 	targetName = args[1]
-	targetPerm = args[2]
 	target = Server.GetClientByName(targetName, false)
 
 	if (target == nil) then
@@ -32,23 +32,21 @@ PermissionsPlugin.GrantCommand = function(client, args)
 		return
 	end
 
-	if (not PermissionsPlugin.PermissionExistsNotify(client, targetPerm)) then
-		return false
-	end
-
-	if (not PermissionsPlugin.CheckPermission(target.name, targetPerm)) then
-		permsTable = PermissionsPlugin.permissionTable
-
-		if (permsTable[target.name] == nil) then
-			permsTable[target.name]= {}
+	for k, targetPerm in pairs(args) do
+		if (k ~= 1) then -- skip name
+			if (PermissionsPlugin.PermissionExistsNotify(client, targetPerm)
+					and not PermissionsPlugin.CheckPermission(target.name, targetPerm)) then
+				PermissionsPlugin.GrantPermission(target.name, targetPerm)
+			end
 		end
-
-		table.insert(permsTable[target.name], targetPerm)
-		PermissionsPlugin.SavePermissions()
 	end
 
-	Server.SendMessage(client, "&eGranted player " .. target.name ..": &9" .. targetPerm)
-	Server.SendMessage(target, "&e" .. client.name .. " granted you: &9" .. targetPerm)
+	PermissionsPlugin.SavePermissions()
+
+	perms = table.concat(args, ", ", 2)
+
+	Server.SendMessage(client, "&eGranted player " .. target.name ..": &9" .. perms)
+	Server.SendMessage(target, "&e" .. client.name .. " granted you: &9" .. perms)
 end
 
 PermissionsPlugin.RevokeCommand = function(client, args)
@@ -57,7 +55,6 @@ PermissionsPlugin.RevokeCommand = function(client, args)
 	end
 
 	targetName = args[1]
-	targetPerm = args[2]
 	target = Server.GetClientByName(targetName, false)
 
 	if (target == nil) then
@@ -65,24 +62,21 @@ PermissionsPlugin.RevokeCommand = function(client, args)
 		return
 	end
 
-	if (not PermissionsPlugin.PermissionExistsNotify(client, targetPerm)) then
-		return false
-	end
-
-	if (PermissionsPlugin.CheckPermission(target.name, targetPerm)) then
-		perms = PermissionsPlugin.permissionTable[target.name]
-
-		for k, perm in pairs(perms) do
-			if (perm == targetPerm) then
-				table.remove(perms, k)
-				PermissionsPlugin.SavePermissions()
-				break
+	for k, targetPerm in pairs(args) do
+		if (k ~= 1) then -- skip name
+			if (PermissionsPlugin.PermissionExistsNotify(client, targetPerm)
+					and PermissionsPlugin.CheckPermission(target.name, targetPerm)) then
+				PermissionsPlugin.RevokePermission(target.name, targetPerm)
 			end
 		end
 	end
 
-	Server.SendMessage(client, "&eRevoked player " .. target.name ..": &9" .. targetPerm)
-	Server.SendMessage(target, "&e" .. client.name .. " revoked you: &9" .. targetPerm)
+	PermissionsPlugin.SavePermissions()
+
+	perms = table.concat(args, ", ", 2)
+
+	Server.SendMessage(client, "&eRevoked player " .. target.name ..": &9" .. perms)
+	Server.SendMessage(target, "&e" .. client.name .. " revoked you: &9" .. perms)
 end
 
 PermissionsPlugin.PermissionsCommand = function(client, args)
@@ -106,7 +100,30 @@ PermissionsPlugin.PermissionsCommand = function(client, args)
 		end
 	end
 
-	Server.SendMessage(client, "&ePermissions: " .. permissions)
+	Server.SendMessage(client, "&ePermissions of " .. target.name .. ": " .. permissions)
+end
+
+-- Doesn't check if permission exists
+PermissionsPlugin.GrantPermission = function(name, perm)
+	permsTable = PermissionsPlugin.permissionTable
+
+	if (permsTable[name] == nil) then
+		permsTable[name]= {}
+	end
+
+	table.insert(permsTable[name], perm)
+end
+
+-- Doesn't check if permission exists
+PermissionsPlugin.RevokePermission = function(name, perm)
+	perms = PermissionsPlugin.permissionTable[name]
+
+	for k, v in pairs(perms) do
+		if (v == perm) then
+			table.remove(perms, k)
+			break
+		end
+	end
 end
 
 PermissionsPlugin.LoadPermissions = function()
@@ -162,7 +179,7 @@ end
 
 PermissionsPlugin.PermissionExistsNotify = function(client, permission)
 	if (not PermissionsPlugin.PermissionExists(permission)) then
-		Server.SendMessage(client, "&cInvalid permission " .. "&9" .. permission)
+		PermissionsPlugin.SendInvalidPermissionMessage(client, permission)
 		return false
 	end
 

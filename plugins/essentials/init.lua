@@ -20,7 +20,7 @@ EssentialsPlugin.init = function()
 	PermissionsPlugin.RequirePermission("cuboid")
 end
 
-include (EssentialsPlugin, "server.lua")
+include(EssentialsPlugin, "server.lua")
 include(EssentialsPlugin, "ban.lua")
 include(EssentialsPlugin, "cuboid.lua")
 include(EssentialsPlugin, "misc.lua")
