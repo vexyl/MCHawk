@@ -1,4 +1,3 @@
--- FIXME: Grant/Revoke commands say they granted permissions even if they the permissions were invalid and not granted/revoked
 -- FIXME: Show invalid permissions as a comma-separated list in grant/revoke instead of sending a new line for each
 
 this = "PermissionsPlugin" -- must match table name below
@@ -24,26 +23,29 @@ PermissionsPlugin.GrantCommand = function(client, args)
 		return
 	end
 
-	targetName = args[1]
-	target = Server.GetClientByName(targetName, false)
+	local perms = table.concat(args, ", ", 2)
+
+	local targetName = args[1]
+	local target = Server.GetClientByName(targetName, false)
 
 	if (target == nil) then
 		Server.SendMessage(client, "&cPlayer " .. targetName .. " not found")
 		return
 	end
 
+	if (not PermissionsPlugin.PermissionsExistNotify(client, perms)) then
+		return
+	end
+
 	for k, targetPerm in pairs(args) do
 		if (k ~= 1) then -- skip name
-			if (PermissionsPlugin.PermissionExistsNotify(client, targetPerm)
-					and not PermissionsPlugin.CheckPermission(target.name, targetPerm)) then
+			if (not PermissionsPlugin.CheckPermission(target.name, targetPerm)) then
 				PermissionsPlugin.GrantPermission(target.name, targetPerm)
 			end
 		end
 	end
 
 	PermissionsPlugin.SavePermissions()
-
-	perms = table.concat(args, ", ", 2)
 
 	Server.SendMessage(client, "&eGranted player " .. target.name ..": &9" .. perms)
 	Server.SendMessage(target, "&e" .. client.name .. " granted you: &9" .. perms)
@@ -54,18 +56,22 @@ PermissionsPlugin.RevokeCommand = function(client, args)
 		return
 	end
 
-	targetName = args[1]
-	target = Server.GetClientByName(targetName, false)
+	local perms = table.concat(args, ", ", 2)
+	local targetName = args[1]
+	local target = Server.GetClientByName(targetName, false)
 
 	if (target == nil) then
 		Server.SendMessage(client, "&cPlayer " .. targetName .. " not found")
 		return
 	end
 
+	if (not PermissionsPlugin.PermissionsExistNotify(client, perms)) then
+		return
+	end
+
 	for k, targetPerm in pairs(args) do
 		if (k ~= 1) then -- skip name
-			if (PermissionsPlugin.PermissionExistsNotify(client, targetPerm)
-					and PermissionsPlugin.CheckPermission(target.name, targetPerm)) then
+			if (PermissionsPlugin.CheckPermission(target.name, targetPerm)) then
 				PermissionsPlugin.RevokePermission(target.name, targetPerm)
 			end
 		end
@@ -73,15 +79,13 @@ PermissionsPlugin.RevokeCommand = function(client, args)
 
 	PermissionsPlugin.SavePermissions()
 
-	perms = table.concat(args, ", ", 2)
-
 	Server.SendMessage(client, "&eRevoked player " .. target.name ..": &9" .. perms)
 	Server.SendMessage(target, "&e" .. client.name .. " revoked you: &9" .. perms)
 end
 
 PermissionsPlugin.PermissionsCommand = function(client, args)
-	name = args[1]
-	target = client
+	local name = args[1]
+	local target = client
 
 	if (name ~= nil) then
 		target = Server.GetClientByName(name, false)
@@ -91,9 +95,9 @@ PermissionsPlugin.PermissionsCommand = function(client, args)
 		end
 	end
 
-	perms = PermissionsPlugin.permissionTable[target.name]
+	local perms = PermissionsPlugin.permissionTable[target.name]
 
-	permissions = ""
+	local permissions = ""
 	if (perms ~= nil) then
 		for k, perm in pairs(perms) do
 			permissions = permissions .. "&9" .. perm .. "&e, "
@@ -105,7 +109,7 @@ end
 
 -- Doesn't check if permission exists
 PermissionsPlugin.GrantPermission = function(name, perm)
-	permsTable = PermissionsPlugin.permissionTable
+	local permsTable = PermissionsPlugin.permissionTable
 
 	if (permsTable[name] == nil) then
 		permsTable[name]= {}
@@ -116,7 +120,7 @@ end
 
 -- Doesn't check if permission exists
 PermissionsPlugin.RevokePermission = function(name, perm)
-	perms = PermissionsPlugin.permissionTable[name]
+	local perms = PermissionsPlugin.permissionTable[name]
 
 	for k, v in pairs(perms) do
 		if (v == perm) then
@@ -129,15 +133,15 @@ end
 PermissionsPlugin.LoadPermissions = function()
 	local f = io.open("permissions.txt", "r")
 	if f then
-		lines = {}
+		local lines = {}
 		for line in io.lines("permissions.txt") do
-			tokens = split(line, ":")
+			local tokens = split(line, ":")
 			if (tokens == nil or tokens[1] == nil or tokens[2] == nil) then
 				print("Permissions Plugin failed to load entry in permissions.txt")
 				break
 			end
 
-			perms = split(tokens[2], ",")
+			local perms = split(tokens[2], ", ")
 			PermissionsPlugin.permissionTable[tokens[1]] = perms
 		end
 
@@ -152,7 +156,7 @@ PermissionsPlugin.SavePermissions = function()
 			f:write(name .. ":")
 
 			for k, perm in pairs(PermissionsPlugin.permissionTable[name]) do
-				f:write(perm .. ",")
+				f:write(perm .. ", ")
 			end
 
 			f:write("\n")
@@ -177,21 +181,27 @@ PermissionsPlugin.PermissionExists = function(permission)
 	return false
 end
 
-PermissionsPlugin.PermissionExistsNotify = function(client, permission)
-	if (not PermissionsPlugin.PermissionExists(permission)) then
-		PermissionsPlugin.SendInvalidPermissionMessage(client, permission)
-		return false
+PermissionsPlugin.PermissionsExistNotify = function(client, permissions)
+	local result = true
+
+	local perms = split(permissions, ", ")
+
+	for _,perm in pairs(perms) do
+		if (not PermissionsPlugin.PermissionExists(perm)) then
+			PermissionsPlugin.SendInvalidPermissionMessage(client, perm)
+			result = false
+		end
 	end
 
-	return true
+	return result
 end
 
 -- TODO: Allow operators to override permissions: if (Server.IsOperator(name)) then return true end
 -- Doesn't check if permission exists
 PermissionsPlugin.CheckPermission = function(name, permission)
-	result = false
+	local result = false
 
-	perms = PermissionsPlugin.permissionTable[name];
+	local perms = PermissionsPlugin.permissionTable[name];
 	if (perms == nil) then
 		result = false
 	else
@@ -207,11 +217,11 @@ PermissionsPlugin.CheckPermission = function(name, permission)
 end
 
 PermissionsPlugin.CheckPermissionNotify = function(client, permission)
-	if (not PermissionsPlugin.PermissionExistsNotify(client, permission)) then
+	if (not PermissionsPlugin.PermissionsExistNotify(client, permission)) then
 		return false
 	end
 
-	result = PermissionsPlugin.CheckPermission(client.name, permission)
+	local result = PermissionsPlugin.CheckPermission(client.name, permission)
 
 	if (not result) then
 		PermissionsPlugin.SendNoPermissionMessage(client, permission)
