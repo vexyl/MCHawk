@@ -30,7 +30,6 @@ public:
 	Position GetPosition() { return m_position; }
 	uint8_t GetYaw() { return m_yaw; }
 	uint8_t GetPitch() { return m_pitch; }
-	std::string GetWorldName() { return m_worldName; }
 	World* GetWorld() { return m_world; }
 
 	bool IsActive() { return active; }
@@ -40,7 +39,6 @@ public:
 	void SetPositionOrientation(Position position, uint8_t yaw, uint8_t pitch);
 	void SetUserType(uint8_t userType) { m_userType = userType; }
 	void SetChatMute(int32_t chatMuteTime=0);
-	void SetWorldName(std::string worldName) { m_worldName = worldName; }
 	void SetWorld(World* world) { m_world = world; }
 
 	bool IsChatMuted();

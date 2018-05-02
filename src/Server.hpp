@@ -33,7 +33,7 @@ public:
 	static Server* GetInstance()
 	{
 		if (m_thisPtr == nullptr) {
-			m_thisPtr = new Server(); // Memory leak
+			m_thisPtr = new Server();
 		}
 		return m_thisPtr;
 	}

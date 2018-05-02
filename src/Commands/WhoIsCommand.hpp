@@ -28,7 +28,7 @@ public:
 
 		SendMessage(sender, "&e--- &f" + client->GetName() + "&e ---");
 
-		std::string worldName = client->GetWorldName();
+		std::string worldName = client->GetWorld()->GetName();
 		SendMessage(sender, "&eWorld: " + worldName);
 
 		std::string alias = client->GetChatName();

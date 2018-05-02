@@ -29,12 +29,12 @@ public:
 			return;
 		}
 
-		std::string srcWorldName = sender->GetWorldName();
-		std::string destWorldName = client->GetWorldName();
+		std::string srcWorldName = sender->GetWorld()->GetName();
+		std::string destWorldName = client->GetWorld()->GetName();
 
 		if (srcWorldName != destWorldName) {
 			World* world = server->GetWorld(destWorldName);
-			server->GetWorld(sender->GetWorldName())->RemoveClient(sender->GetPid());
+			sender->GetWorld()->RemoveClient(sender->GetPid());
 			world->AddClient(sender);
 		}
 

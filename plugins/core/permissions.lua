@@ -33,7 +33,7 @@ PermissionsPlugin.GrantCommand = function(client, args)
 		return
 	end
 
-	if (not PermissionsPlugin.PermissionsExistNotify(client, perms)) then
+	if (not PermissionsPlugin.PermissionsExistsNotify(client, perms)) then
 		return
 	end
 
@@ -65,7 +65,7 @@ PermissionsPlugin.RevokeCommand = function(client, args)
 		return
 	end
 
-	if (not PermissionsPlugin.PermissionsExistNotify(client, perms)) then
+	if (not PermissionsPlugin.PermissionsExistsNotify(client, perms)) then
 		return
 	end
 
@@ -181,14 +181,23 @@ PermissionsPlugin.PermissionExists = function(permission)
 	return false
 end
 
-PermissionsPlugin.PermissionsExistNotify = function(client, permissions)
+PermissionsPlugin.PermissionExistsNotify = function(client, permission)
+	if (not PermissionsPlugin.PermissionExists(permission)) then
+		PermissionsPlugin.SendInvalidPermissionMessage(client, permission)
+		return false
+	end
+
+	return true
+end
+
+-- Checks comma-separated list of permissions and returns false on first invalid permission
+PermissionsPlugin.PermissionsExistsNotify = function(client, permissions)
 	local result = true
 
-	local perms = split(permissions, ", ")
+	perms = split(permissions, ", ")
 
 	for _,perm in pairs(perms) do
-		if (not PermissionsPlugin.PermissionExists(perm)) then
-			PermissionsPlugin.SendInvalidPermissionMessage(client, perm)
+		if (not PermissionsPlugin.PermissionExistsNotify(client, perm)) then
 			result = false
 		end
 	end
@@ -217,7 +226,7 @@ PermissionsPlugin.CheckPermission = function(name, permission)
 end
 
 PermissionsPlugin.CheckPermissionNotify = function(client, permission)
-	if (not PermissionsPlugin.PermissionsExistNotify(client, permission)) then
+	if (not PermissionsPlugin.PermissionsExistsNotify(client, permission)) then
 		return false
 	end
 

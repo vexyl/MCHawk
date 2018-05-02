@@ -15,9 +15,7 @@ public:
 	{
 		(void)args; // Quiet compiler
 
-		Server* server = Server::GetInstance();
-
-		bool saved = server->GetWorld(sender->GetWorldName())->SaveMapIfChanged();
+		bool saved = sender->GetWorld()->SaveMapIfChanged();
 		if (saved)
 			SendMessage(sender, "&eMap saved to file");
 		else

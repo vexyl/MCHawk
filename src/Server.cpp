@@ -294,14 +294,10 @@ void Server::OnAuth(Client* client, struct cauthp clientAuth)
 
 	client->SetUserType(userType);
 
-	World* world = GetWorld("default");
-
-	client->SetWorldName("default");
-
 	// Do this before AddClient()
 	SendInfo(client, m_serverName, m_serverMotd, m_version, userType);
 
-	world->AddClient(client);
+	GetWorld("default")->AddClient(client);
 
 	SendMessage(client, "https://github.com/vexyl/MCHawk");
 	SendMessage(client, "&eTry /goto freebuild to get started.");
@@ -406,7 +402,7 @@ void Server::HandlePacket(Client* client, uint8_t opcode)
 			auto table = make_luatable();
 			m_pluginHandler.TriggerEvent(EventType::kOnPosition, client, table);
 
-			GetWorld(client->GetWorldName())->OnPosition(client, clientPos);
+			client->GetWorld()->OnPosition(client, clientPos);
 		}
 
 		break;
@@ -421,7 +417,7 @@ void Server::HandlePacket(Client* client, uint8_t opcode)
 
 			// Don't use default if a plugin set flag
 			if (!m_pluginHandler.GetEventFlag("NoDefaultCall"))
-				GetWorld(client->GetWorldName())->OnBlock(client, clientBlock);
+				client->GetWorld()->OnBlock(client, clientBlock);
 		}
 		break;
 	}
@@ -476,7 +472,7 @@ bool Server::Tick()
 			std::string name = (*it)->GetName();
 			std::string ipString = (*it)->GetIpString();
 			int8_t pid = (*it)->GetPid();
-			World* world = GetWorld((*it)->GetWorldName());
+			World* world = (*it)->GetWorld();
 
 			if (authed) {
 				auto table = make_luatable();
@@ -707,7 +703,7 @@ std::vector<ClientInfo> Server::GetAllClientInfo() const
 	for (auto& obj : m_clients) {
 		ClientInfo info;
 		info.name = obj->GetName();
-		info.worldName = obj->GetWorldName();
+		info.worldName = obj->GetWorld()->GetName();
 		info.ip = obj->GetIpString();
 
 		infoList.push_back(info);

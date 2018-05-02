@@ -96,7 +96,7 @@ struct LuaServer {
 
 	static void LuaPlaceBlock(Client* client, int type, short x, short y, short z)
 	{
-		World* world = Server::GetInstance()->GetWorld(client->GetWorldName());
+		World* world = client->GetWorld();
 
 		bool valid = world->GetMap().SetBlock(x, y, z, type);
 
@@ -111,7 +111,7 @@ struct LuaServer {
 
 	static int LuaMapGetBlockType(Client* client, short x, short y, short z)
 	{
-		Map& map = Server::GetInstance()->GetWorld(client->GetWorldName())->GetMap();
+		Map& map = client->GetWorld()->GetMap();
 		return map.GetBlockType(x, y, z);
 	}
 

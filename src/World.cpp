@@ -76,7 +76,6 @@ void World::AddClient(Client* client)
 	SpawnClient(client, m_spawnPosition, m_clients);
 	SendClientsTo(client, m_clients);
 
-	client->SetWorldName(m_name);
 	client->SetWorld(this);
 
 	m_clients.push_back(client);

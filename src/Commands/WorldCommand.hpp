@@ -93,7 +93,7 @@ public:
 				return;
 			}
 
-			World *w = server->GetWorld(sender->GetWorldName());
+			World *w = sender->GetWorld();
 
 			if (args.size() < 2) {
 				std::vector<std::string> options = w->GetOptionNames();
@@ -195,7 +195,7 @@ public:
 		} else if (subcommand == "spawn") {
 			// FIXME: Temporary
 			Position pos = sender->GetPosition();
-			World *w = server->GetWorld(sender->GetWorldName());
+			World *w = sender->GetWorld();
 
 			w->SetSpawnPosition(pos);
 

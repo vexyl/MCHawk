@@ -30,12 +30,12 @@ public:
 			return;
 		}
 
-		if (worldName == sender->GetWorldName()) {
+		if (worldName == sender->GetWorld()->GetName()) {
 			SendMessage(sender, "&eWarp nine. Engage. &9*Woosh*");
 			return;
 		}
 
-		server->GetWorld(sender->GetWorldName())->RemoveClient(sender->GetPid());
+		sender->GetWorld()->RemoveClient(sender->GetPid());
 		world->AddClient(sender);
 		server->BroadcastMessage("&e&6" + sender->GetName() + " &ewarped to &a" + worldName);
 	}
