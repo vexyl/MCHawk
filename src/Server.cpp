@@ -167,7 +167,7 @@ void Server::Init()
 		}
 	}
 
-	m_commandHandler.Register("help", new HelpCommand, "h cmds cmd");
+	m_commandHandler.Register("help", new HelpCommand, "h cmds cmd command commands");
 	m_commandHandler.Register("tp", new TeleportCommand);
 	m_commandHandler.Register("summon", new SummonCommand);
 	m_commandHandler.Register("op", new OpCommand);
@@ -265,8 +265,10 @@ void Server::OnAuth(Client* client, struct cauthp clientAuth)
 		return;
 
 	Client* checkClient = GetClientByName(name);
-	if (checkClient != nullptr)
-		KickClient(checkClient, "Logged in from somewhere else");
+	if (checkClient != nullptr) {
+		KickClient(checkClient, "Logged in from somewhere else", true);
+		checkClient->authed = false; // FIXME: Hack to silence "left the game" message
+	}
 
 	// Won't refuse client if replacing ghost player (see checkClient above)
 	if (m_numClients >= m_maxClients && checkClient == nullptr) {
@@ -536,7 +538,7 @@ void Server::SendHeartbeat()
 /* BEGIN CLIENT HELPER FUNCTIONS */
 ///////////////////////////////////
 
-void Server::KickClient(Client* client, std::string reason)
+void Server::KickClient(Client* client, std::string reason, bool notify)
 {
 	if (reason.empty())
 		reason = "Kicked";
@@ -551,6 +553,9 @@ void Server::KickClient(Client* client, std::string reason)
 	} else {
 		LOG(LogLevel::kInfo, "Kicked unauthorized player (%s | %s)", client->GetIpString().c_str(), (reason.empty() ? "None" : reason.c_str()));
 	}
+
+	if (notify)
+		BroadcastMessage("&eKicked player " + client->GetName() + " (" + reason + ")");
 }
 
 // FIXME: This is temporary, it works for the most part but is horribly messy and inefficient

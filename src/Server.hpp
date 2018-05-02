@@ -58,7 +58,7 @@ public:
 	void SendHeartbeat();
 
 	// Client helper functions
-	void KickClient(Client* client, std::string reason="");
+	void KickClient(Client* client, std::string reason="", bool notify=false);
 	static void SendWrappedMessageB(Client* client, std::string message);
 	static void SendWrappedMessage(Client* client, std::string message);
 	void SendSystemMessage(Client* client, std::string message);

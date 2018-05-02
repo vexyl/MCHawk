@@ -37,7 +37,7 @@ public:
 
 		server->GetWorld(sender->GetWorldName())->RemoveClient(sender->GetPid());
 		world->AddClient(sender);
-		SendMessage(sender, "&eWarped to &a" + worldName);
+		server->BroadcastMessage("&e&6" + sender->GetName() + " &ewarped to &a" + worldName);
 	}
 
 	virtual std::string GetDocString() { return "/goto <world name> - warps to world"; }
