@@ -265,10 +265,8 @@ void Server::OnAuth(Client* client, struct cauthp clientAuth)
 		return;
 
 	Client* checkClient = GetClientByName(name);
-	if (checkClient != nullptr) {
+	if (checkClient != nullptr)
 		KickClient(checkClient, "Logged in from somewhere else", true);
-		checkClient->authed = false; // FIXME: Hack to silence "left the game" message
-	}
 
 	// Won't refuse client if replacing ghost player (see checkClient above)
 	if (m_numClients >= m_maxClients && checkClient == nullptr) {
