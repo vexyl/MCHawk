@@ -7,10 +7,11 @@
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/ini_parser.hpp>
 
+// m_mapChanged set to true so when the .ini first saves the map file gets saved too
 World::World(std::string name) : m_name(name), m_active(false), m_mapChanged(true)
 {
 	SetOption("build", "true");
-	SetOption("autosave", "true");
+	SetOption("autosave", "false");
 	SetOption("autoload", "false");
 }
 

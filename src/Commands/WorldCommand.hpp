@@ -81,7 +81,6 @@ public:
 			world->GetMap().GenerateFlatMap(filename, x, y, z);
 			world->GetMap().SetFilename(filename);
 			world->SetSpawnPosition(Position(x/2*32+51, y/2*32+51, z/2*32+51));
-			world->SetOption("autosave", "true");
 			world->SetActive(true);
 
 			server->AddWorld(world);
