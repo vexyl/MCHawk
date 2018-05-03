@@ -575,42 +575,49 @@ void Server::SendWrappedMessage(Client* client, std::string message)
 
 	std::string s = "";
 
-	if (tokens.empty())
+	if (tokens.size() <= 1)
 		s = message;
 
-	std::string color="";
 	std::vector<std::string> messages;
-	for (int i = 0; i < (int)tokens.size(); ++i) {
-		std::string word = tokens[i];
+	if (s.empty()) {
+		std::string color="";
+		for (int i = 0; i < (int)tokens.size(); ++i) {
+			std::string word = tokens[i];
 
-		if ((i + 1) != (int)tokens.size())
-			s += " ";
+			if (word.size() == 0)
+				continue;
 
-		if (s.size() + word.size() <= MAX_SIZE) {
-			s += word;
+			std::cout << "word=" << word << " | size=" << word.size() << std::endl;
 
-			bool colorFound = false;
-			for (int j = 0; j < (int)word.size(); ++j) {
-				if (colorFound) {
-					color = "&";
-					color += word.at(j); // Why can't I do "&" + word.at(j)?!
-					colorFound = false;
-				} else if (word[j] == '&') {
-					colorFound = true;
-				}
-			}
-		} else {
-			messages.push_back(s);
-
-			s = "> " + color;
-
-			if ((i + 1) == (int)tokens.size()) {
+			if (s.size() + word.size() <= MAX_SIZE) {
 				s += word;
-				break;
-			}
 
-			i--;
-			continue;
+				if ((i + 1) != (int)tokens.size() && (int)s.size() + 1 <= (int)MAX_SIZE)
+					s += " ";
+
+				bool colorFound = false;
+				for (int j = 0; j < (int)word.size(); ++j) {
+					if (colorFound) {
+						color = "&";
+						color += word.at(j); // Why can't I do "&" + word.at(j)?!
+						colorFound = false;
+					} else if (word[j] == '&') {
+						colorFound = true;
+					}
+				}
+			} else {
+				messages.push_back(s);
+
+				s = "> " + color;
+
+				if ((i + 1) == (int)tokens.size()) {
+					s += word;
+					break;
+				}
+
+				i--;
+				continue;
+			}
 		}
 	}
 	messages.push_back(s);
