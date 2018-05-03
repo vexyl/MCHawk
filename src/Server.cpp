@@ -128,42 +128,10 @@ void Server::Init()
 		if (boost::filesystem::is_regular_file(itr->status())) {
 			std::string filename = itr->path().filename().string();
 
-			try {
-				boost::property_tree::ptree pt;
-				boost::property_tree::ini_parser::read_ini("worlds/" + filename, pt);
+			World* world = new World();
+			world->Load("worlds/" + filename);
 
-				std::string name = pt.get<std::string>("World.name");
-				std::string map = pt.get<std::string>("World.map");
-
-				short x_size = pt.get<short>("Size.x");
-				short y_size = pt.get<short>("Size.y");
-				short z_size = pt.get<short>("Size.z");
-
-				short sx = pt.get<short>("Spawn.x");
-				short sy = pt.get<short>("Spawn.y");
-				short sz = pt.get<short>("Spawn.z");
-
-				std::string autosave = pt.get<std::string>("Options.autosave");
-				std::string build = pt.get<std::string>("Options.build");
-				std::string autoload = pt.get<std::string>("Options.autoload");
-
-				World* world = new World(name);
-				world->GetMap().SetDimensions(x_size, y_size, z_size);
-				world->GetMap().SetFilename("worlds/" + map);
-				world->SetSpawnPosition(Position(sx, sy, sz));
-				world->SetOption("autosave", autosave);
-				world->SetOption("build", build);
-				world->SetOption("autoload", autoload);
-
-				if (autoload == "true")
-					world->Load();
-				else
-					LOG(LogLevel::kDebug, "Unloaded world %s", name.c_str());
-
-				AddWorld(world);
-			} catch (std::runtime_error& e) {
-				LOG(LogLevel::kWarning, "%s", e.what());
-			}
+			AddWorld(world);
 		}
 	}
 

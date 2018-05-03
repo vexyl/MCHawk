@@ -110,6 +110,4 @@ private:
 	std::map<std::string, World*> m_worlds;
 };
 
-void make_spawn_packet(Packet& packet, int8_t pid, std::string name, Position position, int8_t yaw, int8_t pitch);
-
 #endif // SERVER_H_

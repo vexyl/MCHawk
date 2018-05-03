@@ -164,7 +164,8 @@ public:
 				return;
 			}
 
-			world->Load();
+			world->GetMap().Load();
+			world->SetActive(true);
 
 			SendMessage(sender, "&eLoaded world &a" + worldName);
 		} else if (subcommand == "save") {

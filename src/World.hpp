@@ -11,6 +11,7 @@
 
 class World {
 public:
+	World();
 	World(std::string name);
 
 	Map& GetMap() { return m_map; }
@@ -21,7 +22,7 @@ public:
 	void AddClient(Client* client);
 	void RemoveClient(int8_t pid);
 
-	void Load();
+	void Load(std::string filename);
 	void Save();
 	bool SaveMapIfChanged();
 

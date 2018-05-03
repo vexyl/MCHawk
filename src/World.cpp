@@ -14,10 +14,47 @@ World::World(std::string name) : m_name(name), m_active(false), m_mapChanged(tru
 	SetOption("autoload", "false");
 }
 
-void World::Load()
+World::World() : World("")
 {
-	m_map.Load();
-	SetActive(true);
+
+}
+
+void World::Load(std::string filename)
+{
+	try {
+		boost::property_tree::ptree pt;
+		boost::property_tree::ini_parser::read_ini(filename, pt);
+
+		std::string name = pt.get<std::string>("World.name");
+		std::string mapFilename = pt.get<std::string>("World.map");
+
+		short x_size = pt.get<short>("Size.x");
+		short y_size = pt.get<short>("Size.y");
+		short z_size = pt.get<short>("Size.z");
+
+		short sx = pt.get<short>("Spawn.x");
+		short sy = pt.get<short>("Spawn.y");
+		short sz = pt.get<short>("Spawn.z");
+
+		std::string autosave = pt.get<std::string>("Options.autosave");
+		std::string build = pt.get<std::string>("Options.build");
+		std::string autoload = pt.get<std::string>("Options.autoload");
+
+		m_name = name;
+		m_map.SetDimensions(x_size, y_size, z_size);
+		m_map.SetFilename("worlds/" + mapFilename);
+		SetSpawnPosition(Position(sx, sy, sz));
+		SetOption("autosave", autosave);
+		SetOption("build", build);
+		SetOption("autoload", autoload);
+
+		if (autoload == "true") {
+			m_map.Load();
+			SetActive(true);
+		}
+	} catch (std::runtime_error& e) {
+		LOG(LogLevel::kWarning, "%s", e.what());
+	}
 }
 
 void World::Save()
@@ -155,6 +192,7 @@ void World::Tick()
 		if (m_autosaveClock.getElapsedTime().asSeconds() >= kAutosaveTime) {
 			if (SaveMapIfChanged())
 				BroadcastMessage("Map saved");
+			Save(); // Saves settings, skips map save since SaveMapIfChanged() was called above
 			m_autosaveClock.restart();
 		}
 	}
