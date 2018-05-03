@@ -29,7 +29,7 @@ PermissionsPlugin.GrantCommand = function(client, args)
 	local target = Server.GetClientByName(targetName, false)
 
 	if (target == nil) then
-		Server.SendMessage(client, "&cPlayer " .. targetName .. " not found")
+		Server.SendMessage(client, "&cPlayer &f" .. targetName .. "&c not found")
 		return
 	end
 
@@ -61,7 +61,7 @@ PermissionsPlugin.RevokeCommand = function(client, args)
 	local target = Server.GetClientByName(targetName, false)
 
 	if (target == nil) then
-		Server.SendMessage(client, "&cPlayer " .. targetName .. " not found")
+		Server.SendMessage(client, "&cPlayer &f" .. targetName .. "&c not found")
 		return
 	end
 
@@ -90,7 +90,7 @@ PermissionsPlugin.PermissionsCommand = function(client, args)
 	if (name ~= nil) then
 		target = Server.GetClientByName(name, false)
 		if (target == nil) then
-			Server.SendMessage(client, "&cPlayer " .. name .. " not found")
+			Server.SendMessage(client, "&cPlayer &f" .. name .. "&c not found")
 			return
 		end
 	end

@@ -1,4 +1,4 @@
-#include "Server.hpp"
+﻿#include "Server.hpp"
 
 #ifdef __linux__
 	#include <arpa/inet.h>
@@ -662,22 +662,6 @@ Client* Server::GetClientByName(std::string name, bool exact)
 	}
 
 	return client;
-}
-
-std::vector<ClientInfo> Server::GetAllClientInfo() const
-{
-	std::vector<ClientInfo> infoList;
-
-	for (auto& obj : m_clients) {
-		ClientInfo info;
-		info.name = obj->GetName();
-		info.worldName = obj->GetWorld()->GetName();
-		info.ip = obj->GetIpString();
-
-		infoList.push_back(info);
-	}
-
-	return infoList;
 }
 
 bool Server::IsOperator(std::string name)

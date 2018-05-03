@@ -15,12 +15,12 @@ public:
 		(void)args; // Quiet compiler
 
 		Server* server = Server::GetInstance();
-		std::vector<ClientInfo> infoList = server->GetAllClientInfo();
+		std::vector<Client*> clients = server->GetClients();
 
 		std::string message = "&ePlayer list: ";
-		int size = (int)infoList.size();
+		int size = (int)clients.size();
 		for (int i = 0; i < size; ++i) {
-			message += "&6" + infoList[i].name + "&e(&a" + infoList[i].worldName + "&e)";
+			message += "&6" + clients[i]->GetName() + "&e(&a" + clients[i]->GetWorld()->GetName() + "&e)";
 			if (i < size - 1)
 				message += ", ";
 		}

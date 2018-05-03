@@ -1,4 +1,4 @@
-#ifndef SERVER_H_
+﻿#ifndef SERVER_H_
 #define SERVER_H_
 
 #include <string.h>
@@ -18,12 +18,6 @@
 #include "Position.hpp"
 #include "CommandHandler.hpp"
 #include "LuaPlugins/LuaPluginHandler.hpp"
-
-struct ClientInfo {
-	std::string name;
-	std::string worldName;
-	std::string ip;
-};
 
 class Server {
 public:
@@ -66,7 +60,6 @@ public:
 	void BroadcastMessage(std::string message);
 
 	Client* GetClientByName(std::string name, bool exact=true);
-	std::vector<ClientInfo> GetAllClientInfo() const;
 
 	bool IsOperator(std::string name);
 	void Shutdown();
