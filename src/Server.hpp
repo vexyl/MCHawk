@@ -67,6 +67,7 @@ public:
 	void AddWorld(World* world);
 	void RemoveWorld(std::string name);
 	World* GetWorld(std::string name);
+	World* GetWorldByName(std::string name, bool exact=false);
 	std::vector<std::string> GetWorldNames();
 
 private:

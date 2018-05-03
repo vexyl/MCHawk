@@ -19,11 +19,13 @@ public:
 
 		boost::algorithm::to_lower(worldName);
 
-		World* world = server->GetWorld(worldName);
+		World* world = server->GetWorldByName(worldName);
 		if (world == nullptr) {
 			ClassicProtocol::SendMessage(sender, "&cWorld &f" + worldName + "&c does not exist");
 			return;
 		}
+
+		worldName = world->GetName();
 
 		if (!world->GetActive()) {
 			ClassicProtocol::SendMessage(sender, "&cWorld &f" + worldName + "&c is not loaded");

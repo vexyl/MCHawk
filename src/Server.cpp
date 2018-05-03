@@ -742,6 +742,34 @@ World* Server::GetWorld(std::string name)
 	return i->second;
 }
 
+World* Server::GetWorldByName(std::string name, bool exact)
+{
+	World* world = nullptr;
+
+	boost::algorithm::to_lower(name);
+	for (auto& obj : m_worlds) {
+		std::string worldName = obj.first;
+
+		boost::algorithm::to_lower(worldName);
+
+		// Exact match
+		if (name == worldName)
+			return obj.second;
+
+		// Return closest result unless there are multiple possible names
+		if (!exact && worldName.find(name) == 0) {
+			if (world != nullptr) {
+				world = nullptr;
+				break;
+			}
+
+			world = obj.second;
+		}
+	}
+
+	return world;
+}
+
 std::vector<std::string> Server::GetWorldNames()
 {
 	std::vector<std::string> worldNames;
