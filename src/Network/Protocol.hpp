@@ -1,4 +1,4 @@
-#ifndef PROTOCOL_H_
+﻿#ifndef PROTOCOL_H_
 #define PROTOCOL_H_
 
 #include "../Client.hpp"
@@ -19,28 +19,36 @@
 #include "Packet.hpp"
 #include "../Position.hpp"
 
-/* Server->Client Opcodes */
-#define SSINFO 0x00	/* Server information: Name, MOTD */
-#define SPING 0x01	/* Needs no reply */
-#define SLINIT 0x02	/* Level initialized, data incoming */
-#define SLDATA 0x03	/* Map data chunk, sent after SINIT */
-#define SLFINAL 0x04	/* Level finalized, map dimensions */
-#define SMSG 0x0d	/* Any chat message */
-#define SKICK 0x0e	/* Server kick, gives reason */
-#define SSPAWN 0x07	/* Player spawned */
-#define SDESPAWN 0x0c	/* Player despawned */
-#define STELE 0x08	/* Player teleported */
-#define SPOSDTDIR 0x09	/* Position/Direction change */
-#define SPOSDT 0x0a	/* Position change */
-#define SDIR 0x0b	/* Direction change */
-#define SBLOCK 0x06	/* Block change */
-#define SUTYPE 0x0f	/* Player (de)opped */
+namespace ClassicProtocol {
+namespace Server {
+enum PacketType {
+	kInfo				= 0x00,
+	kPing				= 0x01,
+	kInit				= 0x02,
+	kLevelData			= 0x03,
+	kLevelFinal			= 0x04,
+	kMessage			= 0x0d,
+	kKick				= 0x0e,
+	kSpawn				= 0x07,
+	kDespawn			= 0x0c,
+	kTeleport			= 0x08,
+	kPositionOrientationChange	= 0x09,
+	kPositionChange			= 0x0a,
+	kDirection			= 0x0b,
+	kBlock				= 0x06,
+	kUserType			= 0x0f
+};
+}
 
-/* Client->Server Opcodes */
-#define CAUTH 0x00	/* Client authenitcation */
-#define CMSG 0x0d	/* Client messsages */
-#define CPOS 0x08	/* Client position update */
-#define CBLOCK 0x05	/* Client block change */
+namespace Client {
+enum PacketType {
+	kAuth				= 0x00,
+	kMessage			= 0x0d,
+	kPosition			= 0x08,
+	kBlock				= 0x05
+};
+}
+}
 
 /* Client->Server */
 struct cauthp {

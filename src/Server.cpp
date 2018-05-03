@@ -331,10 +331,12 @@ void Server::OnMessage(Client* client, struct cmsgp clientMsg)
 
 void Server::HandlePacket(Client* client, uint8_t opcode)
 {
+	using namespace ClassicProtocol::Client;
+
 	ClientStream& stream = client->stream;
 
 	if (!client->authed) {
-		if (opcode == CAUTH) {
+		if (opcode == PacketType::kAuth) {
 			struct cauthp clientAuth;
 			if (clientAuth.Read(stream)) {
 				OnAuth(client, clientAuth);
@@ -349,7 +351,7 @@ void Server::HandlePacket(Client* client, uint8_t opcode)
 	}
 
 	switch (opcode) {
-	case CMSG:
+	case PacketType::kMessage:
 	{
 		struct cmsgp clientMsg;
 
@@ -362,7 +364,7 @@ void Server::HandlePacket(Client* client, uint8_t opcode)
 
 		break;
 	}
-	case CPOS:
+	case PacketType::kPosition:
 	{
 		struct cposp clientPos;
 
@@ -375,7 +377,7 @@ void Server::HandlePacket(Client* client, uint8_t opcode)
 
 		break;
 	}
-	case CBLOCK:
+	case PacketType::kBlock:
 	{
 		struct cblockp clientBlock;
 

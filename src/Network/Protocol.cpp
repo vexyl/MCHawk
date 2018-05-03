@@ -1,12 +1,15 @@
-#include "Protocol.hpp"
+﻿#include "Protocol.hpp"
 
 #include "Packet.hpp"
 #include "../Map.hpp"
 #include "../Utils/Logger.hpp"
 
+using namespace ClassicProtocol::Server;
+
 void make_spawn_packet(Packet& packet, int8_t pid, std::string name, Position position, int8_t yaw, int8_t pitch)
 {
-	packet.Write((int8_t)SSPAWN);
+	// Cast opcode because it's an initialized packet and we're writing the packet type, not constructing the packet
+	packet.Write((uint8_t)PacketType::kSpawn);
 	packet.Write(pid); // Self PID
 	packet.Write(name);
 	packet.Write(htons(position.x));
@@ -18,7 +21,7 @@ void make_spawn_packet(Packet& packet, int8_t pid, std::string name, Position po
 
 void SendInfo(Client* client, std::string serverName, std::string serverMOTD, uint8_t version, uint8_t userType)
 {
-	Packet packet(SSINFO);
+	Packet packet(PacketType::kInfo);
 
 	packet.Write((uint8_t)version);
 	packet.Write(serverName);
@@ -30,7 +33,7 @@ void SendInfo(Client* client, std::string serverName, std::string serverMOTD, ui
 
 void SendMessage(Client* client, std::string message)
 {
-	Packet packet(SMSG);
+	Packet packet(PacketType::kMessage);
 
 	packet.Write((uint8_t)0);
 	packet.Write(message);
@@ -40,7 +43,7 @@ void SendMessage(Client* client, std::string message)
 
 void SendMap(Client* client, Map& map)
 {
-	Packet levelInitPacket(SLINIT);
+	Packet levelInitPacket(PacketType::kInit);
 	client->QueuePacket(levelInitPacket);
 
 	uint8_t* compBuffer = nullptr;
@@ -55,7 +58,7 @@ void SendMap(Client* client, Map& map)
 		size_t remainingBytes = compSize - bytes;
 		size_t count = (remainingBytes >= 1024) ? 1024 : (remainingBytes);
 
-		Packet packet(SLDATA);
+		Packet packet(PacketType::kLevelData);
 
 		packet.Write((int16_t)htons(count)); // length
 
@@ -82,7 +85,7 @@ void SendMap(Client* client, Map& map)
 	short mapY = map.GetYSize();
 	short mapZ = map.GetZSize();
 
-	Packet packet(SLFINAL);
+	Packet packet(PacketType::kLevelFinal);
 
 	packet.Write(htons(mapX));
 	packet.Write(htons(mapY));
@@ -93,7 +96,7 @@ void SendMap(Client* client, Map& map)
 
 void SendBlock(Client* client, Position pos, uint8_t type)
 {
-	Packet packet(SBLOCK);
+	Packet packet(PacketType::kBlock);
 
 	packet.Write(htons(pos.x));
 	packet.Write(htons(pos.y));
@@ -105,7 +108,7 @@ void SendBlock(Client* client, Position pos, uint8_t type)
 
 void SendKick(Client* client, std::string reason)
 {
-	Packet packet(SKICK);
+	Packet packet(PacketType::kKick);
 
 	packet.Write(reason);
 
@@ -114,7 +117,7 @@ void SendKick(Client* client, std::string reason)
 
 void SendPosition(Client* client, int8_t pid, Position pos, uint8_t yaw, uint8_t pitch)
 {
-	Packet packet(STELE);
+	Packet packet(PacketType::kTeleport);
 
 	packet.Write(pid);
 	packet.Write(htons(pos.x));
@@ -133,7 +136,7 @@ void SendPlayerPositionUpdate(Client* sender, const std::vector<Client*>& client
 	int8_t pid = sender->GetPid();
 	Position pos = sender->GetPosition();
 
-	Packet packet(STELE);
+	Packet packet(PacketType::kTeleport);
 	packet.Write(pid);
 	packet.Write(htons(pos.x));
 	packet.Write(htons(pos.y));
@@ -149,7 +152,7 @@ void SendPlayerPositionUpdate(Client* sender, const std::vector<Client*>& client
 
 void SendUserType(Client* client, uint8_t userType)
 {
-	Packet packet(SUTYPE);
+	Packet packet(PacketType::kUserType);
 
 	packet.Write(userType);
 
@@ -194,7 +197,7 @@ void SpawnClient(Client* client, Position position, const std::vector<Client*>& 
 
 void DespawnClient(int8_t pid, const std::vector<Client*>& clients)
 {
-	Packet packet(SDESPAWN);
+	Packet packet(PacketType::kDespawn);
 
 	packet.Write(pid);
 
