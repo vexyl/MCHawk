@@ -532,9 +532,6 @@ void Server::SendWrappedMessageB(Client* client, std::string message)
 
 	int length = message.length();
 	while (pos < length) {
-		int diff = length - pos;
-		int count = std::min(diff, max);
-
 		std::string partialMessage;
 
 		if (pos > 0)
@@ -545,6 +542,9 @@ void Server::SendWrappedMessageB(Client* client, std::string message)
 			color = "";
 		}
 
+		int diff = length - pos;
+		int count = std::min(diff, max);
+
 		partialMessage += message.substr(pos, count);
 
 		bool colorFound = false;
@@ -553,10 +553,9 @@ void Server::SendWrappedMessageB(Client* client, std::string message)
 				color = "&";
 				color += partialMessage.at(j); // Why can't I do "&" + word.at(j)?!
 				colorFound = false;
-			}
-
-			if (partialMessage[j] == '&')
+			} else if (partialMessage[j] == '&') {
 				colorFound = true;
+			}
 		}
 
 		ClassicProtocol::SendMessage(client, partialMessage);
@@ -575,6 +574,7 @@ void Server::SendWrappedMessage(Client* client, std::string message)
 	size_t MAX_SIZE = 64;
 
 	std::string s = "";
+
 	if (tokens.empty())
 		s = message;
 
@@ -582,6 +582,9 @@ void Server::SendWrappedMessage(Client* client, std::string message)
 	std::vector<std::string> messages;
 	for (int i = 0; i < (int)tokens.size(); ++i) {
 		std::string word = tokens[i];
+
+		if ((i + 1) != (int)tokens.size())
+			s += " ";
 
 		if (s.size() + word.size() <= MAX_SIZE) {
 			s += word;
@@ -592,15 +595,10 @@ void Server::SendWrappedMessage(Client* client, std::string message)
 					color = "&";
 					color += word.at(j); // Why can't I do "&" + word.at(j)?!
 					colorFound = false;
-				}
-
-				if (word[j] == '&')
+				} else if (word[j] == '&') {
 					colorFound = true;
+				}
 			}
-
-			if ((i + 1) != (int)tokens.size())
-				s += " ";
-
 		} else {
 			messages.push_back(s);
 
@@ -617,8 +615,12 @@ void Server::SendWrappedMessage(Client* client, std::string message)
 	}
 	messages.push_back(s);
 
-	for (auto& obj : messages)
-		SendWrappedMessageB(client, obj);
+	for (auto& obj : messages) {
+		if (obj.size() > MAX_SIZE)
+			SendWrappedMessageB(client, obj);
+		else
+			ClassicProtocol::SendMessage(client, obj);
+	}
 }
 
 void Server::SendSystemMessage(Client* client, std::string message)
