@@ -587,8 +587,6 @@ void Server::SendWrappedMessage(Client* client, std::string message)
 			if (word.size() == 0)
 				continue;
 
-			std::cout << "word=" << word << " | size=" << word.size() << std::endl;
-
 			if (s.size() + word.size() <= MAX_SIZE) {
 				s += word;
 
