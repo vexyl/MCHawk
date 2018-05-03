@@ -1,4 +1,4 @@
-#ifndef GOTOCOMMAND_H_
+﻿#ifndef GOTOCOMMAND_H_
 #define GOTOCOMMAND_H_
 
 #include <string>
@@ -21,17 +21,17 @@ public:
 
 		World* world = server->GetWorld(worldName);
 		if (world == nullptr) {
-			SendMessage(sender, "&cWorld &f" + worldName + "&c does not exist");
+			ClassicProtocol::SendMessage(sender, "&cWorld &f" + worldName + "&c does not exist");
 			return;
 		}
 
 		if (!world->GetActive()) {
-			SendMessage(sender, "&cWorld &f" + worldName + "&c is not loaded");
+			ClassicProtocol::SendMessage(sender, "&cWorld &f" + worldName + "&c is not loaded");
 			return;
 		}
 
 		if (worldName == sender->GetWorld()->GetName()) {
-			SendMessage(sender, "&eWarp nine. Engage. &9*Woosh*");
+			ClassicProtocol::SendMessage(sender, "&eWarp nine. Engage. &9*Woosh*");
 			return;
 		}
 

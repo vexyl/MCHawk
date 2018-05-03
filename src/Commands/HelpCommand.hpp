@@ -1,4 +1,4 @@
-#ifndef HELPCOMMAND_H_
+﻿#ifndef HELPCOMMAND_H_
 #define HELPCOMMAND_H_
 
 #include <cmath>
@@ -40,7 +40,7 @@ public:
 			auto iter = commands.find(commandName);
 			if (iter != commands.end()) {
 				// issued /help commandName
-				SendMessage(sender, "&b" + iter->second->GetDocString());
+				ClassicProtocol::SendMessage(sender, "&b" + iter->second->GetDocString());
 				return;
 			}
 		}
@@ -56,7 +56,7 @@ public:
 			pageString = args.front();
 			// Is a valid number?
 			if (pageString.find_first_not_of("1234567890") != std::string::npos) {
-				SendMessage(sender, "&cInvalid argument");
+				ClassicProtocol::SendMessage(sender, "&cInvalid argument");
 				return;
 			} else {
 				page = atoi(pageString.c_str());
@@ -64,13 +64,13 @@ public:
 					page = 1;
 
 				if (page > maxPages) {
-					SendMessage(sender, "&cInvalid page number");
+					ClassicProtocol::SendMessage(sender, "&cInvalid page number");
 					return;
 				}
 			}
 		}
 
-		SendMessage(sender, "&f--- &bCommands &f---");
+		ClassicProtocol::SendMessage(sender, "&f--- &bCommands &f---");
 
 		offset = (page - 1) * maxResults;
 		for (unsigned int i = 0; i < maxResults && (offset+i) < commands.size(); ++i) {
@@ -78,10 +78,10 @@ public:
 
 			std::advance(it, offset+i);
 
-			SendMessage(sender, "&b" + it->second->GetDocString());
+			ClassicProtocol::SendMessage(sender, "&b" + it->second->GetDocString());
 		}
 
-		SendMessage(sender, "&f--- &bpage " + std::to_string(page) + " of " + std::to_string(maxPages) + " &f---");
+		ClassicProtocol::SendMessage(sender, "&f--- &bpage " + std::to_string(page) + " of " + std::to_string(maxPages) + " &f---");
 	}
 
 	virtual std::string GetDocString() { return "/help [command/page number] - displays this help message"; }

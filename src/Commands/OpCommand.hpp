@@ -1,4 +1,4 @@
-#ifndef OPCOMMAND_H_
+﻿#ifndef OPCOMMAND_H_
 #define OPCOMMAND_H_
 
 #include <string>
@@ -18,7 +18,7 @@ public:
 
 		Client* client = server->GetClientByName(name, false);
 		if (client == nullptr) {
-			SendMessage(sender, "&cPlayer &f" + name + "&c does not exist");
+			ClassicProtocol::SendMessage(sender, "&cPlayer &f" + name + "&c does not exist");
 			return;
 		}
 
@@ -42,7 +42,7 @@ public:
 		}
 
 		client->SetUserType(newUserType);
-		SendUserType(client, newUserType);
+		ClassicProtocol::SendUserType(client, newUserType);
 	}
 
 	virtual std::string GetDocString() { return "/op <name> - toggles operator status on a player"; }

@@ -1,4 +1,4 @@
-#include "LuaPluginAPI.hpp"
+﻿#include "LuaPluginAPI.hpp"
 
 #include <boost/algorithm/string.hpp>
 
@@ -13,7 +13,7 @@ luabridge::LuaRef make_luatable()
 	return table;
 }
 
-luabridge::LuaRef cauthp_to_luatable(const struct cauthp clientAuth)
+luabridge::LuaRef cauthp_to_luatable(const struct ClassicProtocol::cauthp clientAuth)
 {
 	luabridge::LuaRef table(L);
 	table = luabridge::newTable(L);
@@ -28,7 +28,7 @@ luabridge::LuaRef cauthp_to_luatable(const struct cauthp clientAuth)
 	return table;
 }
 
-luabridge::LuaRef cmsgp_to_luatable(const struct cmsgp clientMsg)
+luabridge::LuaRef cmsgp_to_luatable(const struct ClassicProtocol::cmsgp clientMsg)
 {
 	luabridge::LuaRef table(L);
 	table = luabridge::newTable(L);
@@ -43,7 +43,7 @@ luabridge::LuaRef cmsgp_to_luatable(const struct cmsgp clientMsg)
 	return table;
 }
 
-luabridge::LuaRef cblockp_to_luatable(const struct cblockp clientBlock)
+luabridge::LuaRef cblockp_to_luatable(const struct ClassicProtocol::cblockp clientBlock)
 {
 	luabridge::LuaRef table(L);
 	table = luabridge::newTable(L);

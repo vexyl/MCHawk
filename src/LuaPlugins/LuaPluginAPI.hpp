@@ -1,6 +1,5 @@
-#ifndef LUAPLUGINAPI_H_
+﻿#ifndef LUAPLUGINAPI_H_
 #define LUAPLUGINAPI_H_
-
 
 #include "../Server.hpp"
 #include "../Network/Protocol.hpp"
@@ -63,7 +62,7 @@ struct LuaServer {
 
 	static void LuaSendBlock(Client* client, short x, short y, short z, int type)
 	{
-		::SendBlock(client, Position(x, y, z), type);
+		ClassicProtocol::SendBlock(client, Position(x, y, z), type);
 	}
 
 	static Client* LuaGetClientByName(std::string name, bool exact)
@@ -102,7 +101,7 @@ struct LuaServer {
 
 		if (!valid) {
 			int type = LuaServer::LuaMapGetBlockType(client, x, y, z);
-			SendBlock(client, Position(x, y, z), type);
+			ClassicProtocol::SendBlock(client, Position(x, y, z), type);
 			return;
 		}
 
@@ -117,7 +116,7 @@ struct LuaServer {
 
 	static void LuaSendKick(Client* client, std::string reason)
 	{
-		::SendKick(client, reason);
+		ClassicProtocol::SendKick(client, reason);
 	}
 
 	static luabridge::LuaRef LuaGetClients()
@@ -156,8 +155,8 @@ struct LuaServer {
 };
 
 luabridge::LuaRef make_luatable();
-luabridge::LuaRef cauthp_to_luatable(const struct cauthp clientAuth);
-luabridge::LuaRef cmsgp_to_luatable(const struct cmsgp clientMsg);
-luabridge::LuaRef cblockp_to_luatable(const struct cblockp clientBlock);
+luabridge::LuaRef cauthp_to_luatable(const struct ClassicProtocol::cauthp clientAuth);
+luabridge::LuaRef cmsgp_to_luatable(const struct ClassicProtocol::cmsgp clientMsg);
+luabridge::LuaRef cblockp_to_luatable(const struct ClassicProtocol::cblockp clientBlock);
 
 #endif // LUAPLUGINAPI_H_

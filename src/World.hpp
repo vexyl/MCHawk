@@ -1,9 +1,10 @@
-#ifndef WORLD_H_
+﻿#ifndef WORLD_H_
 #define WORLD_H_
 
 #include "Map.hpp"
 #include "Client.hpp"
 #include "Position.hpp"
+#include "Network/Protocol.hpp"
 
 #include <string>
 #include <vector>
@@ -36,8 +37,8 @@ public:
 
 	void Tick();
 
-	void OnPosition(Client* client, struct cposp clientPos);
-	void OnBlock(Client* client, struct cblockp clientBlock);
+	void OnPosition(Client* client, struct ClassicProtocol::cposp clientPos);
+	void OnBlock(Client* client, struct ClassicProtocol::cblockp clientBlock);
 	void BroadcastMessage(std::string message);
 	void SendBlockToClients(int type, short x, short y, short z);
 

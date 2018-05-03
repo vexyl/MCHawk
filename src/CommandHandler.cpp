@@ -1,4 +1,4 @@
-#include "CommandHandler.hpp"
+﻿#include "CommandHandler.hpp"
 
 #include <vector>
 #include <stdexcept>
@@ -73,7 +73,7 @@ void CommandHandler::Execute(Client* sender, std::string name, const CommandArgs
 		// Check if player has permission
 		bool hasPermission = sender->GetUserType() >= iter->second->GetPermissionLevel();
 		if (!hasPermission) {
-			SendMessage(sender, "&cYou don't have permission to use that command.");
+			ClassicProtocol::SendMessage(sender, "&cYou don't have permission to use that command.");
 			return;
 		}
 

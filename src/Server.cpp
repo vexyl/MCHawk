@@ -182,7 +182,7 @@ void Server::OnConnect(sf::TcpSocket *sock)
 	LOG(LogLevel::kDebug, "Client connected (%s)", client->GetIpString().c_str());
 }
 
-void Server::OnAuth(Client* client, struct cauthp clientAuth)
+void Server::OnAuth(Client* client, struct ClassicProtocol::cauthp clientAuth)
 {
 	std::string name((char*)clientAuth.name, 0, sizeof(clientAuth.name));
 	std::string key((char*)clientAuth.key, 0, sizeof(clientAuth.key));
@@ -263,15 +263,15 @@ void Server::OnAuth(Client* client, struct cauthp clientAuth)
 	client->SetUserType(userType);
 
 	// Do this before AddClient()
-	SendInfo(client, m_serverName, m_serverMotd, m_version, userType);
+	ClassicProtocol::SendInfo(client, m_serverName, m_serverMotd, m_version, userType);
 
 	GetWorld("default")->AddClient(client);
 
-	SendMessage(client, "https://github.com/vexyl/MCHawk");
-	SendMessage(client, "&eTry /goto freebuild to get started.");
+	ClassicProtocol::SendMessage(client, "https://github.com/vexyl/MCHawk");
+	ClassicProtocol::SendMessage(client, "&eTry /goto freebuild to get started.");
 }
 
-void Server::OnMessage(Client* client, struct cmsgp clientMsg)
+void Server::OnMessage(Client* client, struct ClassicProtocol::cmsgp clientMsg)
 {
 	std::string message((char*)clientMsg.msg, 0, sizeof(clientMsg.msg));
 	std::string name = client->GetName();
@@ -331,12 +331,12 @@ void Server::OnMessage(Client* client, struct cmsgp clientMsg)
 
 void Server::HandlePacket(Client* client, uint8_t opcode)
 {
-	using namespace ClassicProtocol::Client;
+	using namespace ClassicProtocol;
 
 	ClientStream& stream = client->stream;
 
 	if (!client->authed) {
-		if (opcode == PacketType::kAuth) {
+		if (opcode == PacketType::kClientAuth) {
 			struct cauthp clientAuth;
 			if (clientAuth.Read(stream)) {
 				OnAuth(client, clientAuth);
@@ -351,7 +351,7 @@ void Server::HandlePacket(Client* client, uint8_t opcode)
 	}
 
 	switch (opcode) {
-	case PacketType::kMessage:
+	case PacketType::kClientMessage:
 	{
 		struct cmsgp clientMsg;
 
@@ -364,7 +364,7 @@ void Server::HandlePacket(Client* client, uint8_t opcode)
 
 		break;
 	}
-	case PacketType::kPosition:
+	case PacketType::kClientPosition:
 	{
 		struct cposp clientPos;
 
@@ -377,7 +377,7 @@ void Server::HandlePacket(Client* client, uint8_t opcode)
 
 		break;
 	}
-	case PacketType::kBlock:
+	case PacketType::kClientBlock:
 	{
 		struct cblockp clientBlock;
 
@@ -507,7 +507,7 @@ void Server::KickClient(Client* client, std::string reason, bool notify)
 	if (reason.empty())
 		reason = "Kicked";
 
-	SendKick(client, reason);
+	ClassicProtocol::SendKick(client, reason);
 
 	// FIXME: Maybe queue disconnect? Sometimes client gets I/O error when kicked
 	client->active = false;
@@ -559,7 +559,7 @@ void Server::SendWrappedMessageB(Client* client, std::string message)
 				colorFound = true;
 		}
 
-		::SendMessage(client, partialMessage);
+		ClassicProtocol::SendMessage(client, partialMessage);
 
 		pos += count;
 	}

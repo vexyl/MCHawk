@@ -1,4 +1,4 @@
-#ifndef WHOISCOMMAND_H_
+﻿#ifndef WHOISCOMMAND_H_
 #define WHOISCOMMAND_H_
 
 #include <string>
@@ -22,23 +22,23 @@ public:
 
 		Client* client = server->GetClientByName(name, false);
 		if (client == nullptr) {
-			SendMessage(sender, "&cPlayer &f" + name + "&c does not exist");
+			ClassicProtocol::SendMessage(sender, "&cPlayer &f" + name + "&c does not exist");
 			return;
 		}
 
-		SendMessage(sender, "&e--- &f" + client->GetName() + "&e ---");
+		ClassicProtocol::SendMessage(sender, "&e--- &f" + client->GetName() + "&e ---");
 
 		std::string worldName = client->GetWorld()->GetName();
-		SendMessage(sender, "&eWorld: " + worldName);
+		ClassicProtocol::SendMessage(sender, "&eWorld: " + worldName);
 
 		std::string alias = client->GetChatName();
 		if (alias != client->GetName())
-			SendMessage(sender, "&eAlias: " + alias);
+			ClassicProtocol::SendMessage(sender, "&eAlias: " + alias);
 		else
-			SendMessage(sender, "&eNo alias");
+			ClassicProtocol::SendMessage(sender, "&eNo alias");
 
 		if (sender->GetUserType() == 0x64)
-			SendMessage(sender, "&eIP: " + client->GetIpString());
+			ClassicProtocol::SendMessage(sender, "&eIP: " + client->GetIpString());
 
 	}
 

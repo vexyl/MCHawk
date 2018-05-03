@@ -1,4 +1,4 @@
-#ifndef ALIASCOMMAND_H_
+﻿#ifndef ALIASCOMMAND_H_
 #define ALIASCOMMAND_H_
 
 #include <string>
@@ -33,7 +33,7 @@ public:
 
 		// Alphanumeric names only, max length 16, color codes are ok
 		if (length == 0 || length > 16 || name.find_first_not_of(validChars) != std::string::npos) {
-			SendMessage(sender, "&cInvalid name");
+			ClassicProtocol::SendMessage(sender, "&cInvalid name");
 			return;
 		}
 

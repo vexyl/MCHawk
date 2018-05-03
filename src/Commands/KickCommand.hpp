@@ -1,4 +1,4 @@
-#ifndef KICKCOMMAND_H_
+﻿#ifndef KICKCOMMAND_H_
 #define KICKCOMMAND_H_
 
 #include <string>
@@ -19,7 +19,7 @@ public:
 
 		Client* client = server->GetClientByName(name, false);
 		if (client == nullptr) {
-			SendMessage(sender, "&cPlayer &f" + name + "&c does not exist");
+			ClassicProtocol::SendMessage(sender, "&cPlayer &f" + name + "&c does not exist");
 			return;
 		}
 

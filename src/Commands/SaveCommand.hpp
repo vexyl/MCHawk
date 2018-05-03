@@ -1,4 +1,4 @@
-#ifndef SAVECOMMAND_H_
+﻿#ifndef SAVECOMMAND_H_
 #define SAVECOMMAND_H_
 
 #include <string>
@@ -17,9 +17,9 @@ public:
 
 		bool saved = sender->GetWorld()->SaveMapIfChanged();
 		if (saved)
-			SendMessage(sender, "&eMap saved to file");
+			ClassicProtocol::SendMessage(sender, "&eMap saved to file");
 		else
-			SendMessage(sender, "&cNo changes to save");
+			ClassicProtocol::SendMessage(sender, "&cNo changes to save");
 	}
 
 	virtual std::string GetDocString() { return "/save - saves current map to file"; }

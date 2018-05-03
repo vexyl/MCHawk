@@ -1,4 +1,4 @@
-#ifndef TELEPORTCOMMAND_H_
+﻿#ifndef TELEPORTCOMMAND_H_
 #define TELEPORTCOMMAND_H_
 
 #include <string>
@@ -17,7 +17,7 @@ public:
 
 		Client* client = server->GetClientByName(name, false);
 		if (client == nullptr) {
-			SendMessage(sender, "&cPlayer &f" + name + "&c does not exist");
+			ClassicProtocol::SendMessage(sender, "&cPlayer &f" + name + "&c does not exist");
 			return;
 		}
 
@@ -25,7 +25,7 @@ public:
 		name = client->GetName();
 
 		if (name == sender->GetName()) {
-			SendMessage(sender, "&9*Woosh* &eYou teleport to yourself.");
+			ClassicProtocol::SendMessage(sender, "&9*Woosh* &eYou teleport to yourself.");
 			return;
 		}
 
@@ -38,8 +38,8 @@ public:
 			world->AddClient(sender);
 		}
 
-		SendPosition(sender, -1 /* Self ID */, client->GetPosition(), client->GetYaw(), client->GetPitch());
-		SendMessage(sender, "&eTeleported to " + name);
+		ClassicProtocol::SendPosition(sender, -1 /* Self ID */, client->GetPosition(), client->GetYaw(), client->GetPitch());
+		ClassicProtocol::SendMessage(sender, "&eTeleported to " + name);
 	}
 
 	virtual std::string GetDocString() { return "/tp <name> - teleports to player"; }

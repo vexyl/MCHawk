@@ -20,35 +20,27 @@
 #include "../Position.hpp"
 
 namespace ClassicProtocol {
-namespace Server {
 enum PacketType {
-	kInfo				= 0x00,
-	kPing				= 0x01,
-	kInit				= 0x02,
-	kLevelData			= 0x03,
-	kLevelFinal			= 0x04,
-	kMessage			= 0x0d,
-	kKick				= 0x0e,
-	kSpawn				= 0x07,
-	kDespawn			= 0x0c,
-	kTeleport			= 0x08,
-	kPositionOrientationChange	= 0x09,
-	kPositionChange			= 0x0a,
-	kDirection			= 0x0b,
-	kBlock				= 0x06,
-	kUserType			= 0x0f
+	kServerInfo				= 0x00,
+	kServerPing				= 0x01,
+	kServerInit				= 0x02,
+	kServerLevelData			= 0x03,
+	kServerLevelFinal			= 0x04,
+	kServerMessage			= 0x0d,
+	kServerKick				= 0x0e,
+	kServerSpawn				= 0x07,
+	kServerDespawn			= 0x0c,
+	kServerTeleport			= 0x08,
+	kServerPositionOrientationChange	= 0x09,
+	kServerPositionChange			= 0x0a,
+	kServerDirection			= 0x0b,
+	kServerBlock				= 0x06,
+	kServerUserType			= 0x0f,
+	kClientAuth			= 0x00,
+	kClientMessage			= 0x0d,
+	kClientPosition			= 0x08,
+	kClientBlock			= 0x05
 };
-}
-
-namespace Client {
-enum PacketType {
-	kAuth				= 0x00,
-	kMessage			= 0x0d,
-	kPosition			= 0x08,
-	kBlock				= 0x05
-};
-}
-}
 
 /* Client->Server */
 struct cauthp {
@@ -170,5 +162,6 @@ void SendUserType(Client* client, uint8_t userType);
 void SendClientsTo(Client* client, const std::vector<Client*>& clients);
 void SpawnClient(Client* client, Position position, const std::vector<Client*>& clients);
 void DespawnClient(int8_t pid, const std::vector<Client*>& clients);
+} // namespace ClassicProtocol
 
 #endif // PROTOCOL_H_
