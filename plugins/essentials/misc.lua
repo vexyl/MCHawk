@@ -32,3 +32,8 @@ EssentialsPlugin.BillNye_BillNyeCommand = function(client, args)
 	Server.BroadcastMessage("&cBill Nye&f: " .. message .. "?")
 	Server.BroadcastMessage("&cBill Nye&f: NOW YOU KNOW!")
 end
+
+EssentialsPlugin.Cmds_CmdsCommand = function(client, args)
+	commandString = table.concat(Server.GetCommandStrings(), ", ")
+	Server.SendMessage(client, "&eCommands: " .. commandString)
+end

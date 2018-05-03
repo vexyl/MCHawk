@@ -8,33 +8,34 @@ void LuaServer::Init(lua_State* L)
 {
 	luabridge::getGlobalNamespace(L)
 	.beginClass<Client>("Client")
-	.addProperty("name", &Client::GetName)
-	.addFunction("GetWorld", &Client::GetWorld)
+		.addProperty("name", &Client::GetName)
+		.addFunction("GetWorld", &Client::GetWorld)
 	.endClass();
 
 	luabridge::getGlobalNamespace(L)
 	.beginClass<World>("World")
-	.addFunction("Save", &World::Save)
-	.addFunction("GetOption", &World::GetOption)
+		.addFunction("Save", &World::Save)
+		.addFunction("GetOption", &World::GetOption)
 	.endClass();
 
 	luabridge::getGlobalNamespace(L)
 	.beginClass<LuaServer>("Server")
-	.addStaticFunction("SendMessage", &LuaServer::LuaSendMessage)
-	.addStaticFunction("BroadcastMessage", &LuaServer::LuaBroadcastMessage)
-	.addStaticFunction("SystemWideMessage", &LuaServer::LuaSystemWideMessage)
-	.addStaticFunction("SendBlock", &LuaServer::LuaSendBlock)
-	.addStaticFunction("KickClient", &LuaServer::LuaKickClient)
-	.addStaticFunction("GetClientByName", &LuaServer::LuaGetClientByName)
-	.addStaticFunction("LoadPlugin", &LuaServer::LuaLoadPlugin)
-	.addStaticFunction("RegisterEvent", &LuaServer::LuaRegisterEvent)
-	.addStaticFunction("AddCommand", &LuaServer::LuaAddCommand)
-	.addStaticFunction("PlaceBlock", &LuaServer::LuaPlaceBlock)
-	.addStaticFunction("MapGetBlockType", &LuaServer::LuaMapGetBlockType)
-	.addStaticFunction("SendKick", &LuaServer::LuaSendKick)
-	.addStaticFunction("GetClients", &LuaServer::LuaGetClients)
-	.addStaticFunction("GetWorlds", &LuaServer::LuaGetWorlds)
-	.addStaticFunction("Shutdown", &LuaServer::LuaServerShutdown)
+		.addStaticFunction("SendMessage", &LuaServer::LuaSendMessage)
+		.addStaticFunction("BroadcastMessage", &LuaServer::LuaBroadcastMessage)
+		.addStaticFunction("SystemWideMessage", &LuaServer::LuaSystemWideMessage)
+		.addStaticFunction("SendBlock", &LuaServer::LuaSendBlock)
+		.addStaticFunction("KickClient", &LuaServer::LuaKickClient)
+		.addStaticFunction("GetClientByName", &LuaServer::LuaGetClientByName)
+		.addStaticFunction("LoadPlugin", &LuaServer::LuaLoadPlugin)
+		.addStaticFunction("RegisterEvent", &LuaServer::LuaRegisterEvent)
+		.addStaticFunction("AddCommand", &LuaServer::LuaAddCommand)
+		.addStaticFunction("PlaceBlock", &LuaServer::LuaPlaceBlock)
+		.addStaticFunction("MapGetBlockType", &LuaServer::LuaMapGetBlockType)
+		.addStaticFunction("SendKick", &LuaServer::LuaSendKick)
+		.addStaticFunction("GetClients", &LuaServer::LuaGetClients)
+		.addStaticFunction("GetWorlds", &LuaServer::LuaGetWorlds)
+		.addStaticFunction("Shutdown", &LuaServer::LuaServerShutdown)
+		.addStaticFunction("GetCommandStrings", &LuaServer::LuaGetCommandStrings)
 	.endClass();
 }
 
@@ -148,6 +149,20 @@ luabridge::LuaRef LuaServer::LuaGetWorlds()
 void LuaServer::LuaServerShutdown()
 {
 	Server::GetInstance()->Shutdown();
+}
+
+luabridge::LuaRef LuaServer::LuaGetCommandStrings()
+{
+	CommandMap commands = Server::GetInstance()->GetCommandHandler().GetCommandList();
+
+	auto table = make_luatable();
+	int i = 1;
+	for (auto& obj : commands) {
+		table[i] = obj.first;
+		++i;
+	}
+
+	return table;
 }
 
 // Struct to table stuff

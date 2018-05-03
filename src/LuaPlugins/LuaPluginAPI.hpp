@@ -24,6 +24,7 @@ struct LuaServer {
 	static luabridge::LuaRef LuaGetClients();
 	static luabridge::LuaRef LuaGetWorlds();
 	static void LuaServerShutdown();
+	static luabridge::LuaRef LuaGetCommandStrings();
 };
 
 luabridge::LuaRef make_luatable();
