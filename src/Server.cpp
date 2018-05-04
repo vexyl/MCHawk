@@ -269,6 +269,25 @@ void Server::OnAuth(Client* client, struct ClassicProtocol::cauthp clientAuth)
 
 	ClassicProtocol::SendMessage(client, "https://github.com/vexyl/MCHawk");
 	ClassicProtocol::SendMessage(client, "&eTry /goto freebuild to get started.");
+
+	// FIXME: Temporary CPE blocks
+	if (clientAuth.UNK0 == 0x42) {
+		LOG(LogLevel::kDebug, "Client supports CPE...sending ExtBlock")
+
+		Packet extInfo(0x10);
+		extInfo.Write(std::string("MCHawk"));
+		extInfo.Write((short)1);
+		client->QueuePacket(extInfo);
+
+		Packet extEntry(0x11);
+		extEntry.Write(std::string("CustomBlocks"));
+		extEntry.Write((int)1);
+		client->QueuePacket(extEntry);
+
+		Packet customBlock(0x13);
+		customBlock.Write((uint8_t)0x41);
+		client->QueuePacket(customBlock);
+	}
 }
 
 void Server::OnMessage(Client* client, struct ClassicProtocol::cmsgp clientMsg)
@@ -389,6 +408,62 @@ void Server::HandlePacket(Client* client, uint8_t opcode)
 			if (!m_pluginHandler.GetEventFlag("NoDefaultCall"))
 				client->GetWorld()->OnBlock(client, clientBlock);
 		}
+		break;
+	}
+	case 0x10: //FIXME: Temporary CPE block support
+	{
+		uint8_t buffer[67];
+		if (!stream.consume_data(buffer, sizeof(buffer))) break;
+
+		Packet packet;
+		packet.Write(buffer, sizeof(buffer));
+
+		std::string appName;
+		short extCount;
+
+		packet.Read(appName);
+		packet.Read(extCount);
+		//packet.Read(opcode);
+
+		std::cout << "appName=" << appName << ", extCount=" << extCount << std::endl;
+
+		break;
+	}
+
+	case 0x11: //FIXME: Temporary CPE block support
+	{
+		uint8_t buffer[69];
+		if (!stream.consume_data(buffer, sizeof(buffer))) break;
+
+		Packet packet;
+		packet.Write(buffer, sizeof(buffer));
+
+		std::string extName;
+		short version;
+
+		packet.Read(extName);
+		packet.Read(version);
+		//packet.Read(opcode);
+
+		std::cout << "extName=" << extName << ", version=" << version << std::endl;
+
+		break;
+	}
+	case 0x13: //FIXME: Temporary CPE block support
+	{
+		uint8_t buffer[2];
+		if (!stream.consume_data(buffer, sizeof(buffer))) break;
+
+		Packet packet;
+		packet.Write(buffer, sizeof(buffer));
+
+		uint8_t support;
+
+		packet.Read(support);
+		//packet.Read(opcode);
+
+		std::cout << "support=" << support << std::endl;
+
 		break;
 	}
 	default:

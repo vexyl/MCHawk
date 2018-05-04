@@ -26,20 +26,20 @@ enum PacketType {
 	kServerInit				= 0x02,
 	kServerLevelData			= 0x03,
 	kServerLevelFinal			= 0x04,
-	kServerMessage			= 0x0d,
+	kServerMessage				= 0x0d,
 	kServerKick				= 0x0e,
 	kServerSpawn				= 0x07,
-	kServerDespawn			= 0x0c,
-	kServerTeleport			= 0x08,
+	kServerDespawn				= 0x0c,
+	kServerTeleport				= 0x08,
 	kServerPositionOrientationChange	= 0x09,
 	kServerPositionChange			= 0x0a,
 	kServerDirection			= 0x0b,
 	kServerBlock				= 0x06,
-	kServerUserType			= 0x0f,
-	kClientAuth			= 0x00,
-	kClientMessage			= 0x0d,
-	kClientPosition			= 0x08,
-	kClientBlock			= 0x05
+	kServerUserType				= 0x0f,
+	kClientAuth				= 0x00,
+	kClientMessage				= 0x0d,
+	kClientPosition				= 0x08,
+	kClientBlock				= 0x05
 };
 
 /* Client->Server */
