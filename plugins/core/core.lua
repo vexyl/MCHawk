@@ -9,7 +9,18 @@ CorePlugin.PluginsCommand = function(client, args)
 end
 
 CorePlugin.ServerInfoCommand = function(client, args)
-	Server.SendMessage(client, "&eNot yet")
+	Server.SendMessage(client, "&eThis server is running &bMCHawk")
+	Server.SendMessage(client, "&eWritten in &3C++ &eand &3Lua &efor plugins");
+	Server.SendMessage(client, "&eGithub Repo: https://github.com/vexyl/MCHawk");
+
+	playerCount = GetTableLength(Server.GetClients())
+
+	message = "are &a" .. playerCount .. " &eplayers"
+	if (playerCount == 1) then
+		message = "is &a" .. playerCount .. " &eplayer"
+	end
+
+	Server.SendMessage(client, "&eThere " .. message .. " logged in.")
 end
 
 CorePlugin.ReloadCommand = function(client, args)
