@@ -10,7 +10,7 @@ EssentialsPlugin.Server_ShutdownCommand = function(client, args)
 
 	index = 1 -- used to concatenate reason message
 
-	time = 5
+	time = 15
 	if (args[1] == "-t" and args[2] ~= nil) then
 		time = tonumber(args[2])
 		index = 3 -- skip time arguments

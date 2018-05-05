@@ -95,11 +95,12 @@ unsigned argumentAmount, unsigned permissionLevel)
 void LuaServer::LuaPlaceBlock(Client* client, int type, short x, short y, short z)
 {
 	World* world = client->GetWorld();
+	Map& map = world->GetMap();
 
-	bool valid = world->GetMap().SetBlock(x, y, z, type);
+	bool valid = map.SetBlock(x, y, z, type);
 
 	if (!valid) {
-		int type = LuaServer::LuaMapGetBlockType(client, x, y, z);
+		int type = map.GetBlockType(x, y, z);
 		ClassicProtocol::SendBlock(client, Position(x, y, z), type);
 		return;
 	}
@@ -109,8 +110,7 @@ void LuaServer::LuaPlaceBlock(Client* client, int type, short x, short y, short 
 
 int LuaServer::LuaMapGetBlockType(Client* client, short x, short y, short z)
 {
-	Map& map = client->GetWorld()->GetMap();
-	return map.GetBlockType(x, y, z);
+	return client->GetWorld()->GetMap().GetBlockType(x, y, z);
 }
 
 void LuaServer::LuaSendKick(Client* client, std::string reason)

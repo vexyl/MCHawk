@@ -28,7 +28,9 @@ PermissionsPlugin.GrantCommand = function(client, args)
 	local targetName = args[1]
 	local target = Server.GetClientByName(targetName, false)
 
-	if (target == nil) then
+	if (target ~= nil) then
+		targetName = target.name
+	elseif (PermissionsPlugin.permissionTable[string.lower(targetName)] == nil) then
 		Server.SendMessage(client, "&cPlayer &f" .. targetName .. "&c not found")
 		return
 	end
@@ -39,16 +41,19 @@ PermissionsPlugin.GrantCommand = function(client, args)
 
 	for k, targetPerm in pairs(args) do
 		if (k ~= 1) then -- skip name
-			if (not PermissionsPlugin.CheckPermission(target.name, targetPerm)) then
-				PermissionsPlugin.GrantPermission(target.name, targetPerm)
+			if (not PermissionsPlugin.CheckPermission(targetName, targetPerm)) then
+				PermissionsPlugin.GrantPermission(targetName, targetPerm)
 			end
 		end
 	end
 
 	PermissionsPlugin.SavePermissions()
 
-	Server.SendMessage(client, "&eGranted player " .. target.name ..": &9" .. perms)
-	Server.SendMessage(target, "&e" .. client.name .. " granted you: &9" .. perms)
+	Server.SendMessage(client, "&eGranted player " .. targetName ..": &9" .. perms)
+
+	if (target ~= nil) then
+		Server.SendMessage(target, "&e" .. client.name .. " granted you: &9" .. perms)
+	end
 end
 
 PermissionsPlugin.RevokeCommand = function(client, args)
@@ -60,7 +65,9 @@ PermissionsPlugin.RevokeCommand = function(client, args)
 	local targetName = args[1]
 	local target = Server.GetClientByName(targetName, false)
 
-	if (target == nil) then
+	if (target ~= nil) then
+		targetName = target.name
+	elseif (PermissionsPlugin.permissionTable[string.lower(targetName)] == nil) then
 		Server.SendMessage(client, "&cPlayer &f" .. targetName .. "&c not found")
 		return
 	end
@@ -71,16 +78,19 @@ PermissionsPlugin.RevokeCommand = function(client, args)
 
 	for k, targetPerm in pairs(args) do
 		if (k ~= 1) then -- skip name
-			if (PermissionsPlugin.CheckPermission(target.name, targetPerm)) then
-				PermissionsPlugin.RevokePermission(target.name, targetPerm)
+			if (PermissionsPlugin.CheckPermission(targetName, targetPerm)) then
+				PermissionsPlugin.RevokePermission(targetName, targetPerm)
 			end
 		end
 	end
 
 	PermissionsPlugin.SavePermissions()
 
-	Server.SendMessage(client, "&eRevoked player " .. target.name ..": &9" .. perms)
-	Server.SendMessage(target, "&e" .. client.name .. " revoked you: &9" .. perms)
+	Server.SendMessage(client, "&eRevoked player " .. targetName ..": &9" .. perms)
+
+	if (target ~= nil) then
+		Server.SendMessage(target, "&e" .. client.name .. " revoked you: &9" .. perms)
+	end
 end
 
 PermissionsPlugin.PermissionsCommand = function(client, args)
@@ -128,6 +138,11 @@ PermissionsPlugin.RevokePermission = function(name, perm)
 	name = string.lower(name)
 
 	local perms = PermissionsPlugin.permissionTable[name]
+
+	if (GetTableLength(perms) - 1 <= 0) then
+		PermissionsPlugin.permissionTable[name] = nil
+		return
+	end
 
 	for k, v in pairs(perms) do
 		if (v == perm) then

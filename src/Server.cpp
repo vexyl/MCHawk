@@ -415,6 +415,7 @@ void Server::HandlePacket(Client* client, uint8_t opcode)
 		uint8_t buffer[67];
 		if (!stream.consume_data(buffer, sizeof(buffer))) break;
 
+/*
 		Packet packet;
 		packet.Write(buffer, sizeof(buffer));
 
@@ -426,6 +427,7 @@ void Server::HandlePacket(Client* client, uint8_t opcode)
 		//packet.Read(opcode);
 
 		std::cout << "appName=" << appName << ", extCount=" << extCount << std::endl;
+*/
 
 		break;
 	}
@@ -435,6 +437,7 @@ void Server::HandlePacket(Client* client, uint8_t opcode)
 		uint8_t buffer[69];
 		if (!stream.consume_data(buffer, sizeof(buffer))) break;
 
+/*
 		Packet packet;
 		packet.Write(buffer, sizeof(buffer));
 
@@ -446,7 +449,7 @@ void Server::HandlePacket(Client* client, uint8_t opcode)
 		//packet.Read(opcode);
 
 		std::cout << "extName=" << extName << ", version=" << version << std::endl;
-
+*/
 		break;
 	}
 	case 0x13: //FIXME: Temporary CPE block support
@@ -454,6 +457,7 @@ void Server::HandlePacket(Client* client, uint8_t opcode)
 		uint8_t buffer[2];
 		if (!stream.consume_data(buffer, sizeof(buffer))) break;
 
+/*
 		Packet packet;
 		packet.Write(buffer, sizeof(buffer));
 
@@ -463,6 +467,7 @@ void Server::HandlePacket(Client* client, uint8_t opcode)
 		//packet.Read(opcode);
 
 		std::cout << "support=" << support << std::endl;
+*/
 
 		break;
 	}
