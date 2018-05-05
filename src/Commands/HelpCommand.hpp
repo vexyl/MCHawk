@@ -23,8 +23,8 @@ public:
 		if (args.empty()) {
 			ClassicProtocol::SendMessage(sender, "&eTo see a list of commands type &a/commands");
 			ClassicProtocol::SendMessage(sender, "&eTo get help with a specific command, type &a/help <command>");
-			ClassicProtocol::SendMessage(sender, "&eTo see a list of players, type &a/who");
 			ClassicProtocol::SendMessage(sender, "&eFor pages of commands, type &a/help <page #>");
+			ClassicProtocol::SendMessage(sender, "&eTo see a list of players, type &a/who");
 			return;
 		}
 

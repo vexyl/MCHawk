@@ -34,6 +34,8 @@ EssentialsPlugin.BillNye_BillNyeCommand = function(client, args)
 end
 
 EssentialsPlugin.Cmds_CmdsCommand = function(client, args)
-	commandString = table.concat(Server.GetCommandStrings(), ", ")
+	Server.SendMessage(client, "&eType &a/help <command> &efor more information on a command")
+
+	commandString = "&a" .. table.concat(Server.GetCommandStrings(), "&e, &a")
 	Server.SendMessage(client, "&eCommands: " .. commandString)
 end
