@@ -84,31 +84,36 @@ PermissionsPlugin.RevokeCommand = function(client, args)
 end
 
 PermissionsPlugin.PermissionsCommand = function(client, args)
-	local name = args[1]
-	local target = client
+	local targetName = args[1]
 
-	if (name ~= nil) then
-		target = Server.GetClientByName(name, false)
-		if (target == nil) then
-			Server.SendMessage(client, "&cPlayer &f" .. name .. "&c not found")
-			return
+	local target
+	if (targetName == nil) then
+		targetName = client.name
+	else
+		target = Server.GetClientByName(targetName, false)
+		if (target ~= nil) then
+			targetName = target.name
 		end
 	end
 
-	local perms = PermissionsPlugin.permissionTable[target.name]
-
+	local perms = PermissionsPlugin.permissionTable[string.lower(targetName)]
 	local permissions = ""
 	if (perms ~= nil) then
 		for k, perm in pairs(perms) do
 			permissions = permissions .. "&9" .. perm .. "&e, "
 		end
+	elseif (target == nil and args[1] ~= nil) then
+		Server.SendMessage(client, "&cPlayer &f" .. targetName .. "&c not found")
+		return
 	end
 
-	Server.SendMessage(client, "&ePermissions of " .. target.name .. ": " .. permissions)
+	Server.SendMessage(client, "&ePermissions of " .. targetName .. ": " .. permissions)
 end
 
 -- Doesn't check if permission exists
 PermissionsPlugin.GrantPermission = function(name, perm)
+	name = string.lower(name)
+
 	local permsTable = PermissionsPlugin.permissionTable
 
 	if (permsTable[name] == nil) then
@@ -120,6 +125,8 @@ end
 
 -- Doesn't check if permission exists
 PermissionsPlugin.RevokePermission = function(name, perm)
+	name = string.lower(name)
+
 	local perms = PermissionsPlugin.permissionTable[name]
 
 	for k, v in pairs(perms) do
@@ -208,6 +215,8 @@ end
 -- TODO: Allow operators to override permissions: if (Server.IsOperator(name)) then return true end
 -- Doesn't check if permission exists
 PermissionsPlugin.CheckPermission = function(name, permission)
+	name = string.lower(name)
+
 	local result = false
 
 	local perms = PermissionsPlugin.permissionTable[name];

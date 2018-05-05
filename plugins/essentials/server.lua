@@ -35,6 +35,10 @@ EssentialsPlugin.Server_ShutdownCommand = function(client, args)
  
 	Server.SystemWideMessage(message)
 
+	if (time > 10) then
+		CorePlugin.AddTimer("server_timers", function() Server.SystemWideMessage("Server shutting down in 10 seconds!") end, time - 10)
+	end
+
 	if (time > 5) then
 		CorePlugin.AddTimer("server_timers", function() Server.SystemWideMessage("Server shutting down in 5 seconds!") end, time - 5)
 	end

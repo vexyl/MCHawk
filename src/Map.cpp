@@ -1,4 +1,4 @@
-#include "Map.hpp"
+﻿#include "Map.hpp"
 
 #include <assert.h>
 #include <string.h>
@@ -104,9 +104,6 @@ void Map::GenerateFlatMap(std::string filename, short x, short y, short z)
 // TODO: Use C++ file streams
 void Map::SaveToFile(std::string filename)
 {
-	// FIXME: Temporary until proper world-level settings exist (if map can be saved...)
-	if (filename.empty()) return;
-
 	FILE *fp = fopen(filename.c_str(), "wb");
 	if (fp == nullptr) {
 		LOG(LogLevel::kError, "Can't open map file for writing");
