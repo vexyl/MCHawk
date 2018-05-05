@@ -20,6 +20,14 @@ public:
 		Server* server = Server::GetInstance();
 		uint8_t userType = sender->GetUserType();
 
+		if (args.empty()) {
+			ClassicProtocol::SendMessage(sender, "&eTo see a list of commands type &a/commands");
+			ClassicProtocol::SendMessage(sender, "&eTo get help with a specific command, type &a/help <command>");
+			ClassicProtocol::SendMessage(sender, "&eTo see a list of players, type &a/who");
+			ClassicProtocol::SendMessage(sender, "&eFor pages of commands, type &a/help <page #>");
+			return;
+		}
+
 		auto commands = server->GetCommandHandler().GetCommandList();
 
 		// Remove commands sender can't execute
@@ -33,16 +41,14 @@ public:
 		}
 
 		// Check if client wants command docstring
-		if (!args.empty()) {
-			std::string commandName = args.front();
+		std::string commandName = args.front();
 
-			// Does this command exist?
-			auto iter = commands.find(commandName);
-			if (iter != commands.end()) {
-				// issued /help commandName
-				ClassicProtocol::SendMessage(sender, "&b" + iter->second->GetDocString());
-				return;
-			}
+		// Does this command exist?
+		auto iter = commands.find(commandName);
+		if (iter != commands.end()) {
+			// issued /help commandName
+			ClassicProtocol::SendMessage(sender, "&b" + iter->second->GetDocString());
+			return;
 		}
 
 		// From here any remaining args treated as page number
