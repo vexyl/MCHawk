@@ -15,7 +15,6 @@
 #endif
 
 #include "ClientStream.hpp"
-
 #include "Packet.hpp"
 #include "../Position.hpp"
 

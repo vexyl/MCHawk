@@ -18,6 +18,7 @@
 #include <boost/filesystem.hpp>
 
 #include "Network/ClientStream.hpp"
+#include "Network/CPE.hpp"
 #include "Utils/Logger.hpp"
 #include "Utils/Utils.hpp"
 
@@ -350,13 +351,11 @@ void Server::OnMessage(Client* client, struct Protocol::cmsgp clientMsg)
 
 void Server::HandlePacket(Client* client, uint8_t opcode)
 {
-	using namespace Protocol;
-
 	ClientStream& stream = client->stream;
 
 	if (!client->authed) {
-		if (opcode == PacketType::kClientAuth) {
-			struct cauthp clientAuth;
+		if (opcode == Protocol::PacketType::kClientAuth) {
+			struct Protocol::cauthp clientAuth;
 			if (clientAuth.Read(stream)) {
 				OnAuth(client, clientAuth);
 			}
@@ -370,9 +369,9 @@ void Server::HandlePacket(Client* client, uint8_t opcode)
 	}
 
 	switch (opcode) {
-	case PacketType::kClientMessage:
+	case Protocol::PacketType::kClientMessage:
 	{
-		struct cmsgp clientMsg;
+		struct Protocol::cmsgp clientMsg;
 
 		if (clientMsg.Read(stream)) {
 			OnMessage(client, clientMsg);
@@ -383,9 +382,9 @@ void Server::HandlePacket(Client* client, uint8_t opcode)
 
 		break;
 	}
-	case PacketType::kClientPosition:
+	case Protocol::PacketType::kClientPosition:
 	{
-		struct cposp clientPos;
+		struct Protocol::cposp clientPos;
 
 		if (clientPos.Read(stream)) {
 			auto table = make_luatable();
@@ -396,9 +395,9 @@ void Server::HandlePacket(Client* client, uint8_t opcode)
 
 		break;
 	}
-	case PacketType::kClientBlock:
+	case Protocol::PacketType::kClientBlock:
 	{
-		struct cblockp clientBlock;
+		struct Protocol::cblockp clientBlock;
 
 		if (clientBlock.Read(stream)) {
 			auto table = cblockp_to_luatable(clientBlock);
@@ -410,64 +409,34 @@ void Server::HandlePacket(Client* client, uint8_t opcode)
 		}
 		break;
 	}
-	case 0x10: //FIXME: Temporary CPE block support
+	case CPE::PacketType::kExtInfo: //FIXME: Temporary CPE block support
 	{
-		uint8_t buffer[67];
-		if (!stream.consume_data(buffer, sizeof(buffer))) break;
+		struct CPE::cextinfop clientExtInfo;
 
-/*
-		Packet packet;
-		packet.Write(buffer, sizeof(buffer));
-
-		std::string appName;
-		short extCount;
-
-		packet.Read(appName);
-		packet.Read(extCount);
-		//packet.Read(opcode);
-
-		std::cout << "appName=" << appName << ", extCount=" << extCount << std::endl;
-*/
+		if (clientExtInfo.Read(stream)) {
+			; // TODO
+		}
 
 		break;
 	}
 
-	case 0x11: //FIXME: Temporary CPE block support
+	case CPE::PacketType::kExtEntry: //FIXME: Temporary CPE block support
 	{
-		uint8_t buffer[69];
-		if (!stream.consume_data(buffer, sizeof(buffer))) break;
+		struct CPE::cextentryp clientExtEntry;
 
-/*
-		Packet packet;
-		packet.Write(buffer, sizeof(buffer));
+		if (clientExtEntry.Read(stream)) {
+			; // TODO
+		}
 
-		std::string extName;
-		short version;
-
-		packet.Read(extName);
-		packet.Read(version);
-		//packet.Read(opcode);
-
-		std::cout << "extName=" << extName << ", version=" << version << std::endl;
-*/
 		break;
 	}
-	case 0x13: //FIXME: Temporary CPE block support
+	case CPE::PacketType::kCustomBlocks: //FIXME: Temporary CPE block support
 	{
-		uint8_t buffer[2];
-		if (!stream.consume_data(buffer, sizeof(buffer))) break;
+		struct CPE::ccustomblockp clientCustomBlock;
 
-/*
-		Packet packet;
-		packet.Write(buffer, sizeof(buffer));
-
-		uint8_t support;
-
-		packet.Read(support);
-		//packet.Read(opcode);
-
-		std::cout << "support=" << support << std::endl;
-*/
+		if (clientCustomBlock.Read(stream)) {
+			std::cout << "support=" << clientCustomBlock.support << std::endl;
+		}
 
 		break;
 	}
