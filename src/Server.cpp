@@ -28,7 +28,6 @@
 #include "Commands/SummonCommand.hpp"
 #include "Commands/OpCommand.hpp"
 #include "Commands/KickCommand.hpp"
-#include "Commands/SaveCommand.hpp"
 #include "Commands/AliasCommand.hpp"
 #include "Commands/WhoCommand.hpp"
 #include "Commands/WhoIsCommand.hpp"
@@ -141,7 +140,6 @@ void Server::Init()
 	m_commandHandler.Register("summon", new SummonCommand);
 	m_commandHandler.Register("op", new OpCommand);
 	m_commandHandler.Register("kick", new KickCommand);
-	m_commandHandler.Register("save", new SaveCommand);
 	m_commandHandler.Register("alias", new AliasCommand, "nick name");
 	m_commandHandler.Register("who", new WhoCommand, "player players list");
 	m_commandHandler.Register("whois", new WhoIsCommand, "info");
