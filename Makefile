@@ -10,6 +10,7 @@ SRC = \
 	./src/LuaPlugins/LuaPluginAPI.cpp \
 	./src/Network/Packet.cpp \
 	./src/Network/Protocol.cpp \
+	./src/Network/CPE.cpp \
 	./src/Utils/BufferStream.cpp \
 	./src/Utils/Logger.cpp \
 	./src/Utils/Utils.cpp
@@ -28,6 +29,7 @@ HEADERS = \
 	./src/Network/ClientStream.hpp \
 	./src/Network/Packet.hpp \
 	./src/Network/Protocol.hpp \
+	./src/Network/CPE.hpp \
 	./src/Utils/BufferStream.hpp \
 	./src/Utils/Logger.hpp \
 	./src/Utils/Utils.hpp \
