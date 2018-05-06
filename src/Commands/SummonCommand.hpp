@@ -19,7 +19,7 @@ public:
 
 		Client* client = server->GetClientByName(name, false);
 		if (client == nullptr) {
-			ClassicProtocol::SendMessage(sender, "&cPlayer &f" + name + "&c does not exist");
+			Protocol::SendMessage(sender, "&cPlayer &f" + name + "&c does not exist");
 			return;
 		}
 
@@ -28,7 +28,7 @@ public:
 
 		std::string senderName = sender->GetName();
 		if (name == senderName) {
-			ClassicProtocol::SendMessage(sender, "&eSure, if it makes you feel better... &9*Woosh*");
+			Protocol::SendMessage(sender, "&eSure, if it makes you feel better... &9*Woosh*");
 			return;
 		}
 
@@ -41,9 +41,9 @@ public:
 			world->AddClient(client);
 		}
 
-		ClassicProtocol::SendPosition(client, -1 /* Self ID */, sender->GetPosition(), client->GetYaw(), client->GetPitch());
-		ClassicProtocol::SendMessage(sender, "&eSummoned player " + name);
-		ClassicProtocol::SendMessage(client, "&e" + senderName + " has summoned you");
+		Protocol::SendPosition(client, -1 /* Self ID */, sender->GetPosition(), client->GetYaw(), client->GetPitch());
+		Protocol::SendMessage(sender, "&eSummoned player " + name);
+		Protocol::SendMessage(client, "&e" + senderName + " has summoned you");
 	}
 
 	virtual std::string GetDocString() { return "/summon <name> - summons a player to your position"; }

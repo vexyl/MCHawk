@@ -40,7 +40,7 @@ CorePlugin.tick = function()
 	end
 end
 
-dofile("plugins/core/utils.lua")
+dofile("plugins/" .. CorePlugin.name .. "/utils.lua")
 
 include(CorePlugin, "core.lua")
 LoadPlugin(CorePlugin, "permissions.lua")

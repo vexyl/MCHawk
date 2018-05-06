@@ -21,10 +21,10 @@ public:
 		uint8_t userType = sender->GetUserType();
 
 		if (args.empty()) {
-			ClassicProtocol::SendMessage(sender, "&eTo see a list of commands type &a/commands");
-			ClassicProtocol::SendMessage(sender, "&eTo get help with a specific command, type &a/help <command>");
-			ClassicProtocol::SendMessage(sender, "&eFor pages of commands, type &a/help <page #>");
-			ClassicProtocol::SendMessage(sender, "&eTo see a list of players, type &a/who");
+			Protocol::SendMessage(sender, "&eTo see a list of commands type &a/commands");
+			Protocol::SendMessage(sender, "&eTo get help with a specific command, type &a/help <command>");
+			Protocol::SendMessage(sender, "&eFor pages of commands, type &a/help <page #>");
+			Protocol::SendMessage(sender, "&eTo see a list of players, type &a/who");
 			return;
 		}
 
@@ -47,7 +47,7 @@ public:
 		auto iter = commands.find(commandName);
 		if (iter != commands.end()) {
 			// issued /help commandName
-			ClassicProtocol::SendMessage(sender, "&b" + iter->second->GetDocString());
+			Protocol::SendMessage(sender, "&b" + iter->second->GetDocString());
 			return;
 		}
 
@@ -62,7 +62,7 @@ public:
 			pageString = args.front();
 			// Is a valid number?
 			if (pageString.find_first_not_of("1234567890") != std::string::npos) {
-				ClassicProtocol::SendMessage(sender, "&cInvalid argument");
+				Protocol::SendMessage(sender, "&cInvalid argument");
 				return;
 			} else {
 				page = atoi(pageString.c_str());
@@ -70,13 +70,13 @@ public:
 					page = 1;
 
 				if (page > maxPages) {
-					ClassicProtocol::SendMessage(sender, "&cInvalid page number");
+					Protocol::SendMessage(sender, "&cInvalid page number");
 					return;
 				}
 			}
 		}
 
-		ClassicProtocol::SendMessage(sender, "&f--- &bCommands &f---");
+		Protocol::SendMessage(sender, "&f--- &bCommands &f---");
 
 		offset = (page - 1) * maxResults;
 		for (unsigned int i = 0; i < maxResults && (offset+i) < commands.size(); ++i) {
@@ -84,10 +84,10 @@ public:
 
 			std::advance(it, offset+i);
 
-			ClassicProtocol::SendMessage(sender, "&b" + it->second->GetDocString());
+			Protocol::SendMessage(sender, "&b" + it->second->GetDocString());
 		}
 
-		ClassicProtocol::SendMessage(sender, "&f--- &bpage " + std::to_string(page) + " of " + std::to_string(maxPages) + " &f---");
+		Protocol::SendMessage(sender, "&f--- &bpage " + std::to_string(page) + " of " + std::to_string(maxPages) + " &f---");
 	}
 
 	virtual std::string GetDocString() { return "/help [command/page number] - displays this help message"; }

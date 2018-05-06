@@ -17,9 +17,9 @@ public:
 
 		bool saved = sender->GetWorld()->SaveMapIfChanged();
 		if (saved)
-			ClassicProtocol::SendMessage(sender, "&eMap saved to file");
+			Protocol::SendMessage(sender, "&eMap saved to file");
 		else
-			ClassicProtocol::SendMessage(sender, "&cNo changes to save");
+			Protocol::SendMessage(sender, "&cNo changes to save");
 	}
 
 	virtual std::string GetDocString() { return "/save - saves current map to file"; }

@@ -41,12 +41,12 @@ public:
 			Server::SendWrappedMessage(sender, message);
 		} else if (subcommand == "new") {
 			if (!isOperator) {
-				ClassicProtocol::SendMessage(sender, "&cOnly operators can create new worlds at this time");
+				Protocol::SendMessage(sender, "&cOnly operators can create new worlds at this time");
 				return;
 			}
 
 			if (args.size() < 5) {
-				ClassicProtocol::SendMessage(sender, "&c/world new <name> <x> <y> <z>");
+				Protocol::SendMessage(sender, "&c/world new <name> <x> <y> <z>");
 				return;
 			}
 
@@ -54,7 +54,7 @@ public:
 			boost::algorithm::to_lower(worldName);
 
 			if (worldName.length() > 10) {
-				ClassicProtocol::SendMessage(sender, "&cInvalid name");
+				Protocol::SendMessage(sender, "&cInvalid name");
 				return;
 			}
 
@@ -64,12 +64,12 @@ public:
 				y = boost::lexical_cast<short>(args[3]);
 				z = boost::lexical_cast<short>(args[4]);
 			} catch (boost::bad_lexical_cast&) {
-				ClassicProtocol::SendMessage(sender, "&cMalformed input");
+				Protocol::SendMessage(sender, "&cMalformed input");
 				return;
 			}
 
 			if (x <= 0 || x > 1024 || y <= 0 || y > 64 || z <= 0 || z > 1024) {
-				ClassicProtocol::SendMessage(sender, "&cInvalid size");
+				Protocol::SendMessage(sender, "&cInvalid size");
 				return;
 			}
 
@@ -85,10 +85,10 @@ public:
 
 			server->AddWorld(world);
 
-			ClassicProtocol::SendMessage(sender, "&eWorld &a" + worldName + "&e created (" + std::to_string(x) + "x" + std::to_string(y) + "x" + std::to_string(z) + ")");
+			Protocol::SendMessage(sender, "&eWorld &a" + worldName + "&e created (" + std::to_string(x) + "x" + std::to_string(y) + "x" + std::to_string(z) + ")");
 		} else if (subcommand == "set") {
 			if (!isOperator) {
-				ClassicProtocol::SendMessage(sender, "&cOnly operators can set world options");
+				Protocol::SendMessage(sender, "&cOnly operators can set world options");
 				return;
 			}
 
@@ -101,7 +101,7 @@ public:
 				int size = (int)options.size();
 
 				if (size == 0) {
-					ClassicProtocol::SendMessage(sender, "No options");
+					Protocol::SendMessage(sender, "No options");
 					return;
 				}
 
@@ -120,13 +120,13 @@ public:
 
 			bool validOption = w->IsValidOption(option);
 			if (!validOption) {
-				ClassicProtocol::SendMessage(sender, "&cInvalid option");
+				Protocol::SendMessage(sender, "&cInvalid option");
 				return;
 			}
 
 			if (args.size() == 2) {
 				std::string value = w->GetOption(option);
-				ClassicProtocol::SendMessage(sender, "&e" + option + "=" + value);
+				Protocol::SendMessage(sender, "&e" + option + "=" + value);
 				return;
 			}
 
@@ -134,16 +134,16 @@ public:
 
 			// FIXME: Temporary
 			if (value != "true" && value != "false") {
-				ClassicProtocol::SendMessage(sender, "&cInvalid value");
+				Protocol::SendMessage(sender, "&cInvalid value");
 				return;
 			}
 
 			w->SetOption(option, value);
 
-			ClassicProtocol::SendMessage(sender, "&eWorld option " + option + "=" + value);
+			Protocol::SendMessage(sender, "&eWorld option " + option + "=" + value);
 		} else if (subcommand == "load") {
 			if (args.size() < 2) {
-				ClassicProtocol::SendMessage(sender, "&cMust specify world name");
+				Protocol::SendMessage(sender, "&cMust specify world name");
 				return;
 			}
 
@@ -154,27 +154,27 @@ public:
 			World *world = server->GetWorld(worldName);
 
 			if (world == nullptr) {
-				ClassicProtocol::SendMessage(sender, "&cWorld &f" + worldName + "&c does not exist");
+				Protocol::SendMessage(sender, "&cWorld &f" + worldName + "&c does not exist");
 				return;
 			}
 
 			if (world->GetActive()) {
-				ClassicProtocol::SendMessage(sender, "&cWorld &a" + worldName + "&c is already loaded");
+				Protocol::SendMessage(sender, "&cWorld &a" + worldName + "&c is already loaded");
 				return;
 			}
 
 			world->GetMap().Load();
 			world->SetActive(true);
 
-			ClassicProtocol::SendMessage(sender, "&eLoaded world &a" + worldName);
+			Protocol::SendMessage(sender, "&eLoaded world &a" + worldName);
 		} else if (subcommand == "save") {
 			if (!isOperator) {
-				ClassicProtocol::SendMessage(sender, "&cOnly operators can save worlds");
+				Protocol::SendMessage(sender, "&cOnly operators can save worlds");
 				return;
 			}
 
 			if (args.size() < 2) {
-				ClassicProtocol::SendMessage(sender, "&cMust specify world name");
+				Protocol::SendMessage(sender, "&cMust specify world name");
 				return;
 			}
 
@@ -185,13 +185,13 @@ public:
 			World *world = server->GetWorld(worldName);
 
 			if (world == nullptr) {
-				ClassicProtocol::SendMessage(sender, "&cWorld &f" + worldName + "&c does not exist");
+				Protocol::SendMessage(sender, "&cWorld &f" + worldName + "&c does not exist");
 				return;
 			}
 
 			world->Save();
 
-			ClassicProtocol::SendMessage(sender, "&eSaved world &a" + worldName);
+			Protocol::SendMessage(sender, "&eSaved world &a" + worldName);
 		} else if (subcommand == "spawn") {
 			// FIXME: Temporary
 			Position pos = sender->GetPosition();
@@ -199,9 +199,9 @@ public:
 
 			w->SetSpawnPosition(pos);
 
-			ClassicProtocol::SendMessage(sender, "&eSpawn position set (" + std::to_string(pos.x) + ", " + std::to_string(pos.y) + ", " + std::to_string(pos.z) + ")");
+			Protocol::SendMessage(sender, "&eSpawn position set (" + std::to_string(pos.x) + ", " + std::to_string(pos.y) + ", " + std::to_string(pos.z) + ")");
 		} else {
-			ClassicProtocol::SendMessage(sender, "&b" + GetDocString());
+			Protocol::SendMessage(sender, "&b" + GetDocString());
 			return;
 		}
 	}

@@ -37,8 +37,8 @@ public:
 
 	void Tick();
 
-	void OnPosition(Client* client, struct ClassicProtocol::cposp clientPos);
-	void OnBlock(Client* client, struct ClassicProtocol::cblockp clientBlock);
+	void OnPosition(Client* client, struct Protocol::cposp clientPos);
+	void OnBlock(Client* client, struct Protocol::cblockp clientBlock);
 	void BroadcastMessage(std::string message);
 	void SendBlockToClients(int type, short x, short y, short z);
 

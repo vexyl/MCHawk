@@ -22,23 +22,23 @@ public:
 
 		Client* client = server->GetClientByName(name, false);
 		if (client == nullptr) {
-			ClassicProtocol::SendMessage(sender, "&cPlayer &f" + name + "&c does not exist");
+			Protocol::SendMessage(sender, "&cPlayer &f" + name + "&c does not exist");
 			return;
 		}
 
-		ClassicProtocol::SendMessage(sender, "&e--- &f" + client->GetName() + "&e ---");
+		Protocol::SendMessage(sender, "&e--- &f" + client->GetName() + "&e ---");
 
 		std::string worldName = client->GetWorld()->GetName();
-		ClassicProtocol::SendMessage(sender, "&eWorld: " + worldName);
+		Protocol::SendMessage(sender, "&eWorld: " + worldName);
 
 		std::string alias = client->GetChatName();
 		if (alias != client->GetName())
-			ClassicProtocol::SendMessage(sender, "&eAlias: " + alias);
+			Protocol::SendMessage(sender, "&eAlias: " + alias);
 		else
-			ClassicProtocol::SendMessage(sender, "&eNo alias");
+			Protocol::SendMessage(sender, "&eNo alias");
 
 		if (sender->GetUserType() == 0x64)
-			ClassicProtocol::SendMessage(sender, "&eIP: " + client->GetIpString());
+			Protocol::SendMessage(sender, "&eIP: " + client->GetIpString());
 
 	}
 

@@ -18,7 +18,7 @@ public:
 
 		Client* client = server->GetClientByName(name, false);
 		if (client == nullptr) {
-			ClassicProtocol::SendMessage(sender, "&cPlayer &f" + name + "&c does not exist");
+			Protocol::SendMessage(sender, "&cPlayer &f" + name + "&c does not exist");
 			return;
 		}
 
@@ -42,7 +42,7 @@ public:
 		}
 
 		client->SetUserType(newUserType);
-		ClassicProtocol::SendUserType(client, newUserType);
+		Protocol::SendUserType(client, newUserType);
 	}
 
 	virtual std::string GetDocString() { return "/op <name> - toggles operator status on a player"; }

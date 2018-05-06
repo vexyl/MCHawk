@@ -2,6 +2,7 @@
 
 #include "Client.hpp"
 #include "Network/Protocol.hpp"
+#include "Network/CPE.hpp"
 #include "Utils/Logger.hpp"
 
 #include <boost/property_tree/ptree.hpp>
@@ -110,9 +111,9 @@ void World::AddClient(Client* client)
 {
 	LOG(LogLevel::kDebug, "Player with pid=%d added to world '%s'", client->GetPid(), m_name.c_str());
 
-	ClassicProtocol::SendMap(client, m_map);
-	ClassicProtocol::SpawnClient(client, m_spawnPosition, m_clients);
-	ClassicProtocol::SendClientsTo(client, m_clients);
+	Protocol::SendMap(client, m_map);
+	Protocol::SpawnClient(client, m_spawnPosition, m_clients);
+	Protocol::SendClientsTo(client, m_clients);
 
 	client->SetWorld(this);
 
@@ -126,7 +127,7 @@ void World::RemoveClient(int8_t pid)
 		if ((*iter)->GetPid() == pid) {
 			m_clients.erase(iter);
 			LOG(LogLevel::kDebug, "Player with pid=%d removed from world '%s'", pid, m_name.c_str());
-			ClassicProtocol::DespawnClient(pid, m_clients);
+			Protocol::DespawnClient(pid, m_clients);
 			break;
 		}
 
@@ -199,13 +200,13 @@ void World::Tick()
 	}
 }
 
-void World::OnPosition(Client* client, struct ClassicProtocol::cposp clientPos)
+void World::OnPosition(Client* client, struct Protocol::cposp clientPos)
 {
 	client->SetPositionOrientation(Position(clientPos.x, clientPos.y, clientPos.z), clientPos.yaw, clientPos.pitch);
-	ClassicProtocol::SendPlayerPositionUpdate(client, m_clients);
+	Protocol::SendPlayerPositionUpdate(client, m_clients);
 }
 
-void World::OnBlock(Client* client, struct ClassicProtocol::cblockp clientBlock)
+void World::OnBlock(Client* client, struct Protocol::cblockp clientBlock)
 {
 	uint8_t type = clientBlock.type;
 	// If player is breaking a block, set block type to air
@@ -216,37 +217,44 @@ void World::OnBlock(Client* client, struct ClassicProtocol::cblockp clientBlock)
 
 	if (GetOption("build") == "false") {
 		type = m_map.GetBlockType(clientBlock.x, clientBlock.y, clientBlock.z);
-		ClassicProtocol::SendBlock(client, position, type);
-		ClassicProtocol::SendMessage(client, "&cNo building here");
+		Protocol::SendBlock(client, position, type);
+		Protocol::SendMessage(client, "&cNo building here");
+		return;
+	}
+
+	bool validBlock = Protocol::IsValidBlock(type) || CPE::IsValidBlock(type);
+	if (!validBlock) {
+		Protocol::SendBlock(client, position, 0x00); // Invalid block, tell client to destroy it
+		Protocol::SendMessage(client, "&cInvalid block type");
 		return;
 	}
 
 	bool validPlace = m_map.SetBlock(clientBlock.x, clientBlock.y, clientBlock.z, type);
-
 	if (!validPlace) {
-		ClassicProtocol::SendBlock(client, position, 0x00); // Invalid block, tell client to destroy it
-	} else {
-		uint8_t pid = client->GetPid();
-		// Broadcast block changes to all other clients
-		for (auto& obj : m_clients) {
-			if (obj->GetPid() != pid) {
-				ClassicProtocol::SendBlock(obj, position, type);
-			}
-		}
-
-		m_mapChanged = true;
+		Protocol::SendBlock(client, position, 0x00); // Invalid block, tell client to destroy it
+		return;
 	}
+
+	uint8_t pid = client->GetPid();
+	// Broadcast block changes to all other clients
+	for (auto& obj : m_clients) {
+		if (obj->GetPid() != pid) {
+			Protocol::SendBlock(obj, position, type);
+		}
+	}
+
+	m_mapChanged = true;
 }
 
 // FIXME: Send wrapped message
 void World::BroadcastMessage(std::string message)
 {
 	for (auto& obj : m_clients)
-		ClassicProtocol::SendMessage(obj, "&e[WORLD]: " + message);
+		Protocol::SendMessage(obj, "&e[WORLD]: " + message);
 }
 
 void World::SendBlockToClients(int type, short x, short y, short z)
 {
 	for (auto& obj : m_clients)
-		ClassicProtocol::SendBlock(obj, Position(x, y, z), type);
+		Protocol::SendBlock(obj, Position(x, y, z), type);
 }

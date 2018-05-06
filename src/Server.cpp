@@ -182,7 +182,7 @@ void Server::OnConnect(sf::TcpSocket *sock)
 	LOG(LogLevel::kDebug, "Client connected (%s)", client->GetIpString().c_str());
 }
 
-void Server::OnAuth(Client* client, struct ClassicProtocol::cauthp clientAuth)
+void Server::OnAuth(Client* client, struct Protocol::cauthp clientAuth)
 {
 	std::string name((char*)clientAuth.name, 0, sizeof(clientAuth.name));
 	std::string key((char*)clientAuth.key, 0, sizeof(clientAuth.key));
@@ -263,12 +263,12 @@ void Server::OnAuth(Client* client, struct ClassicProtocol::cauthp clientAuth)
 	client->SetUserType(userType);
 
 	// Do this before AddClient()
-	ClassicProtocol::SendInfo(client, m_serverName, m_serverMotd, m_version, userType);
+	Protocol::SendInfo(client, m_serverName, m_serverMotd, m_version, userType);
 
 	GetWorld("default")->AddClient(client);
 
-	ClassicProtocol::SendMessage(client, "https://github.com/vexyl/MCHawk");
-	ClassicProtocol::SendMessage(client, "&eTry /goto freebuild to get started.");
+	Protocol::SendMessage(client, "https://github.com/vexyl/MCHawk");
+	Protocol::SendMessage(client, "&eTry /goto freebuild to get started.");
 
 	// FIXME: Temporary CPE blocks
 	if (clientAuth.UNK0 == 0x42) {
@@ -290,7 +290,7 @@ void Server::OnAuth(Client* client, struct ClassicProtocol::cauthp clientAuth)
 	}
 }
 
-void Server::OnMessage(Client* client, struct ClassicProtocol::cmsgp clientMsg)
+void Server::OnMessage(Client* client, struct Protocol::cmsgp clientMsg)
 {
 	std::string message((char*)clientMsg.msg, 0, sizeof(clientMsg.msg));
 	std::string name = client->GetName();
@@ -350,7 +350,7 @@ void Server::OnMessage(Client* client, struct ClassicProtocol::cmsgp clientMsg)
 
 void Server::HandlePacket(Client* client, uint8_t opcode)
 {
-	using namespace ClassicProtocol;
+	using namespace Protocol;
 
 	ClientStream& stream = client->stream;
 
@@ -587,7 +587,7 @@ void Server::KickClient(Client* client, std::string reason, bool notify)
 	if (reason.empty())
 		reason = "Kicked";
 
-	ClassicProtocol::SendKick(client, reason);
+	Protocol::SendKick(client, reason);
 
 	// FIXME: Maybe queue disconnect? Sometimes client gets I/O error when kicked
 	client->active = false;
@@ -638,7 +638,7 @@ void Server::SendWrappedMessageB(Client* client, std::string message)
 			}
 		}
 
-		ClassicProtocol::SendMessage(client, partialMessage);
+		Protocol::SendMessage(client, partialMessage);
 
 		pos += count;
 	}
@@ -704,7 +704,7 @@ void Server::SendWrappedMessage(Client* client, std::string message)
 		if (obj.size() > MAX_SIZE)
 			SendWrappedMessageB(client, obj);
 		else
-			ClassicProtocol::SendMessage(client, obj);
+			Protocol::SendMessage(client, obj);
 	}
 }
 

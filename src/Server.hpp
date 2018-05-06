@@ -43,8 +43,8 @@ public:
 	std::map<std::string, World*> GetWorlds() { return m_worlds; }
 
 	void OnConnect(sf::TcpSocket *sock);
-	void OnAuth(Client* client, struct ClassicProtocol::cauthp clientAuth);
-	void OnMessage(Client* client, struct ClassicProtocol::cmsgp clientMsg);
+	void OnAuth(Client* client, struct Protocol::cauthp clientAuth);
+	void OnMessage(Client* client, struct Protocol::cmsgp clientMsg);
 
 	void HandlePacket(Client* client, uint8_t opcode);
 	bool Tick();

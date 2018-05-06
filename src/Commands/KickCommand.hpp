@@ -19,7 +19,7 @@ public:
 
 		Client* client = server->GetClientByName(name, false);
 		if (client == nullptr) {
-			ClassicProtocol::SendMessage(sender, "&cPlayer &f" + name + "&c does not exist");
+			Protocol::SendMessage(sender, "&cPlayer &f" + name + "&c does not exist");
 			return;
 		}
 

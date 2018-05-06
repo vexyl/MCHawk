@@ -19,7 +19,7 @@
 #include "Packet.hpp"
 #include "../Position.hpp"
 
-namespace ClassicProtocol {
+namespace Protocol {
 enum PacketType {
 	kServerInfo				= 0x00,
 	kServerPing				= 0x01,
@@ -40,6 +40,61 @@ enum PacketType {
 	kClientMessage				= 0x0d,
 	kClientPosition				= 0x08,
 	kClientBlock				= 0x05
+};
+
+enum BlockType {
+	kStartOfBlockTypes=0x00,
+	kAir=kStartOfBlockTypes,
+	kStone,
+	kGrass,
+	kDirt,
+	kCobblestone,
+	kWoodPlanks,
+	kSapling,
+	kBedrock,
+	kFlowingWater,
+	kStationaryWater,
+	kFlowingLava,
+	kStationaryLava,
+	kSand,
+	kGravel,
+	kGoldOre,
+	kIronOre,
+	kCoalOre,
+	kWood,
+	kLeaves,
+	kSponge,
+	kGlass,
+	kRedCloth,
+	kOrangeCloth,
+	kYellowCloth,
+	kLimeCloth,
+	kGreenCloth,
+	kAquaGreenCloth,
+	kCyanCloth,
+	kBlueCloth,
+	kPurpleCloth,
+	kIndigoCloth,
+	kVioletCloth,
+	kMagentaCloth,
+	kPinkCloth,
+	kBlackCloth,
+	kGrayCloth,
+	kWhiteCloth,
+	kDandelion,
+	kRose,
+	kBrownMushroom,
+	kRedMushroom,
+	kGoldBlock,
+	kIronBlock,
+	kDoubleSlab,
+	kSlab,
+	kBricks,
+	kTNT,
+	kBookshelf,
+	kMossStone,
+	kObsidian,
+	kEndOfBlockTypes
 };
 
 /* Client->Server */
@@ -148,6 +203,8 @@ struct cblockp {
 	}
 };
 
+bool IsValidBlock(int type);
+
 void make_spawn_packet(Packet& packet, int8_t pid, std::string name, Position position, int8_t yaw, int8_t pitch);
 
 // Send packet functions
@@ -162,6 +219,6 @@ void SendUserType(Client* client, uint8_t userType);
 void SendClientsTo(Client* client, const std::vector<Client*>& clients);
 void SpawnClient(Client* client, Position position, const std::vector<Client*>& clients);
 void DespawnClient(int8_t pid, const std::vector<Client*>& clients);
-} // namespace ClassicProtocol
+} // namespace Protocol
 
 #endif // PROTOCOL_H_

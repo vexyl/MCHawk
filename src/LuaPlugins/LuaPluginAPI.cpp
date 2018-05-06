@@ -61,7 +61,7 @@ void LuaServer::LuaKickClient(Client* client, std::string reason)
 
 void LuaServer::LuaSendBlock(Client* client, short x, short y, short z, int type)
 {
-	ClassicProtocol::SendBlock(client, Position(x, y, z), type);
+	Protocol::SendBlock(client, Position(x, y, z), type);
 }
 
 Client* LuaServer::LuaGetClientByName(std::string name, bool exact)
@@ -101,7 +101,7 @@ void LuaServer::LuaPlaceBlock(Client* client, int type, short x, short y, short 
 
 	if (!valid) {
 		int type = map.GetBlockType(x, y, z);
-		ClassicProtocol::SendBlock(client, Position(x, y, z), type);
+		Protocol::SendBlock(client, Position(x, y, z), type);
 		return;
 	}
 
@@ -115,7 +115,7 @@ int LuaServer::LuaMapGetBlockType(Client* client, short x, short y, short z)
 
 void LuaServer::LuaSendKick(Client* client, std::string reason)
 {
-	ClassicProtocol::SendKick(client, reason);
+	Protocol::SendKick(client, reason);
 }
 
 luabridge::LuaRef LuaServer::LuaGetClients()
@@ -174,7 +174,7 @@ luabridge::LuaRef make_luatable()
 	return table;
 }
 
-luabridge::LuaRef cauthp_to_luatable(const struct ClassicProtocol::cauthp clientAuth)
+luabridge::LuaRef cauthp_to_luatable(const struct Protocol::cauthp clientAuth)
 {
 	luabridge::LuaRef table(L);
 	table = luabridge::newTable(L);
@@ -189,7 +189,7 @@ luabridge::LuaRef cauthp_to_luatable(const struct ClassicProtocol::cauthp client
 	return table;
 }
 
-luabridge::LuaRef cmsgp_to_luatable(const struct ClassicProtocol::cmsgp clientMsg)
+luabridge::LuaRef cmsgp_to_luatable(const struct Protocol::cmsgp clientMsg)
 {
 	luabridge::LuaRef table(L);
 	table = luabridge::newTable(L);
@@ -204,7 +204,7 @@ luabridge::LuaRef cmsgp_to_luatable(const struct ClassicProtocol::cmsgp clientMs
 	return table;
 }
 
-luabridge::LuaRef cblockp_to_luatable(const struct ClassicProtocol::cblockp clientBlock)
+luabridge::LuaRef cblockp_to_luatable(const struct Protocol::cblockp clientBlock)
 {
 	luabridge::LuaRef table(L);
 	table = luabridge::newTable(L);

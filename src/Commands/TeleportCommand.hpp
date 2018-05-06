@@ -17,7 +17,7 @@ public:
 
 		Client* client = server->GetClientByName(name, false);
 		if (client == nullptr) {
-			ClassicProtocol::SendMessage(sender, "&cPlayer &f" + name + "&c does not exist");
+			Protocol::SendMessage(sender, "&cPlayer &f" + name + "&c does not exist");
 			return;
 		}
 
@@ -25,7 +25,7 @@ public:
 		name = client->GetName();
 
 		if (name == sender->GetName()) {
-			ClassicProtocol::SendMessage(sender, "&9*Woosh* &eYou teleport to yourself.");
+			Protocol::SendMessage(sender, "&9*Woosh* &eYou teleport to yourself.");
 			return;
 		}
 
@@ -38,8 +38,8 @@ public:
 			world->AddClient(sender);
 		}
 
-		ClassicProtocol::SendPosition(sender, -1 /* Self ID */, client->GetPosition(), client->GetYaw(), client->GetPitch());
-		ClassicProtocol::SendMessage(sender, "&eTeleported to " + name);
+		Protocol::SendPosition(sender, -1 /* Self ID */, client->GetPosition(), client->GetYaw(), client->GetPitch());
+		Protocol::SendMessage(sender, "&eTeleported to " + name);
 	}
 
 	virtual std::string GetDocString() { return "/tp <name> - teleports to player"; }

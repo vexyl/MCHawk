@@ -21,19 +21,19 @@ public:
 
 		World* world = server->GetWorldByName(worldName);
 		if (world == nullptr) {
-			ClassicProtocol::SendMessage(sender, "&cWorld &f" + worldName + "&c does not exist");
+			Protocol::SendMessage(sender, "&cWorld &f" + worldName + "&c does not exist");
 			return;
 		}
 
 		worldName = world->GetName();
 
 		if (!world->GetActive()) {
-			ClassicProtocol::SendMessage(sender, "&cWorld &f" + worldName + "&c is not loaded");
+			Protocol::SendMessage(sender, "&cWorld &f" + worldName + "&c is not loaded");
 			return;
 		}
 
 		if (worldName == sender->GetWorld()->GetName()) {
-			ClassicProtocol::SendMessage(sender, "&eWarp nine. Engage. &9*Woosh*");
+			Protocol::SendMessage(sender, "&eWarp nine. Engage. &9*Woosh*");
 			return;
 		}
 
