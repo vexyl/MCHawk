@@ -1,6 +1,8 @@
 ﻿#ifndef CPE_H_
 #define CPE_H_
 
+#include "../Client.hpp"
+
 #include <stdint.h>
 
 #include "ClientStream.hpp"
@@ -96,6 +98,11 @@ struct ccustomblockp {
 };
 
 bool IsValidBlock(int type);
+
+// Send packet functions
+void SendExtInfo(Client* client, std::string appName, short extCount);
+void SendExtEntry(Client* client, std::string extName, int version);
+void SendCustomBlocks(Client* client, uint8_t support);
 } // namespace CPE
 
 #endif // CPE_H_

@@ -275,19 +275,9 @@ void Server::OnAuth(Client* client, struct Protocol::cauthp clientAuth)
 	if (clientAuth.UNK0 == 0x42) {
 		LOG(LogLevel::kDebug, "Client supports CPE...sending ExtBlock")
 
-		Packet extInfo(0x10);
-		extInfo.Write(std::string("MCHawk"));
-		extInfo.Write((short)1);
-		client->QueuePacket(extInfo);
-
-		Packet extEntry(0x11);
-		extEntry.Write(std::string("CustomBlocks"));
-		extEntry.Write((int)1);
-		client->QueuePacket(extEntry);
-
-		Packet customBlock(0x13);
-		customBlock.Write((uint8_t)0x41);
-		client->QueuePacket(customBlock);
+		CPE::SendExtInfo(client, std::string("MCHawk"), 1);
+		CPE::SendExtEntry(client, std::string("CustomBlocks"), 1);
+		CPE::SendCustomBlocks(client, 0x41);
 	}
 }
 
@@ -435,7 +425,7 @@ void Server::HandlePacket(Client* client, uint8_t opcode)
 		struct CPE::ccustomblockp clientCustomBlock;
 
 		if (clientCustomBlock.Read(stream)) {
-			std::cout << "support=" << clientCustomBlock.support << std::endl;
+			; // TODO
 		}
 
 		break;
