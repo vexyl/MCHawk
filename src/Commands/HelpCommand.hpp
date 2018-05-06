@@ -24,7 +24,9 @@ public:
 			Protocol::SendMessage(sender, "&eTo see a list of commands type &a/commands");
 			Protocol::SendMessage(sender, "&eTo get help with a specific command, type &a/help <command>");
 			Protocol::SendMessage(sender, "&eFor pages of commands, type &a/help <page #>");
-			Protocol::SendMessage(sender, "&eTo see a list of players, type &a/who");
+			Protocol::SendMessage(sender, "&eFor a list of worlds, type &a/world list");
+			Protocol::SendMessage(sender, "&eTo go to a world type &a/goto <world>");
+			Protocol::SendMessage(sender, "&eTo see a list of players, type &a/who &eor &a/players");
 			return;
 		}
 
