@@ -91,7 +91,7 @@ void CommandHandler::Execute(Client* sender, std::string name, const CommandArgs
 		if (args.size() >= iter->second->GetArgumentAmount())
 			iter->second->Execute(sender, args);
 		else
-			Server::SendWrappedMessage(sender, "&b" + iter->second->GetDocString());
+			Server::SendWrappedMessage(sender, "&b/" + iter->second->GetDocString());
 	}
 }
 

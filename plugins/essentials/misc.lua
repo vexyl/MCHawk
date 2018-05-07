@@ -41,6 +41,10 @@ EssentialsPlugin.Cmds_CmdsCommand = function(client, args)
 end
 
 EssentialsPlugin.Kick_KickCommand = function(client, args)
+	if (not PermissionsPlugin.CheckPermissionNotify(client, "admin")) then
+		return
+	end
+
 	if (args[1] == nil) then
 		Server.SendMessage(client, "&cMust specify a player to kick")
 		return
