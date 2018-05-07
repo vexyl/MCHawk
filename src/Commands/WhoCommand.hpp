@@ -1,4 +1,4 @@
-#ifndef WHOCOMMAND_H_
+﻿#ifndef WHOCOMMAND_H_
 #define WHOCOMMAND_H_
 
 #include <string>

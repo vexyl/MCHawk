@@ -19,6 +19,11 @@ void LuaServer::Init(lua_State* L)
 	.endClass();
 
 	luabridge::getGlobalNamespace(L)
+	.beginClass<LuaCommand>("LuaCommand")
+		.addFunction("AddSubcommand", &LuaCommand::AddSubcommand)
+	.endClass();
+
+	luabridge::getGlobalNamespace(L)
 	.beginClass<LuaServer>("Server")
 		.addStaticFunction("SendMessage", &LuaServer::LuaSendMessage)
 		.addStaticFunction("BroadcastMessage", &LuaServer::LuaBroadcastMessage)
@@ -79,17 +84,19 @@ void LuaServer::LuaRegisterEvent(int type, luabridge::LuaRef func)
 	Server::GetInstance()->GetPluginHandler().RegisterEvent(type, func);
 }
 
-void LuaServer::LuaAddCommand(std::string name, std::string aliases, luabridge::LuaRef func, std::string docString,
-unsigned argumentAmount, unsigned permissionLevel)
+LuaCommand* LuaServer::LuaAddCommand(std::string name, std::string aliases, luabridge::LuaRef func, std::string docString,
+	unsigned argumentAmount, unsigned permissionLevel)
 {
 	if (!func.isFunction()) {
 		std::cerr << "Failed adding Lua command " << name << ": function does not exist" << std::endl;
-		return;
+		return nullptr;
 	}
 
 	LuaCommand* command = new LuaCommand(name, func, docString, argumentAmount, permissionLevel);
 
 	Server::GetInstance()->GetCommandHandler().Register(name, command, aliases);
+
+	return command;
 }
 
 void LuaServer::LuaPlaceBlock(Client* client, int type, short x, short y, short z)

@@ -1,4 +1,4 @@
-#ifndef LUACOMMAND_H_
+﻿#ifndef LUACOMMAND_H_
 #define LUACOMMAND_H_
 
 #include <string>
@@ -10,12 +10,12 @@
 
 luabridge::LuaRef make_luatable();
 
-class LuaCommand : public ICommand {
+class LuaCommand : public Command {
 public:
 	LuaCommand(std::string name, luabridge::LuaRef func, std::string docString,
 			unsigned argumentAmount, unsigned permissionLevel) :
-		m_name(name), m_docString(docString),
-		m_argumentAmount(argumentAmount), m_permissionLevel(permissionLevel)
+		Command(name),
+		m_docString(docString), m_argumentAmount(argumentAmount), m_permissionLevel(permissionLevel)
 	{
 		if (!func.isFunction()) {
 			LOG(LogLevel::kWarning, "Failed to load Lua command %s", name.c_str());
@@ -29,6 +29,9 @@ public:
 
 	virtual void Execute(Client* sender, const CommandArgs& args)
 	{
+		if (HandleSubcommands(sender, args))
+			return;
+
 		if (m_func != nullptr) {
 			try {
 				auto table = make_luatable();
@@ -47,8 +50,22 @@ public:
 	virtual unsigned int GetArgumentAmount() { return m_argumentAmount; }
 	virtual unsigned int GetPermissionLevel() { return m_permissionLevel; }
 
+	LuaCommand* AddSubcommand(std::string subcommand, luabridge::LuaRef func, std::string docString,
+		unsigned argumentAmount, unsigned permissionLevel)
+	{
+		if (!func.isFunction()) {
+			std::cerr << "Failed adding Lua subcommand " << subcommand << ": function does not exist" << std::endl;
+			return nullptr;
+		}
+
+		LuaCommand* command = new LuaCommand(subcommand, func, docString, argumentAmount, permissionLevel);
+
+		Command::AddSubcommand(command);
+
+		return command;
+	}
+
 private:
-	std::string m_name;
 	std::unique_ptr<luabridge::LuaRef> m_func;
 	std::string m_docString;
 	unsigned int m_argumentAmount, m_permissionLevel;

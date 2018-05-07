@@ -9,8 +9,10 @@
 #include "../Network/Protocol.hpp"
 #include "../Utils/Logger.hpp"
 
-class HelpCommand : public ICommand {
+class HelpCommand : public Command {
 public:
+	HelpCommand(std::string name) : Command(name) {}
+
 	~HelpCommand() {}
 
 	virtual void Execute(Client* sender, const CommandArgs& args)
@@ -25,7 +27,7 @@ public:
 			Protocol::SendMessage(sender, "&eTo get help with a specific command, type &a/help <command>");
 			Protocol::SendMessage(sender, "&eFor pages of commands, type &a/help <page #>");
 			Protocol::SendMessage(sender, "&eFor a list of worlds, type &a/world list");
-			Protocol::SendMessage(sender, "&eTo go to a world type &a/goto <world>");
+			Protocol::SendMessage(sender, "&eTo go to a world, type &a/goto <world>");
 			Protocol::SendMessage(sender, "&eTo see a list of players, type &a/who &eor &a/players");
 			return;
 		}
@@ -49,7 +51,40 @@ public:
 		auto iter = commands.find(commandName);
 		if (iter != commands.end()) {
 			// issued /help commandName
-			Protocol::SendMessage(sender, "&b" + iter->second->GetDocString());
+			Command* subcheck = iter->second;
+			std::string docStringPrefix = "";
+
+			if (args.size() > 1) {
+				int i = 1;
+				while (i < (int)args.size()) {
+					auto subcommands = subcheck->GetSubcommands();
+
+					for (auto& obj : subcommands) {
+						if (args[i] == obj->GetName()) {
+							docStringPrefix += subcheck->GetName() + " "; // previous command/subcommand
+							subcheck = obj;
+							break;
+						}
+					}
+
+					++i;
+				}
+			}
+
+			Protocol::SendMessage(sender, "&b/" + docStringPrefix + subcheck->GetDocString());
+
+			auto subcommands = subcheck->GetSubcommands();
+
+			std::string subcommandString;
+			for (int i = 0; i < (int)subcommands.size(); ++i) {
+				subcommandString += "&a" + subcommands[i]->GetName();
+				if ((i + 1) < (int)subcommands.size())
+					subcommandString += "&b, ";
+			}
+
+			if (!subcommandString.empty())
+				Protocol::SendMessage(sender, "&bAvailable subcommands: " + subcommandString);
+
 			return;
 		}
 

@@ -16,7 +16,7 @@ struct LuaServer {
 	static Client* LuaGetClientByName(std::string name, bool exact);
 	static void LuaLoadPlugin(std::string filename);
 	static void LuaRegisterEvent(int type, luabridge::LuaRef func);
-	static void LuaAddCommand(std::string name, std::string aliases, luabridge::LuaRef func, std::string docString,
+	static LuaCommand* LuaAddCommand(std::string name, std::string aliases, luabridge::LuaRef func, std::string docString,
 		unsigned argumentAmount, unsigned permissionLevel);
 	static void LuaPlaceBlock(Client* client, int type, short x, short y, short z);
 	static int LuaMapGetBlockType(Client* client, short x, short y, short z);

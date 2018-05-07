@@ -21,20 +21,9 @@
 #include "Network/CPE.hpp"
 #include "Utils/Logger.hpp"
 #include "Utils/Utils.hpp"
-
+#include "LuaPlugins/LuaPluginAPI.hpp"
 
 #include "Commands/HelpCommand.hpp"
-#include "Commands/TeleportCommand.hpp"
-#include "Commands/SummonCommand.hpp"
-#include "Commands/OpCommand.hpp"
-#include "Commands/KickCommand.hpp"
-#include "Commands/AliasCommand.hpp"
-#include "Commands/WhoCommand.hpp"
-#include "Commands/WhoIsCommand.hpp"
-#include "Commands/GotoCommand.hpp"
-#include "Commands/WorldCommand.hpp"
-
-#include "LuaPlugins/LuaPluginAPI.hpp"
 
 Server* Server::m_thisPtr = nullptr;
 
@@ -135,16 +124,7 @@ void Server::Init()
 		}
 	}
 
-	m_commandHandler.Register("help", new HelpCommand, "h");
-	m_commandHandler.Register("tp", new TeleportCommand);
-	m_commandHandler.Register("summon", new SummonCommand);
-	m_commandHandler.Register("op", new OpCommand);
-	m_commandHandler.Register("kick", new KickCommand);
-	m_commandHandler.Register("alias", new AliasCommand, "nick name");
-	m_commandHandler.Register("who", new WhoCommand, "player players list");
-	m_commandHandler.Register("whois", new WhoIsCommand, "info");
-	m_commandHandler.Register("goto", new GotoCommand, "go g warp");
-	m_commandHandler.Register("world", new WorldCommand, "w map");
+	m_commandHandler.Register("help", new HelpCommand("help"), "h");
 
 	m_pluginHandler.LoadPlugin("plugins/core/init.lua"); // Load this first
 

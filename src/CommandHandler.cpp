@@ -17,7 +17,18 @@ CommandHandler::~CommandHandler()
 		delete obj.second;
 }
 
-void CommandHandler::Register(std::string name, ICommand* command, std::string aliases)
+Command* CommandHandler::GetCommand(std::string name)
+{
+	auto iter = m_commands.find(name);
+
+	// Not found, check aliases
+	if (iter == m_commands.end())
+		return nullptr;
+
+	return iter->second;
+}
+
+void CommandHandler::Register(std::string name, Command* command, std::string aliases)
 {
 	std::pair<CommandMap::iterator, bool> res = m_commands.insert(std::make_pair(name, command));
 
