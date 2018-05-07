@@ -131,6 +131,7 @@
     <ClCompile Include="..\..\src\LuaPlugins\LuaPluginHandler.cpp" />
     <ClCompile Include="..\..\src\Main.cpp" />
     <ClCompile Include="..\..\src\Map.cpp" />
+    <ClCompile Include="..\..\src\Network\CPE.cpp" />
     <ClCompile Include="..\..\src\Network\Packet.cpp" />
     <ClCompile Include="..\..\src\Network\Protocol.cpp" />
     <ClCompile Include="..\..\src\Server.cpp" />
@@ -143,14 +144,9 @@
     <ClInclude Include="..\..\src\Client.hpp" />
     <ClInclude Include="..\..\src\CommandHandler.hpp" />
     <ClInclude Include="..\..\src\Commands\AliasCommand.hpp" />
-    <ClInclude Include="..\..\src\Commands\BillNyeCommand.hpp" />
-    <ClInclude Include="..\..\src\Commands\EmoteCommand.hpp" />
     <ClInclude Include="..\..\src\Commands\GotoCommand.hpp" />
     <ClInclude Include="..\..\src\Commands\HelpCommand.hpp" />
-    <ClInclude Include="..\..\src\Commands\KickCommand.hpp" />
     <ClInclude Include="..\..\src\Commands\OpCommand.hpp" />
-    <ClInclude Include="..\..\src\Commands\PmCommand.hpp" />
-    <ClInclude Include="..\..\src\Commands\SaveCommand.hpp" />
     <ClInclude Include="..\..\src\Commands\SummonCommand.hpp" />
     <ClInclude Include="..\..\src\Commands\TeleportCommand.hpp" />
     <ClInclude Include="..\..\src\Commands\WhoCommand.hpp" />
@@ -163,6 +159,7 @@
     <ClInclude Include="..\..\src\LuaPlugins\LuaStuff.hpp" />
     <ClInclude Include="..\..\src\Map.hpp" />
     <ClInclude Include="..\..\src\Network\ClientStream.hpp" />
+    <ClInclude Include="..\..\src\Network\CPE.hpp" />
     <ClInclude Include="..\..\src\Network\Packet.hpp" />
     <ClInclude Include="..\..\src\Network\Protocol.hpp" />
     <ClInclude Include="..\..\src\Position.hpp" />
