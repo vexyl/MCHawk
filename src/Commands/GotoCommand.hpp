@@ -8,8 +8,10 @@
 #include "../Network/Protocol.hpp"
 #include "../Utils/Logger.hpp"
 
-class GotoCommand : public ICommand {
+class GotoCommand : public Command {
 public:
+	GotoCommand(std::string name) : Command(name) {}
+
 	~GotoCommand() {}
 
 	virtual void Execute(Client* sender, const CommandArgs& args)

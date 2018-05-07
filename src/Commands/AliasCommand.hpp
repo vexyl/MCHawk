@@ -8,8 +8,10 @@
 #include "../Utils/Logger.hpp"
 
 
-class AliasCommand : public ICommand {
+class AliasCommand : public Command {
 public:
+	AliasCommand(std::string name) : Command(name) {}
+
 	~AliasCommand() {}
 
 	virtual void Execute(Client* sender, const CommandArgs& args)

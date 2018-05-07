@@ -6,8 +6,10 @@
 #include "../CommandHandler.hpp"
 #include "../Utils/Logger.hpp"
 
-class WhoCommand : public ICommand {
+class WhoCommand : public Command {
 public:
+	WhoCommand(std::string name) : Command(name) {}
+
 	~WhoCommand() {}
 
 	virtual void Execute(Client* sender, const CommandArgs& args)

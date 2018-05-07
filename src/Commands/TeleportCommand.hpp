@@ -6,8 +6,10 @@
 #include "../CommandHandler.hpp"
 #include "../Utils/Logger.hpp"
 
-class TeleportCommand : public ICommand {
+class TeleportCommand : public Command {
 public:
+	TeleportCommand(std::string name) : Command(name) {}
+
 	~TeleportCommand() {}
 
 	virtual void Execute(Client* sender, const CommandArgs& args)

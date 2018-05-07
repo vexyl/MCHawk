@@ -7,8 +7,10 @@
 #include "../Network/Protocol.hpp"
 #include "../Utils/Logger.hpp"
 
-class OpCommand : public ICommand {
+class OpCommand : public Command {
 public:
+	OpCommand(std::string name) : Command(name) {}
+
 	~OpCommand() {}
 
 	virtual void Execute(Client* sender, const CommandArgs& args)

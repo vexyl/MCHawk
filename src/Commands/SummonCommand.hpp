@@ -8,8 +8,10 @@
 #include "../Utils/Logger.hpp"
 
 
-class SummonCommand : public ICommand {
+class SummonCommand : public Command {
 public:
+	SummonCommand(std::string name) : Command(name) {}
+
 	~SummonCommand() {}
 
 	virtual void Execute(Client* sender, const CommandArgs& args)

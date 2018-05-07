@@ -8,8 +8,10 @@
 #include "../CommandHandler.hpp"
 #include "../Utils/Logger.hpp"
 
-class WorldCommand : public ICommand {
+class WorldCommand : public Command {
 public:
+	WorldCommand(std::string name) : Command(name) {}
+
 	~WorldCommand() {}
 
 	virtual void Execute(Client* sender, const CommandArgs& args)
