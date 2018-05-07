@@ -63,7 +63,6 @@ public:
 						if (args[i] == obj->GetName()) {
 							docStringPrefix += subcheck->GetName() + " "; // previous command/subcommand
 							subcheck = obj;
-							docStringPrefix += subcheck->GetName() + " "; // current subcommand
 							break;
 						}
 					}
