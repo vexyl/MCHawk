@@ -11,6 +11,7 @@ EssentialsPlugin.init = function()
 	Server.AddCommand("pm", "msg message whisper m", EssentialsPlugin.Pm_PmCommand, "&9/pm <name> <message> - sends a private message to a player", 2, 0)
 	Server.AddCommand("billnye", "bn bill nye", EssentialsPlugin.BillNye_BillNyeCommand, "&9/billnye <wisdom> - instills wisdom in fellow server members", 1, 0)
 	Server.AddCommand("cmds", "c cmd command commands", EssentialsPlugin.Cmds_CmdsCommand, "&9/cmds - show short list of commands", 0, 0)
+	Server.AddCommand("kick", "", EssentialsPlugin.Kick_KickCommand, "/kick <player> [reason] - kicks player from server", 1, 1)
 
 	Server.RegisterEvent(ClassicProtocol.AuthEvent, EssentialsPlugin.Ban_OnAuth)
 	Server.RegisterEvent(ClassicProtocol.BlockEvent, EssentialsPlugin.Cuboid_OnBlock)

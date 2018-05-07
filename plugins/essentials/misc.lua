@@ -1,13 +1,13 @@
 EssentialsPlugin.Emote_EmoteCommand = function(client, args)
-	message = "&9* " .. client.name
+	local message = "&9* " .. client.name
 	message = message .. " " .. table.concat(args, " ")
 	Server.BroadcastMessage(message)
 end
 
 EssentialsPlugin.Pm_PmCommand = function(client, args)
-	name = args[1]
+	local name = args[1]
 
-	target = Server.GetClientByName(name)
+	local target = Server.GetClientByName(name)
 	if (target == nil) then
 		Server.SendMessage(client, "&cPlayer &f" .. name .. "&c does not exist")
 		return
@@ -18,7 +18,7 @@ EssentialsPlugin.Pm_PmCommand = function(client, args)
 		return
 	end
 
-	message = table.concat(args, " ", 2) -- skip name argument
+	local message = table.concat(args, " ", 2) -- skip name argument
 
 	Server.SendMessage(client, "&d[You -> " .. target.name .. "] " .. message)
 	Server.SendMessage(target, "&d[" .. client.name .. "] " .. message)
@@ -26,7 +26,7 @@ end
 
 -- Yes, this is an essential command
 EssentialsPlugin.BillNye_BillNyeCommand = function(client, args)
-	message = table.concat(args, " ")
+	local message = table.concat(args, " ")
 
 	Server.BroadcastMessage("&cBill Nye&f: DID YOU KNOW THAT")
 	Server.BroadcastMessage("&cBill Nye&f: " .. message .. "?")
@@ -36,6 +36,35 @@ end
 EssentialsPlugin.Cmds_CmdsCommand = function(client, args)
 	Server.SendMessage(client, "&eType &a/help <command> &efor more information on a command")
 
-	commandString = "&a" .. table.concat(Server.GetCommandStrings(), "&e, &a")
+	local commandString = "&a" .. table.concat(Server.GetCommandStrings(), "&e, &a")
 	Server.SendMessage(client, "&eCommands: " .. commandString)
+end
+
+EssentialsPlugin.Kick_KickCommand = function(client, args)
+	if (args[1] == nil) then
+		Server.SendMessage(client, "&cMust specify a player to kick")
+		return
+	end
+
+	local targetName = args[1]
+
+	local target = Server.GetClientByName(targetName)
+	if (target == nil) then
+		Server.SendMessage(client, "&cPlayer &f" .. targetName .. "&c not found")
+		return
+	end
+
+	targetName = target.name;
+
+	local message = client.name .. " kicked " .. targetName
+	local reason = ""
+
+	local index = 2 -- where reason should start
+	if (args[index] ~= nil) then
+		reason = table.concat(args, " ", index)
+		message = message .. " (" .. reason .. ")"
+	end
+
+	Server.KickClient(target, reason)
+	Server.SystemWideMessage(message)
 end
