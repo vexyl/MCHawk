@@ -5,7 +5,7 @@ split = function(str, delim)
 		delim = "%s" -- whitespace
 	end
 
-	i = 1
+	local i = 1
 	for s in string.gmatch(str, "([^" .. delim .. "]+)") do
 		t[i] = s
 		i = i + 1

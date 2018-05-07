@@ -122,7 +122,7 @@ end
 
 -- Doesn't check if permission exists
 PermissionsPlugin.GrantPermission = function(name, perm)
-	name = string.lower(name)
+	local name = string.lower(name)
 
 	local permsTable = PermissionsPlugin.permissionTable
 
@@ -135,7 +135,7 @@ end
 
 -- Doesn't check if permission exists
 PermissionsPlugin.RevokePermission = function(name, perm)
-	name = string.lower(name)
+	local name = string.lower(name)
 
 	local perms = PermissionsPlugin.permissionTable[name]
 
@@ -216,7 +216,7 @@ end
 PermissionsPlugin.PermissionsExistsNotify = function(client, permissions)
 	local result = true
 
-	perms = split(permissions, ", ")
+	local perms = split(permissions, ", ")
 
 	for _,perm in pairs(perms) do
 		if (not PermissionsPlugin.PermissionExistsNotify(client, perm)) then
@@ -230,7 +230,7 @@ end
 -- TODO: Allow operators to override permissions: if (Server.IsOperator(name)) then return true end
 -- Doesn't check if permission exists
 PermissionsPlugin.CheckPermission = function(name, permission)
-	name = string.lower(name)
+	local name = string.lower(name)
 
 	local result = false
 

@@ -3,14 +3,9 @@ EssentialsPlugin.Server_ShutdownCommand = function(client, args)
 		return
 	end
 
-	name = "CONSOLE"
-	if (client ~= nil) then
-		name = client.name
-	end
+	local index = 1 -- used to concatenate reason message
 
-	index = 1 -- used to concatenate reason message
-
-	time = 15
+	local time = 15
 	if (args[1] == "-t" and args[2] ~= nil) then
 		time = tonumber(args[2])
 		index = 3 -- skip time arguments
@@ -25,8 +20,8 @@ EssentialsPlugin.Server_ShutdownCommand = function(client, args)
 		return
 	end
 
-	message = "(" .. name .. ")" .. " Server shutting down in " .. time .. " seconds..."
-	reason = "Server shut down"
+	local message = "(" .. client.name .. ")" .. " Server shutting down in " .. time .. " seconds..."
+	local reason = "Server shut down"
 
 	if (args[index] ~= nil) then
 		reason = table.concat(args, " ", index)
@@ -47,12 +42,12 @@ EssentialsPlugin.Server_ShutdownCommand = function(client, args)
 end
 
 EssentialsPlugin.Server_SafeShutdown = function(reason)
-	clients = Server.GetClients()
+	local clients = Server.GetClients()
 	for _,client in pairs(clients) do
 		Server.SendKick(client, reason)
 	end
 
-	worlds = Server.GetWorlds()
+	local worlds = Server.GetWorlds()
 	for _,world in pairs(worlds) do
 		if (world:GetOption("autosave") == "true") then
 			world:Save()

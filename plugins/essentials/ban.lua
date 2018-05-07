@@ -7,16 +7,16 @@ EssentialsPlugin.Ban_BanCommand = function(client, args)
 		return
 	end
 
-	name = string.lower(args[1])
+	local name = string.lower(args[1])
 
-	player = Server.GetClientByName(name, true)
+	local player = Server.GetClientByName(name, true)
 	if (player == nil) then
 		Server.SendMessage(client, "&cPlayer &f" .. name .. "&c not found")
 		return
 	end
 
-	message = "&e" .. client.name .. " has banned " .. name .. " from the server."
-	reason = ""
+	local message = "&e" .. client.name .. " has banned " .. name .. " from the server."
+	local reason = ""
 
 	if (args[2] ~= nil) then
 		reason = table.concat(args, " ", 2) -- skip name argument
@@ -35,7 +35,7 @@ EssentialsPlugin.Ban_UnbanCommand = function(client, args)
 		return
 	end
 
-	name = args[1]
+	local name = args[1]
 	
 	if (EssentialsPlugin.Ban_banList[name] == nil) then
 		Server.SendMessage(client, "&cPlayer &f" .. name .. "&c not banned")
@@ -50,7 +50,7 @@ end
 
 EssentialsPlugin.Ban_OnAuth = function(client, args)
 	-- Use args.name because client.name isn't set yet
-	name = string.lower(args.name)
+	local name = string.lower(args.name)
 
 	if (EssentialsPlugin.Ban_banList[name] ~= nil) then
 		Server.KickClient(client, "Banned")
@@ -72,7 +72,7 @@ end
 EssentialsPlugin.Ban_LoadBans = function()
 	local f = io.open("bans.txt", "r")
 	if f then
-		lines = {}
+		local lines = {}
 		for line in io.lines("bans.txt") do
 			EssentialsPlugin.Ban_banList[line] = 1
 		end

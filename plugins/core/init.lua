@@ -29,7 +29,7 @@ end
 
 CorePlugin.tick = function()
 	for timerName in pairs(CorePlugin.timerList) do
-		t = CorePlugin.timerList[timerName]
+		local t = CorePlugin.timerList[timerName]
 		for k,v in pairs(t) do
 			a,b = coroutine.resume(v[1], v[2])
 

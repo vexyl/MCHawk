@@ -31,7 +31,7 @@ EssentialsPlugin.Cuboid_OnBlock = function(client, block)
 		end
 
 		-- reverse block change client-side
-		btype = Server.MapGetBlockType(client, block.x, block.y, block.z)
+		local btype = Server.MapGetBlockType(client, block.x, block.y, block.z)
 		Server.SendBlock(client, block.x, block.y, block.z, btype)
 		
 		Flags.NoDefaultCall = 1
@@ -45,30 +45,30 @@ EssentialsPlugin.Cuboid_OnDisconnect = function(client, t)
 end
 
 EssentialsPlugin.Cuboid_DoCuboid = function(client)
-	world = client:GetWorld()
+	local world = client:GetWorld()
 
 	if (world:GetOption("build") ~= "false") then
-		blocks = EssentialsPlugin.Cuboid_players[client.name]
+		local blocks = EssentialsPlugin.Cuboid_players[client.name]
 
-		x1 = blocks["1"].x
-		y1 = blocks["1"].y
-		z1 = blocks["1"].z
+		local x1 = blocks["1"].x
+		local y1 = blocks["1"].y
+		local z1 = blocks["1"].z
 
-		x2 = blocks["2"].x
-		y2 = blocks["2"].y
-		z2 = blocks["2"].z
+		local x2 = blocks["2"].x
+		local y2 = blocks["2"].y
+		local z2 = blocks["2"].z
 
-		btype = blocks["1"].type
-		mode = blocks["1"].mode
+		local btype = blocks["1"].type
+		local mode = blocks["1"].mode
 
 		-- Set block type to air if player is used /z air
 		if (EssentialsPlugin.Cuboid_destroy[client.name] == 1) then
 			btype = 0
 		end
 
-		xstep = 1
-		ystep = 1
-		zstep = 1
+		local xstep = 1
+		local ystep = 1
+		local zstep = 1
 
 		if (x1 > x2) then
 			xstep = -1
@@ -82,13 +82,13 @@ EssentialsPlugin.Cuboid_DoCuboid = function(client)
 			zstep = -1
 		end
 
-		dx = math.abs(x2 - x1) + 1
-		dy = math.abs(y2 - y1) + 1
-		dz = math.abs(z2 - z1) + 1
+		local dx = math.abs(x2 - x1) + 1
+		local dy = math.abs(y2 - y1) + 1
+		local dz = math.abs(z2 - z1) + 1
 
-		blockCount = dx * dy * dz
+		local blockCount = dx * dy * dz
 
-		maxBlocks = EssentialsPlugin.Cuboid_maxBlocks
+		local maxBlocks = EssentialsPlugin.Cuboid_maxBlocks
 		if (blockCount > maxBlocks) then
 			Server.SendMessage(client, "&cToo many blocks; Max=" .. maxBlocks)
 			return

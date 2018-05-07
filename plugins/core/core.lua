@@ -13,9 +13,9 @@ CorePlugin.ServerInfoCommand = function(client, args)
 	Server.SendMessage(client, "&eWritten in &3C++ &eand &3Lua &efor plugins");
 	Server.SendMessage(client, "&eGithub Repo: https://github.com/vexyl/MCHawk");
 
-	playerCount = GetTableLength(Server.GetClients())
+	local playerCount = GetTableLength(Server.GetClients())
 
-	message = "are &a" .. playerCount .. " &eplayers"
+	local message = "are &a" .. playerCount .. " &eplayers"
 	if (playerCount == 1) then
 		message = "is &a" .. playerCount .. " &eplayer"
 	end
@@ -32,7 +32,7 @@ CorePlugin.GetPluginCount = function()
 end
 
 CorePlugin.AddTimer = function(name, func, time)
-	co = coroutine.create(timer)
+	local co = coroutine.create(timer)
 	coroutine.resume(co, time, func)
 
 	if (CorePlugin.timerList[name] == nil) then
