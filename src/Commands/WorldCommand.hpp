@@ -203,12 +203,12 @@ public:
 
 			Protocol::SendMessage(sender, "&eSpawn position set (" + std::to_string(pos.x) + ", " + std::to_string(pos.y) + ", " + std::to_string(pos.z) + ")");
 		} else {
-			Protocol::SendMessage(sender, "&b" + GetDocString());
+			Server::SendWrappedMessage(sender, "&b" + GetDocString());
 			return;
 		}
 	}
 
-	virtual std::string GetDocString() { return "/world <list/load/new*/save*/set*> - various world-related commands | * operator only"; }
+	virtual std::string GetDocString() { return "world <list/load/new*/save*/set*> - various world-related commands | * operator only"; }
 	virtual unsigned int GetArgumentAmount() { return 1; }
 	virtual unsigned int GetPermissionLevel() { return 0; }
 

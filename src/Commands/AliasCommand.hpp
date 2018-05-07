@@ -43,7 +43,7 @@ public:
 		Server::SendWrappedMessage(sender, "&eAlias set to " + name);
 	}
 
-	virtual std::string GetDocString() { return "/alias [name] - change chat name; defaults to username"; }
+	virtual std::string GetDocString() { return "alias [name] - change chat name; defaults to username"; }
 	virtual unsigned int GetArgumentAmount() { return 0; }
 	virtual unsigned int GetPermissionLevel() { return 1; }
 

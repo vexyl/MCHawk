@@ -20,9 +20,9 @@ CorePlugin.pluginNames = {}
 CorePlugin.timerList = {}
 
 CorePlugin.init = function()
-	Server.AddCommand("plugins", "plugin pl", CorePlugin.PluginsCommand, "&9/plugins - show information about plugins", 0, 0)
-	Server.AddCommand("serverinfo", "sinfo server", CorePlugin.ServerInfoCommand, "&9/serverinfo - show information about the server", 0, 0)
-	Server.AddCommand("reload", "", CorePlugin.ReloadCommand, "&9/reload - reloads server plugins", 0, 1)
+	Server.AddCommand("plugins", "plugin pl", CorePlugin.PluginsCommand, "plugins - show information about plugins", 0, 0)
+	Server.AddCommand("serverinfo", "sinfo server", CorePlugin.ServerInfoCommand, "serverinfo - show information about the server", 0, 0)
+	Server.AddCommand("reload", "", CorePlugin.ReloadCommand, "reload - reloads server plugins", 0, 1)
 
 	Server.RegisterEvent(ClassicProtocol.PluginLoadedEvent, CorePlugin.Plugins_OnPluginLoaded)
 end

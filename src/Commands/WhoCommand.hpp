@@ -31,7 +31,7 @@ public:
 
 	}
 
-	virtual std::string GetDocString() { return "/who - gets player list"; }
+	virtual std::string GetDocString() { return "who - gets player list"; }
 	virtual unsigned int GetArgumentAmount() { return 0; }
 	virtual unsigned int GetPermissionLevel() { return 0; }
 

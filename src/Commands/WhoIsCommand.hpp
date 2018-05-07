@@ -44,7 +44,7 @@ public:
 
 	}
 
-	virtual std::string GetDocString() { return "/whois <name> - gets information about player"; }
+	virtual std::string GetDocString() { return "whois <name> - gets information about player"; }
 	virtual unsigned int GetArgumentAmount() { return 0; }
 	virtual unsigned int GetPermissionLevel() { return 0; }
 

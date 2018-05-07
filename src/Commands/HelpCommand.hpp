@@ -52,7 +52,7 @@ public:
 		if (iter != commands.end()) {
 			// issued /help commandName
 			Command* subcheck = iter->second;
-			std::string docStringPrefix = "";
+			std::string docStringPrefix = "/";
 
 			if (args.size() > 1) {
 				int i = 1;
@@ -63,6 +63,7 @@ public:
 						if (args[i] == obj->GetName()) {
 							docStringPrefix += subcheck->GetName() + " "; // previous command/subcommand
 							subcheck = obj;
+							docStringPrefix += subcheck->GetName() + " "; // current subcommand
 							break;
 						}
 					}
@@ -71,7 +72,7 @@ public:
 				}
 			}
 
-			Protocol::SendMessage(sender, "&b/" + docStringPrefix + subcheck->GetDocString());
+			Server::SendWrappedMessage(sender, "&b" + docStringPrefix + subcheck->GetDocString());
 
 			auto subcommands = subcheck->GetSubcommands();
 
@@ -83,7 +84,7 @@ public:
 			}
 
 			if (!subcommandString.empty())
-				Protocol::SendMessage(sender, "&bAvailable subcommands: " + subcommandString);
+				Server::SendWrappedMessage(sender, "&bAvailable subcommands: " + subcommandString);
 
 			return;
 		}
@@ -121,13 +122,13 @@ public:
 
 			std::advance(it, offset+i);
 
-			Protocol::SendMessage(sender, "&b" + it->second->GetDocString());
+			Server::SendWrappedMessage(sender, "&b/" + it->second->GetDocString());
 		}
 
 		Protocol::SendMessage(sender, "&f--- &bpage " + std::to_string(page) + " of " + std::to_string(maxPages) + " &f---");
 	}
 
-	virtual std::string GetDocString() { return "/help [command/page number] - displays this help message"; }
+	virtual std::string GetDocString() { return "help [command/page number] - displays this help message"; }
 	virtual unsigned int GetArgumentAmount() { return 0; }
 	virtual unsigned int GetPermissionLevel() { return 0; }
 

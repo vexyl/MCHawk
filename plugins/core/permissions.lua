@@ -8,9 +8,9 @@ PermissionsPlugin.permissionTable = {}
 PermissionsPlugin.permissionList = {}
 
 PermissionsPlugin.init = function()
-	Server.AddCommand("grant", "", PermissionsPlugin.GrantCommand, "&9/grant <player> <permission> - grants player permission", 2, 0)
-	Server.AddCommand("revoke", "", PermissionsPlugin.RevokeCommand, "&9/revoke <player> <permission> - revokes player permission", 2, 0)
-	Server.AddCommand("permissions", "p perm perms", PermissionsPlugin.PermissionsCommand, "&9/permissions [player] - shows player permissions", 0, 0)
+	Server.AddCommand("grant", "", PermissionsPlugin.GrantCommand, "grant <player> <permission> - grants player permission", 2, 0)
+	Server.AddCommand("revoke", "", PermissionsPlugin.RevokeCommand, "revoke <player> <permission> - revokes player permission", 2, 0)
+	Server.AddCommand("permissions", "p perm perms", PermissionsPlugin.PermissionsCommand, "permissions [player] - shows player permissions", 0, 0)
 
 	PermissionsPlugin.LoadPermissions()
 	PermissionsPlugin.RequirePermission("permissions")

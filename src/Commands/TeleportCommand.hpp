@@ -44,7 +44,7 @@ public:
 		Protocol::SendMessage(sender, "&eTeleported to " + name);
 	}
 
-	virtual std::string GetDocString() { return "/tp <name> - teleports to player"; }
+	virtual std::string GetDocString() { return "tp <name> - teleports to player"; }
 	virtual unsigned int GetArgumentAmount() { return 1; }
 	virtual unsigned int GetPermissionLevel() { return 0; }
 

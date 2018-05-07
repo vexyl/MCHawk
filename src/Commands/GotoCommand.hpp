@@ -44,7 +44,7 @@ public:
 		server->BroadcastMessage("&e&6" + sender->GetName() + " &ewarped to &a" + worldName);
 	}
 
-	virtual std::string GetDocString() { return "/goto <world name> - warps to world"; }
+	virtual std::string GetDocString() { return "goto <world name> - warps to world"; }
 	virtual unsigned int GetArgumentAmount() { return 1; }
 	virtual unsigned int GetPermissionLevel() { return 0; }
 

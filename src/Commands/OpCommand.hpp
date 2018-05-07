@@ -47,7 +47,7 @@ public:
 		Protocol::SendUserType(client, newUserType);
 	}
 
-	virtual std::string GetDocString() { return "/op <name> - toggles operator status on a player"; }
+	virtual std::string GetDocString() { return "op <name> - toggles operator status on a player"; }
 	virtual unsigned int GetArgumentAmount() { return 1; }
 	virtual unsigned int GetPermissionLevel() { return 1; }
 

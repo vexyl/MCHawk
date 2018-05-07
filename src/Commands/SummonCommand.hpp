@@ -48,7 +48,7 @@ public:
 		Protocol::SendMessage(client, "&e" + senderName + " has summoned you");
 	}
 
-	virtual std::string GetDocString() { return "/summon <name> - summons a player to your position"; }
+	virtual std::string GetDocString() { return "summon <name> - summons a player to your position"; }
 	virtual unsigned int GetArgumentAmount() { return 1; }
 	virtual unsigned int GetPermissionLevel() { return 1; }
 
