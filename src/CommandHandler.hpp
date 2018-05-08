@@ -38,6 +38,10 @@ public:
 
 				subArgs.erase(subArgs.begin());
 
+				// TODO: Have this show docstring for subcommand with an optional supression
+				if (subArgs.size() < obj->GetArgumentAmount())
+					return false;
+
 				obj->Execute(sender, subArgs);
 
 				return true;

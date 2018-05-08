@@ -10,6 +10,7 @@ void LuaServer::Init(lua_State* L)
 	.beginClass<Client>("Client")
 		.addProperty("name", &Client::GetName)
 		.addFunction("GetWorld", &Client::GetWorld)
+		.addFunction("GetIpString", &Client::GetIpString)
 	.endClass();
 
 	luabridge::getGlobalNamespace(L)
