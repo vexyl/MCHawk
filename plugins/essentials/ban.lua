@@ -77,6 +77,7 @@ EssentialsPlugin.Ban_BanIpCommand = function(client, args)
 			end
 
 			Server.KickClient(v, message1)
+			EssentialsPlugin.Ban_banList[name] = { reason } -- ban name too
 			Server.SystemWideMessage(message2)
 
 			break;
@@ -97,7 +98,7 @@ EssentialsPlugin.Ban_UnbanIpCommand = function(client, args)
 	local ip = args[1]
 	
 	if (EssentialsPlugin.Ban_ipBanList[ip] == nil) then
-		Server.SendMessage(client, "&IP &f" .. ip .. "&c not banned")
+		Server.SendMessage(client, "&cIP &f" .. ip .. "&c not banned")
 		return
 	end
 
@@ -145,7 +146,7 @@ EssentialsPlugin.Ban_SaveBans = function()
 	local f = io.open("bans.txt", "w")
 	if f then
 		for name,t in pairs(EssentialsPlugin.Ban_banList) do
-			line = "name:" .. ip
+			line = "name:" .. name
 
 			if (t[1] ~= nil) then
 				line = line .. ":" .. t[1]
