@@ -31,7 +31,7 @@ PermissionsPlugin.GrantCommand = function(client, args)
 	if (target ~= nil) then
 		targetName = target.name
 	elseif (PermissionsPlugin.permissionTable[string.lower(targetName)] == nil) then
-		Server.SendMessage(client, "&cPlayer &f" .. targetName .. "&c not found")
+		Server.SendMessage(client, PLAYER_NOT_FOUND(targetName))
 		return
 	end
 
@@ -68,7 +68,7 @@ PermissionsPlugin.RevokeCommand = function(client, args)
 	if (target ~= nil) then
 		targetName = target.name
 	elseif (PermissionsPlugin.permissionTable[string.lower(targetName)] == nil) then
-		Server.SendMessage(client, "&cPlayer &f" .. targetName .. "&c not found")
+		Server.SendMessage(client, PLAYER_NOT_FOUND(targetName))
 		return
 	end
 
@@ -113,7 +113,7 @@ PermissionsPlugin.PermissionsCommand = function(client, args)
 			permissions = permissions .. "&9" .. perm .. "&e, "
 		end
 	elseif (target == nil and args[1] ~= nil) then
-		Server.SendMessage(client, "&cPlayer &f" .. targetName .. "&c not found")
+		Server.SendMessage(client, PLAYER_NOT_FOUND(targetName))
 		return
 	end
 

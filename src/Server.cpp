@@ -531,10 +531,6 @@ void Server::SendHeartbeat()
 		LOG(LogLevel::kWarning, "Failed to send heartbeat");
 }
 
-///////////////////////////////////
-/* BEGIN CLIENT HELPER FUNCTIONS */
-///////////////////////////////////
-
 void Server::KickClient(Client* client, std::string reason, bool notify)
 {
 	if (reason.empty())
@@ -727,10 +723,6 @@ void Server::Shutdown()
 	LOG(LogLevel::kDebug, "Server shutting down")
 	m_running = false;
 }
-
-/////////////////////////////////
-/* END CLIENT HELPER FUNCTIONS */
-/////////////////////////////////
 
 // World stuff
 

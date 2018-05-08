@@ -44,3 +44,11 @@ timer = function(time, func)
 
 	func()
 end
+
+PLAYER_NOT_FOUND = function(name)
+	return "&cPlayer &f" .. name .. " &cnot found"
+end
+
+WORLD_NOT_FOUND = function(name)
+	return "&cWorld &f" .. name .. " &cnot found"
+end

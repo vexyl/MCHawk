@@ -9,7 +9,7 @@ EssentialsPlugin.Pm_PmCommand = function(client, args)
 
 	local target = Server.GetClientByName(name)
 	if (target == nil) then
-		Server.SendMessage(client, "&cPlayer &f" .. name .. "&c does not exist")
+		Server.SendMessage(client, PLAYER_NOT_FOUND(targetName))
 		return
 	end
 
@@ -54,7 +54,7 @@ EssentialsPlugin.Kick_KickCommand = function(client, args)
 
 	local target = Server.GetClientByName(targetName)
 	if (target == nil) then
-		Server.SendMessage(client, "&cPlayer &f" .. targetName .. "&c not found")
+		Server.SendMessage(client, PLAYER_NOT_FOUND(targetName))
 		return
 	end
 

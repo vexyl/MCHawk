@@ -11,7 +11,7 @@ EssentialsPlugin.Ban_BanCommand = function(client, args)
 
 	local player = Server.GetClientByName(name, true)
 	if (player == nil) then
-		Server.SendMessage(client, "&cPlayer &f" .. name .. "&c not found")
+		Server.SendMessage(client, PLAYER_NOT_FOUND(name))
 		return
 	end
 
