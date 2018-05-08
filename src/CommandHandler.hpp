@@ -6,14 +6,18 @@
 #include <map>
 
 #include "Client.hpp"
-
+#include <iostream>
 typedef std::vector<std::string> CommandArgs;
 
 class Command {
 public:
 	Command(std::string name) : m_name(name) { }
 
-	virtual ~Command() {}
+	virtual ~Command()
+	{
+		for (auto& obj : m_subcommands)
+			delete obj;
+	}
 
 	std::string GetName() { return m_name; }
 
