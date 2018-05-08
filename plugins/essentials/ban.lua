@@ -77,7 +77,7 @@ EssentialsPlugin.Ban_BanIpCommand = function(client, args)
 			end
 
 			Server.KickClient(v, message1)
-			EssentialsPlugin.Ban_banList[v.name] = { reason } -- ban name too
+			EssentialsPlugin.Ban_banList[string.lower(v.name)] = { reason } -- ban name too
 			Server.SystemWideMessage(message2)
 
 			break;
