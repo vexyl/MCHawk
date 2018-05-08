@@ -6,7 +6,7 @@
 #include <map>
 
 #include "Client.hpp"
-#include <iostream>
+
 typedef std::vector<std::string> CommandArgs;
 
 class Command {
