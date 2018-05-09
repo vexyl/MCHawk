@@ -56,4 +56,4 @@ Copy the plugins folder to *bin/Release/* and run *bin/Release/MCHawk* to start 
 
 The release version sends a heartbeat request to http://www.classicube.net by default. Edit *bin/Release/config.ini* to change it.
 
-Discord: https://discord.gg/xwDejUa
+https://discord.gg/qC3HRAb
