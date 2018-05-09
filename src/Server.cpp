@@ -146,17 +146,21 @@ void Server::Init()
 	// Core scripts may load other plugins, load them now
 	m_pluginHandler.FlushPluginQueue();
 
-	// Load all plugins in folder
-	for (boost::filesystem::directory_iterator itr("plugins"); itr != boost::filesystem::directory_iterator(); ++itr) {
-		if (boost::filesystem::is_directory(itr->status())) {
-			std::string path = itr->path().generic_string();
-			if (path != "plugins/core") {
-				std::string filename = path + "/init.lua";
-				if (boost::filesystem::exists(filename)) {
-					m_pluginHandler.LoadPlugin(filename);
+	try {
+		// Load all plugins in folder
+		for (boost::filesystem::directory_iterator itr("plugins"); itr != boost::filesystem::directory_iterator(); ++itr) {
+			if (boost::filesystem::is_directory(itr->status())) {
+				std::string path = itr->path().generic_string();
+				if (path != "plugins/core") {
+					std::string filename = path + "/init.lua";
+					if (boost::filesystem::exists(filename)) {
+						m_pluginHandler.LoadPlugin(filename);
+					}
 				}
 			}
 		}
+	} catch (std::runtime_error& e) {
+		LOG(LogLevel::kWarning, "%s", e.what());
 	}
 
 	// In case a script loaded another plugin while being loaded
@@ -225,7 +229,7 @@ void Server::OnAuth(Client* client, struct Protocol::cauthp clientAuth)
 	m_pluginHandler.TriggerEvent(EventType::kOnConnect, client, table);
 
 	// Don't use default if a plugin set flag
-	if (m_pluginHandler.GetEventFlag("NoDefaultCall"))
+	if (m_pluginHandler.GetEventFlag("NoDefaultCall") > 0)
 		return;
 
 	Client* checkClient = GetClientByName(name);
@@ -338,8 +342,8 @@ void Server::HandlePacket(Client* client, uint8_t opcode)
 			if (clientAuth.Read(stream)) {
 				OnAuth(client, clientAuth);
 
-			auto table = cauthp_to_luatable(clientAuth);
-			m_pluginHandler.TriggerEvent(EventType::kOnAuth, client, table);
+				auto table = cauthp_to_luatable(clientAuth);
+				m_pluginHandler.TriggerEvent(EventType::kOnAuth, client, table);
 			}
 		} else {
 			LOG(LogLevel::kDebug, "Dropped unauthorized client (%s)", client->GetIpString().c_str());
@@ -359,7 +363,7 @@ void Server::HandlePacket(Client* client, uint8_t opcode)
 			auto table = cmsgp_to_luatable(clientMsg);
 			m_pluginHandler.TriggerEvent(EventType::kOnMessage, client, table);
 
-			if (!m_pluginHandler.GetEventFlag("NoDefaultCall"))
+			if (m_pluginHandler.GetEventFlag("NoDefaultCall") <= 0)
 				OnMessage(client, clientMsg);
 		}
 
@@ -373,7 +377,7 @@ void Server::HandlePacket(Client* client, uint8_t opcode)
 			auto table = make_luatable();
 			m_pluginHandler.TriggerEvent(EventType::kOnPosition, client, table);
 
-			if (!m_pluginHandler.GetEventFlag("NoDefaultCall"))
+			if (m_pluginHandler.GetEventFlag("NoDefaultCall") <= 0)
 				client->GetWorld()->OnPosition(client, clientPos);
 		}
 
@@ -388,7 +392,7 @@ void Server::HandlePacket(Client* client, uint8_t opcode)
 			m_pluginHandler.TriggerEvent(EventType::kOnBlock, client, table);
 
 			// Don't use default if a plugin set flag
-			if (!m_pluginHandler.GetEventFlag("NoDefaultCall"))
+			if (m_pluginHandler.GetEventFlag("NoDefaultCall") <= 0)
 				client->GetWorld()->OnBlock(client, clientBlock);
 		}
 		break;

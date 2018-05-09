@@ -1,4 +1,4 @@
-#include "LuaPluginHandler.hpp"
+﻿#include "LuaPluginHandler.hpp"
 
 #include "LuaPluginAPI.hpp"
 
@@ -29,12 +29,14 @@ void LuaPluginHandler::LoadPlugin(std::string filename)
 {
 	LuaPlugin* plugin = new LuaPlugin;
 
-	plugin->LoadScript(L, filename);
+	if (!plugin->LoadScript(L, filename) || !plugin->Init()) {
+		delete plugin;
+		return;
+	}
+
 	AddPlugin(plugin);
-	plugin->Init();
 
 	auto table = make_luatable();
-
 	table["name"] = plugin->GetName();
 
 	TriggerEvent(EventType::kOnPluginLoaded, nullptr, table);

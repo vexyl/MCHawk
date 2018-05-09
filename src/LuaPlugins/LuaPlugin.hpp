@@ -1,4 +1,4 @@
-#ifndef LUAPLUGIN_H_
+﻿#ifndef LUAPLUGIN_H_
 #define LUAPLUGIN_H_
 
 // https://eliasdaler.wordpress.com/2014/07/18/using-lua-with-cpp-luabridge/
@@ -9,9 +9,9 @@
 
 class LuaPlugin {
 public:
-	void LoadScript(lua_State* L, const std::string& filename);
+	bool LoadScript(lua_State* L, const std::string& filename);
 
-	void Init();
+	bool Init();
 	void Tick();
 
 	std::string GetName() const { return m_name; }
