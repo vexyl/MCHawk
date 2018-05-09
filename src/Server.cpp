@@ -291,9 +291,6 @@ void Server::OnMessage(Client* client, struct Protocol::cmsgp clientMsg)
 	if (message.at(0) == '/') {
 		LOG(LogLevel::kInfo, "[Command (%s)] %s", name.c_str(), message.c_str());
 
-		// Prevents command spam/ClassicalSharp sending multiple lines on a command
-		client->SetChatMute(1000); // mutes for 1 second
-
 		// Strip leading '/'
 		std::string command = message.substr(1);
 

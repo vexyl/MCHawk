@@ -31,6 +31,9 @@ EssentialsPlugin.BillNye_BillNyeCommand = function(client, args)
 	Server.BroadcastMessage("&cBill Nye&f: DID YOU KNOW THAT")
 	Server.BroadcastMessage("&cBill Nye&f: " .. message .. "?")
 	Server.BroadcastMessage("&cBill Nye&f: NOW YOU KNOW!")
+
+	-- Prevent client from spamming this command
+	client:SetChatMute(1000)
 end
 
 EssentialsPlugin.Cmds_CmdsCommand = function(client, args)

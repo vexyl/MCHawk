@@ -11,6 +11,7 @@ void LuaServer::Init(lua_State* L)
 		.addProperty("name", &Client::GetName)
 		.addFunction("GetWorld", &Client::GetWorld)
 		.addFunction("GetIpString", &Client::GetIpString)
+		.addFunction("SetChatMute", &Client::SetChatMute)
 	.endClass();
 
 	luabridge::getGlobalNamespace(L)
