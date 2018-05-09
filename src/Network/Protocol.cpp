@@ -16,7 +16,7 @@ bool Protocol::IsValidBlock(int type)
 
 Packet* Protocol::make_spawn_packet(int8_t pid, std::string name, Position position, int8_t yaw, int8_t pitch)
 {
-	// Cast opcode because it's an initialized packet and we're writing the packet type, not constructing the packet+
+	// Cast opcode because it's an initialized packet and we're writing the packet type, not constructing the packet
 	Packet* packet = new Packet(Protocol::PacketType::kServerSpawn);
 
 	packet->Write(pid); // Self PID

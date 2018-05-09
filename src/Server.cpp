@@ -487,7 +487,7 @@ bool Server::Tick()
 			}
 
 			// Client removed here because DespawnClient() would send to this inactive client as well
-			delete (*it)->stream.socket;
+			Client* oldClient = *it;
 			it = m_clients.erase(it);
 
 			if (authed) {
@@ -500,6 +500,8 @@ bool Server::Tick()
 			} else {
 				LOG(LogLevel::kInfo, "Client disconnected (%s)", ipString.c_str());
 			}
+
+			delete oldClient;
 		} else {
 			++it;
 		}

@@ -1,4 +1,4 @@
-// From Multiplayer Game Programming: Architecting Networked Games (book; modified)
+﻿// From Multiplayer Game Programming: Architecting Networked Games (book; modified)
 // https://github.com/MultiplayerBook/MultiplayerBook
 
 #include "BufferStream.hpp"
@@ -14,6 +14,7 @@ BufferStream::~BufferStream()
 	assert(m_buffer != nullptr);
 	std::free(m_buffer);
 }
+
 void BufferStream::ReallocBuffer(uint32_t inNewLength)
 {
 	m_buffer = static_cast<char*>(std::realloc(m_buffer, inNewLength));

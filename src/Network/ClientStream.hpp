@@ -1,4 +1,4 @@
-#ifndef CLIENTSTREAM_H_
+﻿#ifndef CLIENTSTREAM_H_
 #define CLIENTSTREAM_H_
 
 #include <string.h>
@@ -13,6 +13,7 @@ struct ClientStream {
 	char buf[8192];
 
 	ClientStream() {
+		socket = nullptr;
 		count = 0;
 	}
 

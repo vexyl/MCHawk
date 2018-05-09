@@ -15,6 +15,9 @@ Client::Client() : m_world(nullptr)
 
 Client::~Client()
 {
+	if (stream.socket != nullptr)
+		delete stream.socket;
+
 	for (auto& obj : m_packetQueue)
 		delete obj;
 }
