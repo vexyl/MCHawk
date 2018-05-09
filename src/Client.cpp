@@ -13,6 +13,12 @@ Client::Client() : m_world(nullptr)
 	m_chatMuted = false;
 }
 
+Client::~Client()
+{
+	for (auto& obj : m_packetQueue)
+		delete obj;
+}
+
 std::string Client::GetIpString()
 {
 	if (m_ipString.empty()) {
