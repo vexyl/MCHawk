@@ -46,12 +46,12 @@ struct cextinfop {
 		uint8_t buffer[67];
 		if (!stream.consume_data(buffer, sizeof(buffer))) return false;
 
-		Packet* packet = new Packet;
-		packet->Write(buffer, sizeof(buffer));
+		Packet packet;
+		packet.Write(buffer, sizeof(buffer));
 
-		packet->Read(appName);
-		packet->Read(extCount);
-		//packet->Read(opcode);
+		packet.Read(appName);
+		packet.Read(extCount);
+		//packet.Read(opcode);
 
 		return true;
 	}
@@ -67,12 +67,12 @@ struct cextentryp {
 		uint8_t buffer[69];
 		if (!stream.consume_data(buffer, sizeof(buffer))) return false;
 
-		Packet* packet = new Packet;
-		packet->Write(buffer, sizeof(buffer));
+		Packet packet;
+		packet.Write(buffer, sizeof(buffer));
 
-		packet->Read(extName);
-		packet->Read(version);
-		//packet->Read(opcode);
+		packet.Read(extName);
+		packet.Read(version);
+		//packet.Read(opcode);
 
 		return true;
 	}
@@ -87,11 +87,11 @@ struct ccustomblockp {
 		uint8_t buffer[2];
 		if (!stream.consume_data(buffer, sizeof(buffer))) return false;
 
-		Packet* packet = new Packet;
-		packet->Write(buffer, sizeof(buffer));
+		Packet packet;
+		packet.Write(buffer, sizeof(buffer));
 
-		packet->Read(support);
-		//packet->Read(opcode);
+		packet.Read(support);
+		//packet.Read(opcode);
 
 		return true;
 	}

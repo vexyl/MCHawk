@@ -22,7 +22,7 @@ namespace Protocol {
 enum PacketType {
 	kServerInfo				= 0x00,
 	kServerPing				= 0x01,
-	kServerInit				= 0x02,
+	kServerLevelInit				= 0x02,
 	kServerLevelData			= 0x03,
 	kServerLevelFinal			= 0x04,
 	kServerMessage				= 0x0d,
@@ -109,14 +109,14 @@ struct cauthp {
 		uint8_t buffer[131];
 		if (!stream.consume_data(buffer, sizeof(buffer))) return false;
 
-		Packet* packet = new Packet;
-		packet->Write(buffer, sizeof(buffer));
+		Packet packet;
+		packet.Write(buffer, sizeof(buffer));
 
-		packet->Read(UNK0);
-		packet->Read(key, sizeof(key));
-		packet->Read(name, sizeof(name));
-		packet->Read(version);
-		//packet->Read(opcode);
+		packet.Read(UNK0);
+		packet.Read(key, sizeof(key));
+		packet.Read(name, sizeof(name));
+		packet.Read(version);
+		//packet.Read(opcode);
 
 		return true;
 	}
@@ -132,12 +132,12 @@ struct cmsgp {
 		uint8_t buffer[66];
 		if (!stream.consume_data(buffer, sizeof(buffer))) return false;
 
-		Packet* packet = new Packet;
-		packet->Write(buffer, sizeof(buffer));
+		Packet packet;
+		packet.Write(buffer, sizeof(buffer));
 
-		packet->Read(msg, sizeof(msg));
-		packet->Read(flag);
-		//packet->Read(opcode);
+		packet.Read(msg, sizeof(msg));
+		packet.Read(flag);
+		//packet.Read(opcode);
 
 		return true;
 	}
@@ -154,16 +154,16 @@ struct cposp {
 		uint8_t buffer[10];
 		if (!stream.consume_data(buffer, sizeof(buffer))) return false;
 
-		Packet* packet = new Packet;
-		packet->Write(buffer, sizeof(buffer));
+		Packet packet;
+		packet.Write(buffer, sizeof(buffer));
 
-		packet->Read(pitch);
-		packet->Read(yaw);
-		packet->Read(z);
-		packet->Read(y);
-		packet->Read(x);
-		packet->Read(pid);
-		//packet->Read(opcode);
+		packet.Read(pitch);
+		packet.Read(yaw);
+		packet.Read(z);
+		packet.Read(y);
+		packet.Read(x);
+		packet.Read(pid);
+		//packet.Read(opcode);
 
 		x = ntohs(x);
 		y = ntohs(y);
@@ -184,15 +184,15 @@ struct cblockp {
 		uint8_t buffer[9];
 		if (!stream.consume_data(buffer, sizeof(buffer))) return false;
 
-		Packet* packet = new Packet;
-		packet->Write(buffer, sizeof(buffer));
+		Packet packet;
+		packet.Write(buffer, sizeof(buffer));
 
-		packet->Read(type);
-		packet->Read(mode);
-		packet->Read(z);
-		packet->Read(y);
-		packet->Read(x);
-		//packet->Read(opcode);
+		packet.Read(type);
+		packet.Read(mode);
+		packet.Read(z);
+		packet.Read(y);
+		packet.Read(x);
+		//packet.Read(opcode);
 
 		x = ntohs(x);
 		y = ntohs(y);

@@ -54,7 +54,7 @@ void Protocol::SendMessage(Client* client, std::string message)
 
 void Protocol::SendMap(Client* client, Map& map)
 {
-	Packet* levelInitPacket = new Packet(Protocol::PacketType::kServerInit);
+	Packet* levelInitPacket = new Packet(Protocol::PacketType::kServerLevelInit);
 	client->QueuePacket(levelInitPacket);
 
 	uint8_t* compBuffer = nullptr;
@@ -147,17 +147,18 @@ void Protocol::SendPlayerPositionUpdate(Client* sender, const std::vector<Client
 	int8_t pid = sender->GetPid();
 	Position pos = sender->GetPosition();
 
-	Packet* packet = new Packet(Protocol::PacketType::kServerTeleport);
-	packet->Write(pid);
-	packet->Write(htons(pos.x));
-	packet->Write(htons(pos.y));
-	packet->Write(htons(pos.z));
-	packet->Write(sender->GetYaw());
-	packet->Write(sender->GetPitch());
-
 	for (auto& obj : clients) {
-		if (obj->GetPid() != pid)
+		if (obj->GetPid() != pid) {
+			Packet* packet = new Packet(Protocol::PacketType::kServerTeleport);
+			packet->Write(pid);
+			packet->Write(htons(pos.x));
+			packet->Write(htons(pos.y));
+			packet->Write(htons(pos.z));
+			packet->Write(sender->GetYaw());
+			packet->Write(sender->GetPitch());
+
 			obj->QueuePacket(packet);
+		}
 	}
 }
 
@@ -194,21 +195,21 @@ void Protocol::SpawnClient(Client* client, Position position, const std::vector<
 	client->QueuePacket(selfSpawnPacket);
 
 	pid = client->GetPid(); // Actual PID
-
-	Packet* spawnPacket = make_spawn_packet(pid, name, position, 0, 0);
 	// Send client spawn to rest of clients
 	for (auto& obj : clients) {
-		if (obj->GetPid() != pid)
+		if (obj->GetPid() != pid) {
+			Packet* spawnPacket = make_spawn_packet(pid, name, position, 0, 0);
 			obj->QueuePacket(spawnPacket);
+		}
 	}
 }
 
 void Protocol::DespawnClient(int8_t pid, const std::vector<Client*>& clients)
 {
-	Packet* packet = new Packet(Protocol::PacketType::kServerDespawn);
+	for (auto& obj : clients) {
+		Packet* packet = new Packet(Protocol::PacketType::kServerDespawn);
+		packet->Write(pid);
 
-	packet->Write(pid);
-
-	for (auto& obj : clients)
 		obj->QueuePacket(packet);
+	}
 }

@@ -479,16 +479,14 @@ bool Server::Tick()
 			int8_t pid = (*it)->GetPid();
 			World* world = (*it)->GetWorld();
 
-			if (authed) {
-				auto table = make_luatable();
-				m_pluginHandler.TriggerEvent(EventType::kOnDisconnect, (*it), table);
-			}
-
 			// Client removed here because DespawnClient() would send to this inactive client as well
 			Client* oldClient = *it;
 			it = m_clients.erase(it);
 
 			if (authed) {
+				auto table = make_luatable();
+				m_pluginHandler.TriggerEvent(EventType::kOnDisconnect, oldClient, table);
+
 				LOG(LogLevel::kInfo, "Player %s disconnected (%s)", name.c_str(), ipString.c_str());
 				BroadcastMessage("&ePlayer " + name + " left the game.");
 				world->RemoveClient(pid);
