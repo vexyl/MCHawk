@@ -1,4 +1,4 @@
-#ifndef LUAPLUGINHANDLER_H_
+﻿#ifndef LUAPLUGINHANDLER_H_
 #define LUAPLUGINHANDLER_H_
 
 #include "LuaPlugin.hpp"

@@ -174,6 +174,7 @@ luabridge::LuaRef LuaServer::LuaGetCommandStrings()
 }
 
 // Struct to table stuff
+
 luabridge::LuaRef make_luatable()
 {
 	luabridge::LuaRef table(L);

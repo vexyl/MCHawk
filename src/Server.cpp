@@ -65,6 +65,7 @@ void Server::FreeInstance()
 
 void Server::Init()
 {
+	LOG(LogLevel::kInfo, "Initializing server...");
 	// Turn off SFML errors
 	sf::err().rdbuf(nullptr);
 
@@ -95,8 +96,6 @@ void Server::Init()
 	}
 
 	m_listener.setBlocking(false);
-
-	LOG(LogLevel::kInfo, "Server initialized and listening on port %d", m_port);
 
 	if (!m_serverVerifyNames)
 		LOG(LogLevel::kWarning, "Verify names is turned off! This is NOT secure and disabling it should only be necessary during server tests. After that, TURN IT BACK ON.");
@@ -162,6 +161,8 @@ void Server::Init()
 
 	// In case a script loaded another plugin while being loaded
 	m_pluginHandler.FlushPluginQueue();
+
+	LOG(LogLevel::kInfo, "Server initialized and listening on port %d", m_port);
 }
 
 void Server::OnConnect(sf::TcpSocket *sock)
@@ -221,7 +222,7 @@ void Server::OnAuth(Client* client, struct Protocol::cauthp clientAuth)
 
 	// Pass authed player to events
 	auto table = cauthp_to_luatable(clientAuth);
-	m_pluginHandler.TriggerEvent(EventType::kOnAuth, client, table);
+	m_pluginHandler.TriggerEvent(EventType::kOnConnect, client, table);
 
 	// Don't use default if a plugin set flag
 	if (m_pluginHandler.GetEventFlag("NoDefaultCall"))
@@ -261,9 +262,6 @@ void Server::OnAuth(Client* client, struct Protocol::cauthp clientAuth)
 	Protocol::SendInfo(client, m_serverName, m_serverMotd, m_version, userType);
 
 	GetWorld("default")->AddClient(client);
-
-	Protocol::SendMessage(client, "https://github.com/vexyl/MCHawk");
-	Protocol::SendMessage(client, "&eTry /goto freebuild to get started.");
 
 	// FIXME: Temporary CPE blocks
 	if (clientAuth.UNK0 == 0x42) {
@@ -342,6 +340,9 @@ void Server::HandlePacket(Client* client, uint8_t opcode)
 			struct Protocol::cauthp clientAuth;
 			if (clientAuth.Read(stream)) {
 				OnAuth(client, clientAuth);
+
+			auto table = cauthp_to_luatable(clientAuth);
+			m_pluginHandler.TriggerEvent(EventType::kOnAuth, client, table);
 			}
 		} else {
 			LOG(LogLevel::kDebug, "Dropped unauthorized client (%s)", client->GetIpString().c_str());
@@ -358,10 +359,11 @@ void Server::HandlePacket(Client* client, uint8_t opcode)
 		struct Protocol::cmsgp clientMsg;
 
 		if (clientMsg.Read(stream)) {
-			OnMessage(client, clientMsg);
-
 			auto table = cmsgp_to_luatable(clientMsg);
 			m_pluginHandler.TriggerEvent(EventType::kOnMessage, client, table);
+
+			if (!m_pluginHandler.GetEventFlag("NoDefaultCall"))
+				OnMessage(client, clientMsg);
 		}
 
 		break;
@@ -374,7 +376,8 @@ void Server::HandlePacket(Client* client, uint8_t opcode)
 			auto table = make_luatable();
 			m_pluginHandler.TriggerEvent(EventType::kOnPosition, client, table);
 
-			client->GetWorld()->OnPosition(client, clientPos);
+			if (!m_pluginHandler.GetEventFlag("NoDefaultCall"))
+				client->GetWorld()->OnPosition(client, clientPos);
 		}
 
 		break;

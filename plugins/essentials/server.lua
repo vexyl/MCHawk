@@ -29,6 +29,7 @@ EssentialsPlugin.Server_ShutdownCommand = function(client, args)
 	end
  
 	Server.SystemWideMessage(message)
+	print("Server plugin: " .. message)
 
 	if (time > 10) then
 		CorePlugin.AddTimer("server_timers", function() Server.SystemWideMessage("Server shutting down in 10 seconds!") end, time - 10)
@@ -42,6 +43,8 @@ EssentialsPlugin.Server_ShutdownCommand = function(client, args)
 end
 
 EssentialsPlugin.Server_SafeShutdown = function(reason)
+	print("Server plugin: Server shutting down")
+
 	local clients = Server.GetClients()
 	for _,client in pairs(clients) do
 		Server.SendKick(client, reason)

@@ -68,7 +68,7 @@ EssentialsPlugin.Ban_BanIpCommand = function(client, args)
 	local clients = Server.GetClients()
 	for _,v in pairs(clients) do
 		if (v:GetIpString() == ip) then
-			local message1 = "Banned"
+			local message1 = "IP Banned"
 			local message2 = "&e" .. client.name .. " IP banned " .. v.name
 
 			if (reason ~= nil) then
@@ -108,7 +108,7 @@ EssentialsPlugin.Ban_UnbanIpCommand = function(client, args)
 	Server.SendMessage(client, "&eUnbanned IP " .. ip)
 end
 
-EssentialsPlugin.Ban_OnAuth = function(client, args)
+EssentialsPlugin.Ban_OnConnect = function(client, args)
 	-- Use args.name because client.name isn't set yet
 	local name = string.lower(args.name)
 	local ip = client:GetIpString()
