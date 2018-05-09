@@ -14,44 +14,47 @@ bool Protocol::IsValidBlock(int type)
 	return false;
 }
 
-void Protocol::make_spawn_packet(Packet& packet, int8_t pid, std::string name, Position position, int8_t yaw, int8_t pitch)
+Packet* Protocol::make_spawn_packet(int8_t pid, std::string name, Position position, int8_t yaw, int8_t pitch)
 {
-	// Cast opcode because it's an initialized packet and we're writing the packet type, not constructing the packet
-	packet.Write((uint8_t)Protocol::PacketType::kServerSpawn);
-	packet.Write(pid); // Self PID
-	packet.Write(name);
-	packet.Write(htons(position.x));
-	packet.Write(htons(position.y));
-	packet.Write(htons(position.z));
-	packet.Write((uint8_t)yaw); // yaw
-	packet.Write((uint8_t)pitch); // pitch
+	// Cast opcode because it's an initialized packet and we're writing the packet type, not constructing the packet+
+	Packet* packet = new Packet(Protocol::PacketType::kServerSpawn);
+
+	packet->Write(pid); // Self PID
+	packet->Write(name);
+	packet->Write(htons(position.x));
+	packet->Write(htons(position.y));
+	packet->Write(htons(position.z));
+	packet->Write((uint8_t)yaw); // yaw
+	packet->Write((uint8_t)pitch); // pitch
+
+	return packet;
 }
 
 void Protocol::SendInfo(Client* client, std::string serverName, std::string serverMOTD, uint8_t version, uint8_t userType)
 {
-	Packet packet(Protocol::PacketType::kServerInfo);
+	Packet* packet = new Packet(Protocol::PacketType::kServerInfo);
 
-	packet.Write((uint8_t)version);
-	packet.Write(serverName);
-	packet.Write(serverMOTD);
-	packet.Write((uint8_t)userType);
+	packet->Write((uint8_t)version);
+	packet->Write(serverName);
+	packet->Write(serverMOTD);
+	packet->Write((uint8_t)userType);
 
 	client->QueuePacket(packet);
 }
 
 void Protocol::SendMessage(Client* client, std::string message)
 {
-	Packet packet(Protocol::PacketType::kServerMessage);
+	Packet* packet = new Packet(Protocol::PacketType::kServerMessage);
 
-	packet.Write((uint8_t)0);
-	packet.Write(message);
+	packet->Write((uint8_t)0);
+	packet->Write(message);
 
 	client->QueuePacket(packet);
 }
 
 void Protocol::SendMap(Client* client, Map& map)
 {
-	Packet levelInitPacket(Protocol::PacketType::kServerInit);
+	Packet* levelInitPacket = new Packet(Protocol::PacketType::kServerInit);
 	client->QueuePacket(levelInitPacket);
 
 	uint8_t* compBuffer = nullptr;
@@ -66,21 +69,21 @@ void Protocol::SendMap(Client* client, Map& map)
 		size_t remainingBytes = compSize - bytes;
 		size_t count = (remainingBytes >= 1024) ? 1024 : (remainingBytes);
 
-		Packet packet(Protocol::PacketType::kServerLevelData);
+		Packet* packet = new Packet(Protocol::PacketType::kServerLevelData);
 
-		packet.Write((int16_t)htons(count)); // length
+		packet->Write((int16_t)htons(count)); // length
 
-		packet.BufferStream::Write((void*)(&compBuffer[bytes]), count);
+		packet->BufferStream::Write((void*)(&compBuffer[bytes]), count);
 		// Padding; must send exactly 1024 bytes per chunk
 		if (count < 1024) {
 			size_t paddingSize = 1024 - count;
-			packet.WriteZeroes(paddingSize);
+			packet->WriteZeroes(paddingSize);
 		}
 
 		bytes += count;
 
 		char percent = (char)(((float)bytes / (float)compSize) * 100.0f);
-		packet.Write((uint8_t)percent);
+		packet->Write((uint8_t)percent);
 
 		//printf("%d/%d bytes | %d%%\n", (int)bytes, (int)bufferSize, (int)percent); // Debug
 
@@ -93,46 +96,46 @@ void Protocol::SendMap(Client* client, Map& map)
 	short mapY = map.GetYSize();
 	short mapZ = map.GetZSize();
 
-	Packet packet(Protocol::PacketType::kServerLevelFinal);
+	Packet* packet = new Packet(Protocol::PacketType::kServerLevelFinal);
 
-	packet.Write(htons(mapX));
-	packet.Write(htons(mapY));
-	packet.Write(htons(mapZ));
+	packet->Write(htons(mapX));
+	packet->Write(htons(mapY));
+	packet->Write(htons(mapZ));
 
 	client->QueuePacket(packet);
 }
 
 void Protocol::SendBlock(Client* client, Position pos, uint8_t type)
 {
-	Packet packet(Protocol::PacketType::kServerBlock);
+	Packet* packet = new Packet(Protocol::PacketType::kServerBlock);
 
-	packet.Write(htons(pos.x));
-	packet.Write(htons(pos.y));
-	packet.Write(htons(pos.z));
-	packet.Write(type);
+	packet->Write(htons(pos.x));
+	packet->Write(htons(pos.y));
+	packet->Write(htons(pos.z));
+	packet->Write(type);
 
 	client->QueuePacket(packet);
 }
 
 void Protocol::SendKick(Client* client, std::string reason)
 {
-	Packet packet(Protocol::PacketType::kServerKick);
+	Packet* packet = new Packet(Protocol::PacketType::kServerKick);
 
-	packet.Write(reason);
+	packet->Write(reason);
 
 	client->QueuePacket(packet);
 }
 
 void Protocol::SendPosition(Client* client, int8_t pid, Position pos, uint8_t yaw, uint8_t pitch)
 {
-	Packet packet(Protocol::PacketType::kServerTeleport);
+	Packet* packet = new Packet(Protocol::PacketType::kServerTeleport);
 
-	packet.Write(pid);
-	packet.Write(htons(pos.x));
-	packet.Write(htons(pos.y));
-	packet.Write(htons(pos.z));
-	packet.Write(yaw);
-	packet.Write(pitch);
+	packet->Write(pid);
+	packet->Write(htons(pos.x));
+	packet->Write(htons(pos.y));
+	packet->Write(htons(pos.z));
+	packet->Write(yaw);
+	packet->Write(pitch);
 
 	client->QueuePacket(packet);
 }
@@ -144,13 +147,13 @@ void Protocol::SendPlayerPositionUpdate(Client* sender, const std::vector<Client
 	int8_t pid = sender->GetPid();
 	Position pos = sender->GetPosition();
 
-	Packet packet(Protocol::PacketType::kServerTeleport);
-	packet.Write(pid);
-	packet.Write(htons(pos.x));
-	packet.Write(htons(pos.y));
-	packet.Write(htons(pos.z));
-	packet.Write(sender->GetYaw());
-	packet.Write(sender->GetPitch());
+	Packet* packet = new Packet(Protocol::PacketType::kServerTeleport);
+	packet->Write(pid);
+	packet->Write(htons(pos.x));
+	packet->Write(htons(pos.y));
+	packet->Write(htons(pos.z));
+	packet->Write(sender->GetYaw());
+	packet->Write(sender->GetPitch());
 
 	for (auto& obj : clients) {
 		if (obj->GetPid() != pid)
@@ -160,9 +163,9 @@ void Protocol::SendPlayerPositionUpdate(Client* sender, const std::vector<Client
 
 void Protocol::SendUserType(Client* client, uint8_t userType)
 {
-	Packet packet(Protocol::PacketType::kServerUserType);
+	Packet* packet = new Packet(Protocol::PacketType::kServerUserType);
 
-	packet.Write(userType);
+	packet->Write(userType);
 
 	client->QueuePacket(packet);
 }
@@ -175,8 +178,7 @@ void Protocol::SendClientsTo(Client* client, const std::vector<Client*>& clients
 
 		if (pid == clientPid) continue;
 
-		Packet packet;
-		make_spawn_packet(packet, pid, obj->GetName(), obj->GetPosition(), obj->GetYaw(), obj->GetPitch());
+		Packet* packet = make_spawn_packet(pid, obj->GetName(), obj->GetPosition(), obj->GetYaw(), obj->GetPitch());
 		client->QueuePacket(packet);
 	}
 }
@@ -188,14 +190,12 @@ void Protocol::SpawnClient(Client* client, Position position, const std::vector<
 
 	client->SetPositionOrientation(position, 0, 0);
 
-	Packet selfSpawnPacket;
-	make_spawn_packet(selfSpawnPacket, pid, name, position, 0, 0);
+	Packet* selfSpawnPacket = make_spawn_packet(pid, name, position, 0, 0);
 	client->QueuePacket(selfSpawnPacket);
 
 	pid = client->GetPid(); // Actual PID
 
-	Packet spawnPacket;
-	make_spawn_packet(spawnPacket, pid, name, position, 0, 0);
+	Packet* spawnPacket = make_spawn_packet(pid, name, position, 0, 0);
 	// Send client spawn to rest of clients
 	for (auto& obj : clients) {
 		if (obj->GetPid() != pid)
@@ -205,9 +205,9 @@ void Protocol::SpawnClient(Client* client, Position position, const std::vector<
 
 void Protocol::DespawnClient(int8_t pid, const std::vector<Client*>& clients)
 {
-	Packet packet(Protocol::PacketType::kServerDespawn);
+	Packet* packet = new Packet(Protocol::PacketType::kServerDespawn);
 
-	packet.Write(pid);
+	packet->Write(pid);
 
 	for (auto& obj : clients)
 		obj->QueuePacket(packet);

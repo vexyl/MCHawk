@@ -267,7 +267,7 @@ void Server::OnAuth(Client* client, struct Protocol::cauthp clientAuth)
 	if (clientAuth.UNK0 == 0x42) {
 		LOG(LogLevel::kDebug, "Client supports CPE...sending ExtBlock")
 
-		CPE::SendExtInfo(client, std::string("MCHawk"), 1);
+		CPE::SendExtInfo(client, std::string("&bMCHawk"), 1);
 		CPE::SendExtEntry(client, std::string("CustomBlocks"), 1);
 		CPE::SendCustomBlocks(client, 0x41);
 	}

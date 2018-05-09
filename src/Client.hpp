@@ -1,4 +1,4 @@
-#ifndef CLIENT_H_
+﻿#ifndef CLIENT_H_
 #define CLIENT_H_
 
 #include <string.h>
@@ -43,7 +43,7 @@ public:
 
 	bool IsChatMuted();
 
-	void QueuePacket(Packet& packet);
+	void QueuePacket(Packet* packet);
 
 	void ProcessPacketsInQueue();
 

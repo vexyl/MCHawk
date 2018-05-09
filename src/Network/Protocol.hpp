@@ -109,14 +109,14 @@ struct cauthp {
 		uint8_t buffer[131];
 		if (!stream.consume_data(buffer, sizeof(buffer))) return false;
 
-		Packet packet;
-		packet.Write(buffer, sizeof(buffer));
+		Packet* packet = new Packet;
+		packet->Write(buffer, sizeof(buffer));
 
-		packet.Read(UNK0);
-		packet.Read(key, sizeof(key));
-		packet.Read(name, sizeof(name));
-		packet.Read(version);
-		//packet.Read(opcode);
+		packet->Read(UNK0);
+		packet->Read(key, sizeof(key));
+		packet->Read(name, sizeof(name));
+		packet->Read(version);
+		//packet->Read(opcode);
 
 		return true;
 	}
@@ -132,12 +132,12 @@ struct cmsgp {
 		uint8_t buffer[66];
 		if (!stream.consume_data(buffer, sizeof(buffer))) return false;
 
-		Packet packet;
-		packet.Write(buffer, sizeof(buffer));
+		Packet* packet = new Packet;
+		packet->Write(buffer, sizeof(buffer));
 
-		packet.Read(msg, sizeof(msg));
-		packet.Read(flag);
-		//packet.Read(opcode);
+		packet->Read(msg, sizeof(msg));
+		packet->Read(flag);
+		//packet->Read(opcode);
 
 		return true;
 	}
@@ -154,16 +154,16 @@ struct cposp {
 		uint8_t buffer[10];
 		if (!stream.consume_data(buffer, sizeof(buffer))) return false;
 
-		Packet packet;
-		packet.Write(buffer, sizeof(buffer));
+		Packet* packet = new Packet;
+		packet->Write(buffer, sizeof(buffer));
 
-		packet.Read(pitch);
-		packet.Read(yaw);
-		packet.Read(z);
-		packet.Read(y);
-		packet.Read(x);
-		packet.Read(pid);
-		//packet.Read(opcode);
+		packet->Read(pitch);
+		packet->Read(yaw);
+		packet->Read(z);
+		packet->Read(y);
+		packet->Read(x);
+		packet->Read(pid);
+		//packet->Read(opcode);
 
 		x = ntohs(x);
 		y = ntohs(y);
@@ -184,15 +184,15 @@ struct cblockp {
 		uint8_t buffer[9];
 		if (!stream.consume_data(buffer, sizeof(buffer))) return false;
 
-		Packet packet;
-		packet.Write(buffer, sizeof(buffer));
+		Packet* packet = new Packet;
+		packet->Write(buffer, sizeof(buffer));
 
-		packet.Read(type);
-		packet.Read(mode);
-		packet.Read(z);
-		packet.Read(y);
-		packet.Read(x);
-		//packet.Read(opcode);
+		packet->Read(type);
+		packet->Read(mode);
+		packet->Read(z);
+		packet->Read(y);
+		packet->Read(x);
+		//packet->Read(opcode);
 
 		x = ntohs(x);
 		y = ntohs(y);
@@ -204,7 +204,7 @@ struct cblockp {
 
 bool IsValidBlock(int type);
 
-void make_spawn_packet(Packet& packet, int8_t pid, std::string name, Position position, int8_t yaw, int8_t pitch);
+Packet* make_spawn_packet(int8_t pid, std::string name, Position position, int8_t yaw, int8_t pitch);
 
 // Send packet functions
 void SendInfo(Client* client, std::string serverName, std::string serverMOTD, uint8_t version, uint8_t userType=0);

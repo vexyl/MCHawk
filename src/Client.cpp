@@ -1,4 +1,4 @@
-#include "Client.hpp"
+﻿#include "Client.hpp"
 
 #include "Utils/Logger.hpp"
 
@@ -61,12 +61,9 @@ bool Client::IsChatMuted()
 	return m_chatMuted;
 }
 
-void Client::QueuePacket(Packet& packet)
+void Client::QueuePacket(Packet* packet)
 {
-	// I know this is atrocious code
-	Packet* p = new Packet();
-	p->Write(packet.GetBufferPtr(), packet.GetLength());
-	m_packetQueue.push_back(p);
+	m_packetQueue.push_back(packet);
 }
 
 void Client::ProcessPacketsInQueue()
