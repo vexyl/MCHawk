@@ -48,10 +48,8 @@ Server::Server() : m_running(true)
 
 Server::~Server()
 {
-	for (auto& obj : m_clients) {
-		delete obj->stream.socket;
+	for (auto& obj : m_clients)
 		delete obj;
-	}
 
 	for (auto& obj : m_worlds)
 		delete obj.second;
