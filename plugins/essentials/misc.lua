@@ -19,7 +19,6 @@ EssentialsPlugin.Pm_OnMessage = function(client, args)
 
 		local tokens = split(message)
 		if (tokens[2] ~= nil) then
-			print("Got an @ message")
 			local targetName = string.sub(tokens[1], 2, -1)
 			local privateMessage = table.concat(tokens, " ", 2)
 			EssentialsPlugin.Pm_MessagePlayer(client, targetName, privateMessage)

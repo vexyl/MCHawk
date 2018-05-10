@@ -302,6 +302,14 @@ void Server::OnMessage(Client* client, struct Protocol::cmsgp clientMsg)
 
 		m_commandHandler.Handle(client, command);
 	} else {
+		auto table = cmsgp_to_luatable(clientMsg); // FIXME: Temporary, don't need this since we already have the strings
+		m_pluginHandler.TriggerEvent(EventType::kOnMessage, client, table);
+
+		if (m_pluginHandler.GetEventFlag("NoDefaultCall")) {
+			LOG(LogLevel::kInfo, "[SUPRESSED] %s: %s", name.c_str(), message.c_str());
+			return;
+		}
+
 		// Done before message is modified for colors
 		LOG(LogLevel::kInfo, "[BROADCAST] %s: %s", name.c_str(), message.c_str());
 
@@ -357,13 +365,8 @@ void Server::HandlePacket(Client* client, uint8_t opcode)
 	{
 		struct Protocol::cmsgp clientMsg;
 
-		if (clientMsg.Read(stream)) {
-			auto table = cmsgp_to_luatable(clientMsg);
-			m_pluginHandler.TriggerEvent(EventType::kOnMessage, client, table);
-
-			if (m_pluginHandler.GetEventFlag("NoDefaultCall") <= 0)
-				OnMessage(client, clientMsg);
-		}
+		if (clientMsg.Read(stream))
+			OnMessage(client, clientMsg);
 
 		break;
 	}
