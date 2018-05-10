@@ -5,9 +5,9 @@ EssentialsPlugin.Emote_EmoteCommand = function(client, args)
 end
 
 EssentialsPlugin.Pm_PmCommand = function(client, args)
-	local name = args[1]
+	local targetName = args[1]
 
-	local target = Server.GetClientByName(name)
+	local target = Server.GetClientByName(targetName)
 	if (target == nil) then
 		Server.SendMessage(client, PLAYER_NOT_FOUND(targetName))
 		return
