@@ -6,7 +6,28 @@ end
 
 EssentialsPlugin.Pm_PmCommand = function(client, args)
 	local targetName = args[1]
+	local message = table.concat(args, " ", 2) -- skip name argument
 
+	EssentialsPlugin.Pm_MessagePlayer(client, targetName, message)
+end
+
+EssentialsPlugin.Pm_OnMessage = function(client, args)
+	local message = args["message"]
+
+	if (string.sub(message, 1, 1) == "@") then
+		Flags.NoDefaultCall = 1
+
+		local tokens = split(message)
+		if (tokens[2] ~= nil) then
+			print("Got an @ message")
+			local targetName = string.sub(tokens[1], 2, -1)
+			local privateMessage = table.concat(tokens, " ", 2)
+			EssentialsPlugin.Pm_MessagePlayer(client, targetName, privateMessage)
+		end
+	end
+end
+
+EssentialsPlugin.Pm_MessagePlayer = function(client, targetName, message)
 	local target = Server.GetClientByName(targetName)
 	if (target == nil) then
 		Server.SendMessage(client, PLAYER_NOT_FOUND(targetName))
@@ -17,8 +38,6 @@ EssentialsPlugin.Pm_PmCommand = function(client, args)
 		Server.SendMessage(client, "&cYou shouldn't be talking to yourself...")
 		return
 	end
-
-	local message = table.concat(args, " ", 2) -- skip name argument
 
 	Server.SendMessage(client, "&d[You -> " .. target.name .. "] " .. message)
 	Server.SendMessage(target, "&d[" .. client.name .. "] " .. message)
