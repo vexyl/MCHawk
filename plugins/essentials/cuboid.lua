@@ -47,7 +47,7 @@ end
 EssentialsPlugin.Cuboid_DoCuboid = function(client)
 	local world = client:GetWorld()
 
-	if (world:GetOption("build") ~= "false") then
+	if (client:CanBuild()) then
 		local blocks = EssentialsPlugin.Cuboid_players[client.name]
 
 		local x1 = blocks["1"].x

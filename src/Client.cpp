@@ -1,4 +1,5 @@
 ﻿#include "Client.hpp"
+#include "World.hpp"
 
 #include "Utils/Logger.hpp"
 
@@ -20,6 +21,12 @@ Client::~Client()
 
 	for (auto& obj : m_packetQueue)
 		delete obj;
+}
+
+// Checks if player is an operator or if the world allows building
+bool Client::CanBuild()
+{
+	return (m_userType == 0x64) || (m_world->GetOption("build") == "true");
 }
 
 std::string Client::GetIpString()

@@ -13,6 +13,7 @@ void LuaServer::Init(lua_State* L)
 		.addFunction("GetIpString", &Client::GetIpString)
 		.addFunction("SetChatMute", &Client::SetChatMute)
 		.addFunction("GetUserType", &Client::GetUserType)
+		.addFunction("CanBuild", &Client::CanBuild)
 	.endClass();
 
 	luabridge::getGlobalNamespace(L)

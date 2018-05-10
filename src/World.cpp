@@ -215,7 +215,7 @@ void World::OnBlock(Client* client, struct Protocol::cblockp clientBlock)
 
 	Position position(clientBlock.x, clientBlock.y, clientBlock.z);
 
-	if (GetOption("build") == "false") {
+	if (!client->CanBuild()) {
 		type = m_map.GetBlockType(clientBlock.x, clientBlock.y, clientBlock.z);
 		Protocol::SendBlock(client, position, type);
 		Protocol::SendMessage(client, "&cThis world is protected");
