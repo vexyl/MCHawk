@@ -27,9 +27,10 @@ EssentialsPlugin.init = function()
 		end
 	)
 
-	PermissionsPlugin.RequirePermission("server")
-	PermissionsPlugin.RequirePermission("admin")
-	PermissionsPlugin.RequirePermission("cuboid")
+	PermissionsPlugin.RequirePermission("essentials.server")
+	PermissionsPlugin.RequirePermission("essentials.ban")
+	PermissionsPlugin.RequirePermission("essentials.kick")
+	PermissionsPlugin.RequirePermission("essentials.cuboid")
 end
 
 include(EssentialsPlugin, "server.lua")

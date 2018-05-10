@@ -2,7 +2,7 @@ EssentialsPlugin.Ban_banList = {}
 EssentialsPlugin.Ban_ipBanList = {}
 
 EssentialsPlugin.Ban_BanCommand = function(client, args)
-	if (not PermissionsPlugin.CheckPermissionNotify(client, "admin")) then
+	if (not PermissionsPlugin.CheckPermissionNotify(client, "essentials.ban")) then
 		return
 	end
 
@@ -33,7 +33,7 @@ EssentialsPlugin.Ban_BanCommand = function(client, args)
 end
 
 EssentialsPlugin.Ban_UnbanCommand = function(client, args)
-	if (not PermissionsPlugin.CheckPermissionNotify(client, "admin")) then
+	if (not PermissionsPlugin.CheckPermissionNotify(client, "essentials.ban")) then
 		return
 	end
 
@@ -51,7 +51,7 @@ EssentialsPlugin.Ban_UnbanCommand = function(client, args)
 end
 
 EssentialsPlugin.Ban_BanIpCommand = function(client, args)
-	if (not PermissionsPlugin.CheckPermissionNotify(client, "admin")) then
+	if (not PermissionsPlugin.CheckPermissionNotify(client, "essentials.ban")) then
 		return
 	end
 
@@ -91,7 +91,7 @@ EssentialsPlugin.Ban_BanIpCommand = function(client, args)
 end
 
 EssentialsPlugin.Ban_UnbanIpCommand = function(client, args)
-	if (not PermissionsPlugin.CheckPermissionNotify(client, "admin")) then
+	if (not PermissionsPlugin.CheckPermissionNotify(client, "essentials.ban")) then
 		return
 	end
 

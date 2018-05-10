@@ -62,7 +62,7 @@ EssentialsPlugin.Cmds_CmdsCommand = function(client, args)
 end
 
 EssentialsPlugin.Kick_KickCommand = function(client, args)
-	if (not PermissionsPlugin.CheckPermissionNotify(client, "admin")) then
+	if (not PermissionsPlugin.CheckPermissionNotify(client, "essentials.kick")) then
 		return
 	end
 

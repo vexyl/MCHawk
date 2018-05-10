@@ -64,6 +64,7 @@ void Server::FreeInstance()
 void Server::Init()
 {
 	LOG(LogLevel::kInfo, "Initializing server...");
+
 	// Turn off SFML errors
 	sf::err().rdbuf(nullptr);
 

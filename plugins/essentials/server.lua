@@ -1,5 +1,5 @@
 EssentialsPlugin.Server_ShutdownCommand = function(client, args)
-	if (not PermissionsPlugin.CheckPermissionNotify(client, "server")) then
+	if (not PermissionsPlugin.CheckPermissionNotify(client, "essentials.server")) then
 		return
 	end
 

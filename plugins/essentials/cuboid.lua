@@ -4,7 +4,7 @@ EssentialsPlugin.Cuboid_maxBlocks = 32 ^ 3
 EssentialsPlugin.Cuboid_destroy = {}
 
 EssentialsPlugin.Cuboid_CuboidCommand = function(client, args)
-	if (not PermissionsPlugin.CheckPermissionNotify(client, "cuboid")) then
+	if (not PermissionsPlugin.CheckPermissionNotify(client, "essentials.cuboid")) then
 		return
 	end
 
