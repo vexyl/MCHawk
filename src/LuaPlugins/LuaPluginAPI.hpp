@@ -25,6 +25,7 @@ struct LuaServer {
 	static luabridge::LuaRef LuaGetWorlds();
 	static void LuaServerShutdown();
 	static luabridge::LuaRef LuaGetCommandStrings();
+	static bool LuaIsOperator(std::string name);
 };
 
 luabridge::LuaRef make_luatable();

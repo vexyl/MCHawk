@@ -12,6 +12,7 @@ void LuaServer::Init(lua_State* L)
 		.addFunction("GetWorld", &Client::GetWorld)
 		.addFunction("GetIpString", &Client::GetIpString)
 		.addFunction("SetChatMute", &Client::SetChatMute)
+		.addFunction("GetUserType", &Client::GetUserType)
 	.endClass();
 
 	luabridge::getGlobalNamespace(L)
@@ -43,6 +44,7 @@ void LuaServer::Init(lua_State* L)
 		.addStaticFunction("GetWorlds", &LuaServer::LuaGetWorlds)
 		.addStaticFunction("Shutdown", &LuaServer::LuaServerShutdown)
 		.addStaticFunction("GetCommandStrings", &LuaServer::LuaGetCommandStrings)
+		.addStaticFunction("IsOperator", &LuaServer::LuaIsOperator)
 	.endClass();
 }
 
@@ -172,6 +174,11 @@ luabridge::LuaRef LuaServer::LuaGetCommandStrings()
 	}
 
 	return table;
+}
+
+bool LuaServer::LuaIsOperator(std::string name)
+{
+	return Server::GetInstance()->IsOperator(name);
 }
 
 // Struct to table stuff
