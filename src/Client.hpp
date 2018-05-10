@@ -18,6 +18,7 @@ public:
 	ClientStream stream;
 	bool active;
 	bool authed;
+	bool kicked;
 
 	Client();
 

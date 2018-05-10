@@ -307,7 +307,7 @@ void Server::OnMessage(Client* client, struct Protocol::cmsgp clientMsg)
 		m_pluginHandler.TriggerEvent(EventType::kOnMessage, client, table);
 
 		if (m_pluginHandler.GetEventFlag("NoDefaultCall")) {
-			LOG(LogLevel::kInfo, "[SUPRESSED] %s: %s", name.c_str(), message.c_str());
+			LOG(LogLevel::kInfo, "[SUPPRESSED] %s: %s", name.c_str(), message.c_str());
 			return;
 		}
 
@@ -492,7 +492,10 @@ bool Server::Tick()
 				m_pluginHandler.TriggerEvent(EventType::kOnDisconnect, oldClient, table);
 
 				LOG(LogLevel::kInfo, "Player %s disconnected (%s)", name.c_str(), ipString.c_str());
-				BroadcastMessage("&ePlayer " + name + " left the game.");
+
+				if (!oldClient->kicked)
+					BroadcastMessage("&ePlayer " + name + " left the game.");
+
 				world->RemoveClient(pid);
 
 				if (m_numClients > 0)
@@ -555,6 +558,8 @@ void Server::KickClient(Client* client, std::string reason, bool notify)
 
 	if (notify)
 		BroadcastMessage("&eKicked player " + client->GetName() + " (" + reason + ")");
+
+	client->kicked = true;
 }
 
 // FIXME: This is temporary, it works for the most part but is horribly messy and inefficient

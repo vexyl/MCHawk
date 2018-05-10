@@ -11,6 +11,10 @@ Client::Client() : m_world(nullptr)
 	m_userType = 0;
 	m_yaw = m_pitch = 0;
 
+	active = false;
+	authed = false;
+	kicked = false;
+
 	m_chatMuted = false;
 }
 
