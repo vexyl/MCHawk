@@ -192,7 +192,7 @@ void World::Tick()
 {
 	if (GetOption("autosave") == "true") {
 		if (m_autosaveClock.getElapsedTime().asSeconds() >= kAutosaveTime) {
-			if (SaveMapIfChanged())
+			if (GetActive() && SaveMapIfChanged())
 				BroadcastMessage("Map saved");
 			Save(); // Saves settings, skips map save since SaveMapIfChanged() was called above
 			m_autosaveClock.restart();
