@@ -22,7 +22,7 @@ public:
 		std::string message = "&ePlayer list: ";
 		int size = (int)clients.size();
 		for (int i = 0; i < size; ++i) {
-			message += "&6" + clients[i]->GetName() + "&e(&a" + clients[i]->GetWorld()->GetName() + "&e)";
+			message += clients[i]->GetChatName() + "&e(&a" + clients[i]->GetWorld()->GetName() + "&e)";
 			if (i < size - 1)
 				message += ", ";
 		}

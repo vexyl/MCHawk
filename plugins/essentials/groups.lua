@@ -10,6 +10,19 @@ EssentialsPlugin.Groups_GroupsCommand = function(client, args)
 	end
 end
 
+EssentialsPlugin.Groups_GroupsCommand_Reload = function(client, args)
+	if (not PermissionsPlugin.CheckPermissionNotify(client, "essentials.groups")) then
+		return
+	end
+
+	EssentialsPlugin.Groups_groupsTable = {}
+	EssentialsPlugin.Groups_playerTable = {}
+
+	EssentialsPlugin.Groups_LoadGroups()
+
+	Server.SendMessage(client, "&eReloaded groups")
+end
+
 EssentialsPlugin.Groups_OnAuth = function(client, args)
 	local targetName = string.lower(client.name)
 	local groups = EssentialsPlugin.Groups_playerTable[targetName]

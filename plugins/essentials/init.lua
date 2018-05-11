@@ -14,7 +14,9 @@ EssentialsPlugin.init = function()
 	Server.AddCommand("billnye", "bn bill nye", EssentialsPlugin.BillNye_BillNyeCommand, "billnye <wisdom> - instills wisdom in fellow server members", 1, 0)
 	Server.AddCommand("cmds", "c cmd command commands", EssentialsPlugin.Cmds_CmdsCommand, "cmds - show short list of commands", 0, 0)
 	Server.AddCommand("kick", "", EssentialsPlugin.Kick_KickCommand, "kick <player> [reason] - kicks player from server", 1, 0)
-	Server.AddCommand("groups", "gr grp grps group rank ranks", EssentialsPlugin.Groups_GroupsCommand, "groups - show available permission groups", 0, 0)
+
+	groupsCmd = Server.AddCommand("groups", "gr grp grps group rank ranks", EssentialsPlugin.Groups_GroupsCommand, "groups - show available permission groups", 0, 0)
+	groupsCmd:AddSubcommand("reload", EssentialsPlugin.Groups_GroupsCommand_Reload, "reload - reads the groups file into memory", 0, 0)
 
 	Server.RegisterEvent(ClassicProtocol.ConnectEvent, EssentialsPlugin.Ban_OnConnect)
 	Server.RegisterEvent(ClassicProtocol.BlockEvent, EssentialsPlugin.Cuboid_OnBlock)
@@ -33,6 +35,7 @@ EssentialsPlugin.init = function()
 	PermissionsPlugin.RequirePermission("essentials.ban")
 	PermissionsPlugin.RequirePermission("essentials.kick")
 	PermissionsPlugin.RequirePermission("essentials.cuboid")
+	PermissionsPlugin.RequirePermission("essentials.groups")
 
 	EssentialsPlugin.Ban_LoadBans()
 	EssentialsPlugin.Groups_LoadGroups()
