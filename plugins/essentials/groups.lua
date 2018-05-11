@@ -1,22 +1,34 @@
 EssentialsPlugin.Groups_groupsTable = {}
 EssentialsPlugin.Groups_playerTable = {}
 
+EssentialsPlugin.Groups_GroupsCommand = function(client, args)
+	Server.SendMessage(client, "&f---&eGroups&f---")
+	for _,groupTable in ipairs(EssentialsPlugin.Groups_groupsTable) do
+		local group = groupTable[1]
+		local color = groupTable[2]
+		Server.SendMessage(client, "- " .. color .. group)
+	end
+end
+
 EssentialsPlugin.Groups_OnAuth = function(client, args)
 	local targetName = string.lower(client.name)
-	local groupName = nil -- rank
-
 	local groups = EssentialsPlugin.Groups_playerTable[targetName]
-	if (groups ~= nil) then
-		for k,group in ipairs(groups) do
-			local groupTable = EssentialsPlugin.Groups_groupsTable[group]
 
-			local color = groupTable[1]
-			local perms = groupTable[2]
+	if (groups == nil) then
+		groups = { "Guest" }
+	end
 
-			if (k == 1) then -- first group set chat name with color
-				client:SetChatName("&f[" .. color .. group .. "&f] " .. color .. client.name)
-			end
+	for k,group in ipairs(groups) do
+		local groupTable = EssentialsPlugin.Groups_GetGroupTable(group)
 
+		local color = groupTable[2]
+		local perms = groupTable[3]
+
+		if (k == 1) then -- first group set chat name with color
+			client:SetChatName(color .. client.name)
+		end
+
+		if (perms ~= nil) then
 			for _,perm in pairs(perms) do
 				if (not PermissionsPlugin.CheckPermission(targetName, perm)) then
 					PermissionsPlugin.GrantPermission(targetName, perm)
@@ -29,7 +41,7 @@ end
 
 EssentialsPlugin.Groups_GroupExists = function(group)
 	for _,groupTable in pairs(EssentialsPlugin.Groups_groupsTable) do
-		if (group == groupTable[2]) then
+		if (group == groupTable[1]) then
 			return true
 		end
 	end
@@ -39,7 +51,7 @@ end
 
 EssentialsPlugin.Groups_GetGroupTable = function(group)
 	for _,groupTable in pairs(EssentialsPlugin.Groups_groupsTable) do
-		if (group == groupTable[2]) then
+		if (group == groupTable[1]) then
 			return groupTable
 		end
 	end
@@ -62,19 +74,23 @@ EssentialsPlugin.Groups_LoadGroups = function()
 			if (action == "group") then
 				local group = tokens[2]
 				local color = tokens[3]
-				local perms = split(tokens[4], ", ")
-
+				local perms = nil
 				local validGroup = true
-				for _,perm in pairs(perms) do
-					if (not PermissionsPlugin.PermissionExists(perm)) then
-						print("Group plugin: invalid permission for " .. group .. ": " .. perm)
-						validGroup = false
-						break
+
+				if (tokens[4] ~= nil) then
+					perms = split(tokens[4], ", ")
+
+					for _,perm in pairs(perms) do
+						if (not PermissionsPlugin.PermissionExists(perm)) then
+							print("Group plugin: invalid permission for " .. group .. ": " .. perm)
+							validGroup = false
+							break
+						end
 					end
 				end
 
 				if (validGroup) then
-					EssentialsPlugin.Groups_groupsTable[group] = { color, perms }
+					table.insert(EssentialsPlugin.Groups_groupsTable, { group, color, perms })
 				end
 			elseif (action == "name") then
 				-- grant player permissions
@@ -83,7 +99,8 @@ EssentialsPlugin.Groups_LoadGroups = function()
 
 				local validGroup = true
 				for _,group in pairs(groups) do
-					local groupTable = EssentialsPlugin.Groups_groupsTable[group]
+					local groupTable = EssentialsPlugin.Groups_GetGroupTable(group)
+
 					if (groupTable == nil) then
 						print("Group plugin: invalid group for " .. name .. ": " .. group)
 						validGroup = false

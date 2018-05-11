@@ -256,12 +256,12 @@ void Server::OnAuth(Client* client, struct Protocol::cauthp clientAuth)
 	uint8_t userType = 0x00;
 	if (IsOperator(name)) {
 		userType = 0x64;
-		BroadcastMessage("&eOperator " + client->GetChatName() + " &ejoined the game");
 		LOG(LogLevel::kInfo, "Operator %s (%s) authenticated", name.c_str(), ipString.c_str());
 	} else {
-		BroadcastMessage("&e" + client->GetChatName() + " &ejoined the game");
 		LOG(LogLevel::kInfo, "Player %s (%s) authenticated", name.c_str(), ipString.c_str());
 	}
+
+	BroadcastMessage("&e" + client->GetChatName() + " &ejoined the game");
 
 	client->SetUserType(userType);
 
