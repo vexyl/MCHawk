@@ -15,7 +15,7 @@ EssentialsPlugin.init = function()
 	Server.AddCommand("cmds", "c cmd command commands", EssentialsPlugin.Cmds_CmdsCommand, "cmds - show short list of commands", 0, 0)
 	Server.AddCommand("kick", "", EssentialsPlugin.Kick_KickCommand, "kick <player> [reason] - kicks player from server", 1, 0)
 
-	groupsCmd = Server.AddCommand("groups", "gr grp grps group rank ranks", EssentialsPlugin.Groups_GroupsCommand, "groups - show available permission groups", 0, 0)
+	local groupsCmd = Server.AddCommand("groups", "gr grp grps group rank ranks", EssentialsPlugin.Groups_GroupsCommand, "groups - show available permission groups", 0, 0)
 	groupsCmd:AddSubcommand("reload", EssentialsPlugin.Groups_GroupsCommand_Reload, "reload - reads the groups file into memory", 0, 0)
 
 	Server.RegisterEvent(ClassicProtocol.ConnectEvent, EssentialsPlugin.Ban_OnConnect)

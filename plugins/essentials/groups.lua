@@ -6,7 +6,7 @@ EssentialsPlugin.Groups_GroupsCommand = function(client, args)
 	for _,groupTable in ipairs(EssentialsPlugin.Groups_groupsTable) do
 		local group = groupTable[1]
 		local color = groupTable[2]
-		Server.SendMessage(client, "- " .. color .. group)
+		Server.SendMessage(client, "| " .. color .. group)
 	end
 end
 
