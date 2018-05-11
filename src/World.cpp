@@ -4,6 +4,7 @@
 #include "Network/Protocol.hpp"
 #include "Network/CPE.hpp"
 #include "Utils/Logger.hpp"
+#include "LuaPlugins/LuaPluginAPI.hpp"
 
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/ini_parser.hpp>
@@ -109,6 +110,13 @@ void World::Save()
 
 void World::AddClient(Client* client)
 {
+	auto table = make_luatable(); // FIXME: Temporary, don't need this since we already have the strings
+
+	table["world"] = this;
+	table["prev"] = client->GetWorld();
+
+	Server::GetInstance()->GetPluginHandler().TriggerEvent(EventType::kOnWorldJoin, client, table);
+
 	LOG(LogLevel::kDebug, "Player with pid=%d added to world '%s'", client->GetPid(), m_name.c_str());
 
 	Protocol::SendMap(client, m_map);

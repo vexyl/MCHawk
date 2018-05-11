@@ -93,3 +93,13 @@ EssentialsPlugin.Kick_KickCommand = function(client, args)
 	Server.KickClient(target, reason)
 	Server.SystemWideMessage(message)
 end
+
+EssentialsPlugin.Misc_OnWorldJoin = function(client, args)
+	local world = args["world"]
+	local prevWorld = args["prev"]
+
+	-- Only show message if warping from one world to another
+	if (prevWorld ~= nil) then
+		Server.BroadcastMessage(client:GetChatName() .. " &ewarped to &a" .. world:GetName())
+	end
+end

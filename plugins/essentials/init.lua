@@ -23,6 +23,7 @@ EssentialsPlugin.init = function()
 	Server.RegisterEvent(ClassicProtocol.DisconnectEvent, EssentialsPlugin.Cuboid_OnDisconnect)
 	Server.RegisterEvent(ClassicProtocol.MessageEvent, EssentialsPlugin.Pm_OnMessage)
 	Server.RegisterEvent(ClassicProtocol.AuthEvent, EssentialsPlugin.Groups_OnAuth)
+	Server.RegisterEvent(ClassicProtocol.WorldJoinEvent, EssentialsPlugin.Misc_OnWorldJoin)
 
 	Server.RegisterEvent(ClassicProtocol.AuthEvent,
 		function(client, args)
