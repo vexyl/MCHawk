@@ -243,6 +243,8 @@ void Server::OnAuth(Client* client, struct Protocol::cauthp clientAuth)
 	}
 
 	client->SetName(name);
+	client->SetChatName(name);
+
 	client->authed = true;
 
 	m_pluginHandler.TriggerEvent(EventType::kOnAuth, client, table);
