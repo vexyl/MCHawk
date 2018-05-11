@@ -14,8 +14,7 @@ EssentialsPlugin.Groups_OnAuth = function(client, args)
 			local perms = groupTable[2]
 
 			if (k == 1) then -- first group set chat name with color
-				client:SetChatName(color .. client.name)
-				groupName = group
+				client:SetChatName("&f[" .. color .. group .. "&f] " .. color .. client.name)
 			end
 
 			for _,perm in pairs(perms) do
