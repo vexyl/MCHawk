@@ -245,6 +245,8 @@ void Server::OnAuth(Client* client, struct Protocol::cauthp clientAuth)
 	client->SetName(name);
 	client->authed = true;
 
+	m_pluginHandler.TriggerEvent(EventType::kOnAuth, client, table);
+
 	m_numClients++;
 
 	std::string ipString = client->GetIpString();
@@ -252,10 +254,10 @@ void Server::OnAuth(Client* client, struct Protocol::cauthp clientAuth)
 	uint8_t userType = 0x00;
 	if (IsOperator(name)) {
 		userType = 0x64;
-		BroadcastMessage("&e" + name + " joined the game");
+		BroadcastMessage("&eOperator " + client->GetChatName() + " &ejoined the game");
 		LOG(LogLevel::kInfo, "Operator %s (%s) authenticated", name.c_str(), ipString.c_str());
 	} else {
-		BroadcastMessage("&e" + name + " joined the game");
+		BroadcastMessage("&e" + client->GetChatName() + " &ejoined the game");
 		LOG(LogLevel::kInfo, "Player %s (%s) authenticated", name.c_str(), ipString.c_str());
 	}
 
@@ -348,9 +350,6 @@ void Server::HandlePacket(Client* client, uint8_t opcode)
 			struct Protocol::cauthp clientAuth;
 			if (clientAuth.Read(stream)) {
 				OnAuth(client, clientAuth);
-
-				auto table = cauthp_to_luatable(clientAuth);
-				m_pluginHandler.TriggerEvent(EventType::kOnAuth, client, table);
 			}
 		} else {
 			LOG(LogLevel::kDebug, "Dropped unauthorized client (%s)", client->GetIpString().c_str());

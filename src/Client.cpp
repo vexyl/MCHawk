@@ -48,14 +48,6 @@ std::string Client::GetIpString()
 	return m_ipString;
 }
 
-void Client::SetName(std::string name)
-{
-	if (m_chatName.empty())
-		m_chatName = name;
-
-	m_name = name;
-}
-
 void Client::SetPositionOrientation(Position position, uint8_t yaw, uint8_t pitch)
 {
 	m_position = position;

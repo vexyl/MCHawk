@@ -39,7 +39,7 @@ public:
 
 	bool IsActive() { return active; }
 
-	void SetName(std::string name);
+	void SetName(std::string name) { m_name = name; }
 	void SetChatName(std::string name) { m_chatName = name; }
 	void SetPositionOrientation(Position position, uint8_t yaw, uint8_t pitch);
 	void SetUserType(uint8_t userType) { m_userType = userType; }

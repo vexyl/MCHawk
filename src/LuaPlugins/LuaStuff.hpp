@@ -1,4 +1,4 @@
-#ifndef LUASTUFF_H_
+﻿#ifndef LUASTUFF_H_
 #define LUASTUFF_H_
 
 extern "C" {

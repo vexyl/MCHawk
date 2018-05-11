@@ -195,5 +195,3 @@ EssentialsPlugin.Ban_LoadBans = function()
 		print("Couldn't open bans.txt")
 	end
 end
-
-EssentialsPlugin.Ban_LoadBans()

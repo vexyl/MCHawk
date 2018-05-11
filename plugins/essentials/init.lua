@@ -19,6 +19,7 @@ EssentialsPlugin.init = function()
 	Server.RegisterEvent(ClassicProtocol.BlockEvent, EssentialsPlugin.Cuboid_OnBlock)
 	Server.RegisterEvent(ClassicProtocol.DisconnectEvent, EssentialsPlugin.Cuboid_OnDisconnect)
 	Server.RegisterEvent(ClassicProtocol.MessageEvent, EssentialsPlugin.Pm_OnMessage)
+	Server.RegisterEvent(ClassicProtocol.AuthEvent, EssentialsPlugin.Groups_OnAuth)
 
 	Server.RegisterEvent(ClassicProtocol.AuthEvent,
 		function(client, args)
@@ -31,9 +32,13 @@ EssentialsPlugin.init = function()
 	PermissionsPlugin.RequirePermission("essentials.ban")
 	PermissionsPlugin.RequirePermission("essentials.kick")
 	PermissionsPlugin.RequirePermission("essentials.cuboid")
+
+	EssentialsPlugin.Ban_LoadBans()
+	EssentialsPlugin.Groups_LoadGroups()
 end
 
 include(EssentialsPlugin, "server.lua")
 include(EssentialsPlugin, "ban.lua")
 include(EssentialsPlugin, "cuboid.lua")
 include(EssentialsPlugin, "misc.lua")
+include(EssentialsPlugin, "groups.lua")
