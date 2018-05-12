@@ -32,7 +32,7 @@ CorePlugin.tick = function()
 	for timerName in pairs(CorePlugin.timerList) do
 		local t = CorePlugin.timerList[timerName]
 		for k,v in pairs(t) do
-			a,b = coroutine.resume(v[1], v[2])
+			local a,b = coroutine.resume(v[1], v[2])
 
 			if (a == false or b == nil) then
 				t[k] = nil

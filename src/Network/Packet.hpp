@@ -1,4 +1,4 @@
-#ifndef PACKET_H_
+﻿#ifndef PACKET_H_
 #define PACKET_H_
 
 #include <string>
@@ -10,7 +10,7 @@ public:
 	using BufferStream::Write;
 	using BufferStream::Read;
 
-	Packet(): m_opcode(0) {};
+	Packet() : m_opcode(0) { }
 	Packet(int8_t opcode);
 
 	void Write(const std::string& inData);
