@@ -134,14 +134,23 @@ bool Map::SetBlock(short x, short y, short z, int8_t type)
 	return true;
 }
 
+// block type is -1 on error
+Map::Block Map::GetBlock(short x, short y, short z)
+{
+	int offset = calcMapOffset(x, y, z, m_x, m_z) + 4;
+	if (offset < (int)m_bufferSize)
+		return Block(x, y, z, m_buffer[offset]);
+
+	return Block();
+}
+
+// returns -1 on error
 int8_t Map::GetBlockType(short x, short y, short z)
 {
 	int offset = calcMapOffset(x, y, z, m_x, m_z) + 4;
 
-	if ((offset + 1) > (int)m_bufferSize) {
-		LOG(LogLevel::kWarning, "Attempted map write passed buffer size");
-		return false;
-	}
+	if ((offset + 1) > (int)m_bufferSize)
+		return -1;
 
 	return m_buffer[offset];
 }

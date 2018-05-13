@@ -184,21 +184,21 @@ void Protocol::SendClientsTo(Client* client, const std::vector<Client*>& clients
 	}
 }
 
-void Protocol::SpawnClient(Client* client, Position position, const std::vector<Client*>& clients)
+void Protocol::SpawnClient(Client* client, Position pos, const std::vector<Client*>& clients)
 {
 	std::string name = client->GetName();
 	int8_t pid = -1; // Self PID first
 
-	client->SetPositionOrientation(position, 0, 0);
+	client->SetPositionOrientation(pos, 0, 0);
 
-	Packet* selfSpawnPacket = make_spawn_packet(pid, name, position, 0, 0);
+	Packet* selfSpawnPacket = make_spawn_packet(pid, name, pos, 0, 0);
 	client->QueuePacket(selfSpawnPacket);
 
 	pid = client->GetPid(); // Actual PID
 	// Send client spawn to rest of clients
 	for (auto& obj : clients) {
 		if (obj->GetPid() != pid) {
-			Packet* spawnPacket = make_spawn_packet(pid, name, position, 0, 0);
+			Packet* spawnPacket = make_spawn_packet(pid, name, pos, 0, 0);
 			obj->QueuePacket(spawnPacket);
 		}
 	}

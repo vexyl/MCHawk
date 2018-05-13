@@ -1,4 +1,4 @@
-#ifndef MAP_H_
+﻿#ifndef MAP_H_
 #define MAP_H_
 
 #define calcMapOffset(x, y, z, xSize, zSize) ((y * zSize + z) * xSize + x)
@@ -11,6 +11,14 @@
 
 class Map {
 public:
+	struct Block {
+		Block(short inX, short inY, short inZ, int8_t inType) : x(inX), y(inY), z(inZ), type(inType) { }
+		Block() : Block(0, 0, 0, -1) { }
+
+		short x, y, z;
+		int8_t type;
+	};
+
 	Map();
 
 	~Map();
@@ -34,6 +42,7 @@ public:
 	void SaveToFile() { SaveToFile(m_filename); }
 
 	bool SetBlock(short x, short y, short z, int8_t type);
+	Block GetBlock(short x, short y, short z);
 	int8_t GetBlockType(short x, short y, short z);
 
 	void CompressBuffer(uint8_t** outCompBuffer, size_t* outCompSize);

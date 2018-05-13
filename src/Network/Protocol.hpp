@@ -216,7 +216,7 @@ void SendPosition(Client* client, int8_t pid, Position pos, uint8_t yaw, uint8_t
 void SendPlayerPositionUpdate(Client* sender, const std::vector<Client*>& clients);
 void SendUserType(Client* client, uint8_t userType);
 void SendClientsTo(Client* client, const std::vector<Client*>& clients);
-void SpawnClient(Client* client, Position position, const std::vector<Client*>& clients);
+void SpawnClient(Client* client, Position pos, const std::vector<Client*>& clients);
 void DespawnClient(int8_t pid, const std::vector<Client*>& clients);
 } // namespace Protocol
 
