@@ -146,7 +146,7 @@ EssentialsPlugin.Ban_SaveBans = function()
 	local f = io.open("bans.txt", "w")
 	if f then
 		for name,t in pairs(EssentialsPlugin.Ban_banList) do
-			line = "name:" .. name
+			local line = "name:" .. name
 
 			if (t[1] ~= nil) then
 				line = line .. ":" .. t[1]
@@ -156,7 +156,7 @@ EssentialsPlugin.Ban_SaveBans = function()
 		end
 
 		for ip,t in pairs(EssentialsPlugin.Ban_ipBanList) do
-			line = "ip:" .. ip
+			local line = "ip:" .. ip
 
 			if (t[1] ~= nil) then
 				line = line .. ":" .. t[1]

@@ -38,11 +38,11 @@ EssentialsPlugin.Cuboid_OnBlock = function(client, block)
 	end
 end
 
-EssentialsPlugin.Cuboid_OnDisconnect = function(client, t)
+EssentialsPlugin.Cuboid_OnDisconnect = function(client, args)
 	EssentialsPlugin.Cuboid_Remove(client.name)
 end
 
-EssentialsPlugin.Cuboid_OnWorldJoin = function(client, t)
+EssentialsPlugin.Cuboid_OnWorldJoin = function(client, args)
 	EssentialsPlugin.Cuboid_Remove(client.name)
 end
 
