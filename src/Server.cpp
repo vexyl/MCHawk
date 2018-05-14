@@ -27,9 +27,7 @@
 #include "Commands/TeleportCommand.hpp"
 #include "Commands/SummonCommand.hpp"
 #include "Commands/OpCommand.hpp"
-#include "Commands/AliasCommand.hpp"
 #include "Commands/WhoCommand.hpp"
-#include "Commands/WhoIsCommand.hpp"
 #include "Commands/GotoCommand.hpp"
 #include "Commands/WorldCommand.hpp"
 
