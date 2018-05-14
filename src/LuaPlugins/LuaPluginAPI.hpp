@@ -23,9 +23,11 @@ struct LuaServer {
 	static void LuaSendKick(Client* client, std::string reason);
 	static luabridge::LuaRef LuaGetClients();
 	static luabridge::LuaRef LuaGetWorlds();
+	static World* LuaGetWorldByName(std::string name, bool exact);
 	static void LuaServerShutdown();
 	static luabridge::LuaRef LuaGetCommandStrings();
 	static bool LuaIsOperator(std::string name);
+	static void LuaTransportPlayer(Client* client, World* world);
 };
 
 luabridge::LuaRef make_luatable();

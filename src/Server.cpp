@@ -28,7 +28,6 @@
 #include "Commands/SummonCommand.hpp"
 #include "Commands/OpCommand.hpp"
 #include "Commands/WhoCommand.hpp"
-#include "Commands/GotoCommand.hpp"
 #include "Commands/WorldCommand.hpp"
 
 Server* Server::m_thisPtr = nullptr;
@@ -133,7 +132,6 @@ void Server::Init()
 	m_commandHandler.Register("summon", new SummonCommand("summon"));
 	m_commandHandler.Register("op", new OpCommand("op"));
 	m_commandHandler.Register("who", new WhoCommand("who"), "player players list");
-	m_commandHandler.Register("goto", new GotoCommand("goto"), "go g warp");
 	m_commandHandler.Register("world", new WorldCommand("world"), "w map");
 
 	m_pluginHandler.LoadPlugin("plugins/core/init.lua"); // Load this first

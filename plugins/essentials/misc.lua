@@ -103,3 +103,30 @@ EssentialsPlugin.Misc_OnWorldJoin = function(client, args)
 		Server.BroadcastMessage(client:GetChatName() .. " &ewarped to &a" .. world:GetName())
 	end
 end
+
+EssentialsPlugin.Misc_GotoCommand = function(client, args)
+	local targetName = args[1]
+	local world = Server.GetWorldByName(targetName)
+
+	if (world == nil) then
+		Server.SendMessage(client, WORLD_NOT_FOUND(targetName))
+		return
+	end
+
+	-- Proper world name
+	local worldName = world:GetName()
+
+	-- inactive world
+	if (not world:GetActive()) then
+		Server.SendMessage(client, WORLD_NOT_ACTIVE(worldName))
+		return
+	end
+
+	-- Same world player is in
+	if (worldName == client:GetWorld():GetName()) then
+		Server.SendMessage(client, "&eWarp nine. Engage. &9*Woosh*")
+		return
+	end
+
+	Server.TransportPlayer(client, world)
+end

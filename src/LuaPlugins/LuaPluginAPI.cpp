@@ -47,9 +47,11 @@ void LuaServer::Init(lua_State* L)
 		.addStaticFunction("SendKick", &LuaServer::LuaSendKick)
 		.addStaticFunction("GetClients", &LuaServer::LuaGetClients)
 		.addStaticFunction("GetWorlds", &LuaServer::LuaGetWorlds)
+		.addStaticFunction("GetWorldByName", &LuaServer::LuaGetWorldByName)
 		.addStaticFunction("Shutdown", &LuaServer::LuaServerShutdown)
 		.addStaticFunction("GetCommandStrings", &LuaServer::LuaGetCommandStrings)
 		.addStaticFunction("IsOperator", &LuaServer::LuaIsOperator)
+		.addStaticFunction("TransportPlayer", &LuaServer::LuaTransportPlayer)
 	.endClass();
 }
 
@@ -162,6 +164,11 @@ luabridge::LuaRef LuaServer::LuaGetWorlds()
 	return table;
 }
 
+World* LuaServer::LuaGetWorldByName(std::string name, bool exact)
+{
+	return Server::GetInstance()->GetWorldByName(name, exact);
+}
+
 void LuaServer::LuaServerShutdown()
 {
 	Server::GetInstance()->Shutdown();
@@ -184,6 +191,14 @@ luabridge::LuaRef LuaServer::LuaGetCommandStrings()
 bool LuaServer::LuaIsOperator(std::string name)
 {
 	return Server::GetInstance()->IsOperator(name);
+}
+
+void LuaServer::LuaTransportPlayer(Client* client, World* world)
+{
+	if (world != nullptr) {
+		client->GetWorld()->RemoveClient(client->GetPid());
+		world->AddClient(client);
+	}
 }
 
 // Struct to table stuff

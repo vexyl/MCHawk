@@ -14,6 +14,7 @@ EssentialsPlugin.init = function()
 	Server.AddCommand("billnye", "bn bill nye", EssentialsPlugin.BillNye_BillNyeCommand, "billnye <wisdom> - instills wisdom in fellow server members", 1, 0)
 	Server.AddCommand("cmds", "c cmd command commands", EssentialsPlugin.Cmds_CmdsCommand, "cmds - show short list of commands", 0, 0)
 	Server.AddCommand("kick", "", EssentialsPlugin.Kick_KickCommand, "kick <player> [reason] - kicks player from server", 1, 0)
+	Server.AddCommand("goto", "go g warp", EssentialsPlugin.Misc_GotoCommand, "goto <world name> - warps to world", 1, 0)
 
 	local worldCmd = Server.AddCommand("luaworld", "lw", EssentialsPlugin.World_WorldCommand, "worlds - various commands related to worlds", 1, 0)
 	worldCmd:AddSubcommand("list", EssentialsPlugin.World_WorldCommand_List, "list - list all available worlds; active=green, inactive=red", 0, 0)
