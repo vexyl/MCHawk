@@ -22,6 +22,12 @@ EssentialsPlugin.init = function()
 	local groupsCmd = Server.AddCommand("groups", "gr grp grps group rank ranks", EssentialsPlugin.Groups_GroupsCommand, "groups - show available permission groups", 0, 0)
 	groupsCmd:AddSubcommand("reload", EssentialsPlugin.Groups_GroupsCommand_Reload, "reload - reads the groups file into memory", 0, 0)
 
+	Server.AddCommand("main", "def default",
+		function(client, args)
+			EssentialsPlugin.Misc_GotoCommand(client, { "default" })
+		end,
+	"main - warps to default world", 0, 0)
+
 	Server.RegisterEvent(ClassicProtocol.ConnectEvent, EssentialsPlugin.Ban_OnConnect)
 	Server.RegisterEvent(ClassicProtocol.BlockEvent, EssentialsPlugin.Cuboid_OnBlock)
 	Server.RegisterEvent(ClassicProtocol.DisconnectEvent, EssentialsPlugin.Cuboid_OnDisconnect)
