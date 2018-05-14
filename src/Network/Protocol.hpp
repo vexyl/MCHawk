@@ -22,7 +22,7 @@ namespace Protocol {
 enum PacketType {
 	kServerInfo				= 0x00,
 	kServerPing				= 0x01,
-	kServerLevelInit				= 0x02,
+	kServerLevelInit			= 0x02,
 	kServerLevelData			= 0x03,
 	kServerLevelFinal			= 0x04,
 	kServerMessage				= 0x0d,

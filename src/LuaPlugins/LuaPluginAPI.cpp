@@ -22,6 +22,7 @@ void LuaServer::Init(lua_State* L)
 	.beginClass<World>("World")
 		.addFunction("Save", &World::Save)
 		.addFunction("GetOption", &World::GetOption)
+		.addFunction("GetActive", &World::GetActive)
 		.addFunction("GetName", &World::GetName)
 	.endClass();
 
