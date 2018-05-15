@@ -72,7 +72,6 @@ public:
 
 private:
 	enum { kHeartbeatTime = 60 /* seconds */, kSaveTime = 600 /* seconds */ };
-	enum { kMaxSetBlockDistance = 10 };
 
 	static Server* m_thisPtr; // Singleton
 

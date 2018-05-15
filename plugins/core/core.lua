@@ -13,7 +13,7 @@ CorePlugin.ServerInfoCommand = function(client, args)
 	Server.SendMessage(client, "&eWritten in &3C++ &eand &3Lua &efor plugins");
 	Server.SendMessage(client, "&eGithub Repo: https://github.com/vexyl/MCHawk");
 
-	local playerCount = GetTableLength(Server.GetClients())
+	local playerCount = #Server.GetClients()
 
 	local message = "are &a" .. playerCount .. " &eplayers"
 	if (playerCount == 1) then
@@ -28,7 +28,7 @@ CorePlugin.ReloadCommand = function(client, args)
 end
 
 CorePlugin.GetPluginCount = function()
-	return GetTableLength(CorePlugin.pluginNames)
+	return #CorePlugin.pluginNames
 end
 
 CorePlugin.AddTimer = function(name, func, time)

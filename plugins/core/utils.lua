@@ -24,15 +24,6 @@ LoadPlugin = function(plugin, filename)
 	Server.LoadPlugin("plugins/" .. plugin.name .. "/" .. filename)
 end
 
-GetTableLength = function(t)
-	local length = 0
-	for _ in pairs(t) do
-		length = length + 1
-	end
-
-	return length
-end
-
 -- Stolen from https://stackoverflow.com/questions/6118799/creating-a-timer-using-lua
 timer = function(time, func)
 	local init = os.time()

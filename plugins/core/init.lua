@@ -44,8 +44,8 @@ end
 dofile("plugins/" .. CorePlugin.name .. "/utils.lua")
 
 include(CorePlugin, "core.lua")
-LoadPlugin(CorePlugin, "permissions.lua")
 
+-- Mostly turns off new global variables
 setmetatable(_G,
 	{ __newindex = function(_, name, value)
 		if (name == "this" or name:find("Plugin") ~= nil) then
@@ -55,3 +55,5 @@ setmetatable(_G,
 		end
 	end
 });
+
+LoadPlugin(CorePlugin, "permissions.lua")

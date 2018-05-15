@@ -177,7 +177,7 @@ EssentialsPlugin.Ban_LoadBans = function()
 			local banType = tokens[1]
 			local reason = nil
 
-			if (GetTableLength(tokens) == 3) then
+			if (#tokens == 3) then
 				reason = tokens[3]
 			end
 

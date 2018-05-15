@@ -139,7 +139,7 @@ PermissionsPlugin.RevokePermission = function(name, perm)
 
 	local perms = PermissionsPlugin.permissionTable[name]
 
-	if (GetTableLength(perms) - 1 <= 0) then
+	if (#perms - 1 <= 0) then
 		PermissionsPlugin.permissionTable[name] = nil
 		return
 	end

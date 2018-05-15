@@ -6,8 +6,6 @@ EssentialsPlugin.World_WorldCommand_List = function(client, args)
 	local message = "&eWorlds: "
 	local worlds = Server.GetWorlds()
 
-	local length = GetTableLength(worlds)
-
 	for index,world in ipairs(worlds) do
 		if (world:GetActive()) then
 			message = message .. "&a"
@@ -17,7 +15,7 @@ EssentialsPlugin.World_WorldCommand_List = function(client, args)
 
 		message = message .. world:GetName()
 
-		if (index < length) then
+		if (index < #worlds) then
 			message = message .. "&e, "
 		end
 	end
