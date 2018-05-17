@@ -90,7 +90,7 @@ void LuaPluginHandler::RegisterEvent(int type, luabridge::LuaRef func)
 {
 	if (func.isFunction()) {
 		try {
-			m_signalMap[type].connect(func);
+			m_signalMap[type].connect(boost::bind((std::function<void(Client*, luabridge::LuaRef)>)func, _1, _2));
 		} catch (luabridge::LuaException const& e) {
 			std::cerr << "LuaException: " << e.what() << std::endl;
 		}
