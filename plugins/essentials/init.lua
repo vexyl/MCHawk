@@ -25,6 +25,14 @@ EssentialsPlugin.init = function()
 		end,
 	"main - warps to default world", 0, 0)
 
+	Server.AddCommand("ragequit", "quit",
+		function(client, args)
+			local message = "invoked the sacred rights of RAGEQUIT"
+			Server.KickClient(client, message)
+			Server.SystemWideMessage(client:GetChatName() .. " &e" .. message)
+		end,
+	"ragequit - throw a fit and leave the server in tears", 0, 0)
+
 	Server.RegisterEvent(ClassicProtocol.ConnectEvent, EssentialsPlugin.Ban_OnConnect)
 	Server.RegisterEvent(ClassicProtocol.BlockEvent, EssentialsPlugin.Cuboid_OnBlock)
 	Server.RegisterEvent(ClassicProtocol.DisconnectEvent, EssentialsPlugin.Cuboid_OnDisconnect)
