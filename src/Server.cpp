@@ -100,21 +100,6 @@ void Server::Init()
 
 	SendHeartbeat();
 
-	// Scrap = flat world that doesn't autosave
-	std::string name = "scrap";
-	short x = 256;
-	short y = 16;
-	short z = 256;
-	std::string filename = "worlds/maps/" + name + "_" + std::to_string(x) + "x" + std::to_string(y) + "x" + std::to_string(z) + ".raw";
-	World* w = new World("scrap");
-	w->GetMap().GenerateFlatMap(filename, x, y, z);
-	w->GetMap().SetFilename(filename);
-	w->SetSpawnPosition(Position(x/2*32+51, y/2*32+51, z/2*32+51));
-	w->SetOption("autosave", "false");
-	w->SetActive(true);
-
-	AddWorld(w);
-
 	// Load all worlds from config files
 	for (boost::filesystem::directory_iterator itr("worlds/"); itr != boost::filesystem::directory_iterator(); ++itr) {
 		if (boost::filesystem::is_regular_file(itr->status())) {
