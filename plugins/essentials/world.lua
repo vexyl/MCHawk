@@ -5,6 +5,8 @@ Init = function()
 	worldCmd:AddSubcommand("set", EssentialsPlugin.World.WorldCommand_Set, "set [option] [value] - sets world options; leave off arguments to see list of options; leave off value to see current value", 0, 1)
 	worldCmd:AddSubcommand("save", EssentialsPlugin.World.WorldCommand_Save, "save - saves world options and map data to file", 0, 1)
 	worldCmd:AddSubcommand("load", EssentialsPlugin.World.WorldCommand_Load, "load - loads world map into memory", 1, 0)
+
+	PermissionsPlugin.RequirePermission("essentials.world")
 end,
 
 WorldCommand = function(client, args)
@@ -33,6 +35,10 @@ WorldCommand_List = function(client, args)
 end,
 
 WorldCommand_Set = function(client, args)
+	if (not PermissionsPlugin.CheckPermissionNotify(client, "essentials.world")) then
+		return
+	end
+
 	local world = client:GetWorld()
 
 	if (#args == 0) then
@@ -69,6 +75,10 @@ WorldCommand_Set = function(client, args)
 end,
 
 WorldCommand_Save = function(client, args)
+	if (not PermissionsPlugin.CheckPermissionNotify(client, "essentials.world")) then
+		return
+	end
+
 	local world = client:GetWorld()
 	world:Save()
 	Server.SendMessage(client, "&eWorld saved")
