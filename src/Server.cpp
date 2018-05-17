@@ -457,14 +457,15 @@ bool Server::Tick()
 
 		// Deletes inactive clients and sends despawn packet to all active clients if necessary
 		if (!(*it)->active) {
-			bool authed = (*it)->authed;
-			std::string name = (*it)->GetName();
-			std::string ipString = (*it)->GetIpString();
-			int8_t pid = (*it)->GetPid();
-			World* world = (*it)->GetWorld();
-
 			// Client removed here because DespawnClient() would send to this inactive client as well
 			Client* oldClient = *it;
+
+			bool authed = oldClient->authed;
+			std::string name = oldClient->GetName();
+			std::string ipString = oldClient->GetIpString();
+			int8_t pid = oldClient->GetPid();
+			World* world = oldClient->GetWorld();
+
 			it = m_clients.erase(it);
 
 			if (authed) {
