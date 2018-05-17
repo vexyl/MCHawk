@@ -16,22 +16,28 @@ void LuaServer::Init(lua_State* L)
 		.addFunction("CanBuild", &Client::CanBuild)
 		.addFunction("SetChatName", &Client::SetChatName)
 		.addFunction("GetChatName", &Client::GetChatName)
-	.endClass();
+	.endClass()
 
-	luabridge::getGlobalNamespace(L)
 	.beginClass<World>("World")
 		.addFunction("Save", &World::Save)
 		.addFunction("GetOption", &World::GetOption)
 		.addFunction("GetActive", &World::GetActive)
 		.addFunction("GetName", &World::GetName)
-	.endClass();
+		.addFunction("SetOption", &World::SetOption)
+		.addFunction("SetActive", &World::SetActive)
+		.addFunction("Save", &World::Save)
+		.addFunction("GetMap", &World::GetMap)
+		.addStaticFunction("GetOptionNames", &LuaServer::LuaWorldGetOptionNames)
+	.endClass()
 
-	luabridge::getGlobalNamespace(L)
+	.beginClass<Map>("Map")
+		.addFunction("Load", &Map::Load)
+	.endClass()
+
 	.beginClass<LuaCommand>("LuaCommand")
 		.addFunction("AddSubcommand", &LuaCommand::AddSubcommand)
-	.endClass();
+	.endClass()
 
-	luabridge::getGlobalNamespace(L)
 	.beginClass<LuaServer>("Server")
 		.addStaticFunction("SendMessage", &LuaServer::LuaSendMessage)
 		.addStaticFunction("BroadcastMessage", &LuaServer::LuaBroadcastMessage)
@@ -199,6 +205,18 @@ void LuaServer::LuaTransportPlayer(Client* client, World* world)
 		client->GetWorld()->RemoveClient(client->GetPid());
 		world->AddClient(client);
 	}
+}
+
+luabridge::LuaRef LuaServer::LuaWorldGetOptionNames(World* world)
+{
+	auto table = make_luatable();
+	int i = 1;
+	for (auto& obj : world->GetOptionNames()) {
+		table[i] = obj;
+		++i;
+	}
+
+	return table;
 }
 
 // Struct to table stuff

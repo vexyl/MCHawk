@@ -460,15 +460,12 @@ bool Server::Tick()
 			// Client removed here because DespawnClient() would send to this inactive client as well
 			Client* oldClient = *it;
 
-			bool authed = oldClient->authed;
-			std::string name = oldClient->GetName();
-			std::string ipString = oldClient->GetIpString();
-			int8_t pid = oldClient->GetPid();
-			World* world = oldClient->GetWorld();
-
 			it = m_clients.erase(it);
 
-			if (authed) {
+			std::string name = oldClient->GetName();
+			std::string ipString = oldClient->GetIpString();
+
+			if (oldClient->authed) {
 				auto table = make_luatable();
 				m_pluginHandler.TriggerEvent(EventType::kOnDisconnect, oldClient, table);
 
@@ -477,7 +474,7 @@ bool Server::Tick()
 				if (!oldClient->kicked)
 					BroadcastMessage("&ePlayer " + name + " left the game.");
 
-				world->RemoveClient(pid);
+				oldClient->GetWorld()->RemoveClient(oldClient->GetPid());
 
 				if (m_numClients > 0)
 					m_numClients--;
