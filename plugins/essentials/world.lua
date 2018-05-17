@@ -4,7 +4,8 @@ Init = function()
 	worldCmd:AddSubcommand("list", EssentialsPlugin.World.WorldCommand_List, "list - list all available worlds; active=green, inactive=red", 0, 0)
 	worldCmd:AddSubcommand("set", EssentialsPlugin.World.WorldCommand_Set, "set [option] [value] - sets world options; leave off arguments to see list of options; leave off value to see current value", 0, 1)
 	worldCmd:AddSubcommand("save", EssentialsPlugin.World.WorldCommand_Save, "save - saves world options and map data to file", 0, 1)
-	worldCmd:AddSubcommand("load", EssentialsPlugin.World.WorldCommand_Load, "load - loads world map into memory", 1, 0)
+	worldCmd:AddSubcommand("load", EssentialsPlugin.World.WorldCommand_Load, "load <world name> - loads world map into memory", 1, 0)
+	worldCmd:AddSubcommand("new", EssentialsPlugin.World.WorldCommand_New, "new <world name> <x> <y> <z>", 4, 0)
 
 	PermissionsPlugin.RequirePermission("essentials.world")
 end,
@@ -103,5 +104,9 @@ WorldCommand_Load = function(client, args)
 	targetWorld:SetActive(true)
 
 	Server.SendMessage(client, "&eLoaded world &a" .. worldName)
+end,
+
+WorldCommand_New = function(client, args)
+	Server.SendMessage(client, "&cNot yet implemented")
 end
 }

@@ -29,8 +29,12 @@ public:
 
 	virtual void Execute(Client* sender, const CommandArgs& args)
 	{
-		if (HandleSubcommands(sender, args))
+		if (HandleSubcommands(sender, args)) {
 			return;
+		} else if (!GetSubcommands().empty()) {
+			Protocol::SendMessage(sender, "&cInvalid subcommand &f" + args.front());
+			return;
+		}
 
 		if (m_func != nullptr) {
 			try {

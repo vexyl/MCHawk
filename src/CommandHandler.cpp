@@ -11,6 +11,29 @@
 #include "Utils/Logger.hpp"
 #include "Network/Protocol.hpp"
 
+bool Command::HandleSubcommands(Client* sender, const CommandArgs& args)
+{
+	for (auto& obj : m_subcommands) {
+		if (args[0] == obj->GetName()) {
+			CommandArgs subArgs = args;
+
+			subArgs.erase(subArgs.begin());
+
+			// FIXME: Repeated code; have command handler take care of subcommands
+			if (subArgs.size() < obj->GetArgumentAmount()) {
+				Protocol::SendMessage(sender, "&b" + obj->GetDocString());
+				return true;
+			}
+
+			obj->Execute(sender, subArgs);
+
+			return true;
+		}
+	}
+
+	return false;
+}
+
 CommandHandler::~CommandHandler()
 {
 	for (auto& obj : m_commands)

@@ -30,26 +30,8 @@ public:
 
 	void AddSubcommand(Command* command) { m_subcommands.push_back(command); }
 
-	bool HandleSubcommands(Client* sender, const CommandArgs& args)
-	{
-		for (auto& obj : m_subcommands) {
-			if (args[0] == obj->GetName()) {
-				CommandArgs subArgs = args;
+	bool HandleSubcommands(Client* sender, const CommandArgs& args);
 
-				subArgs.erase(subArgs.begin());
-
-				// TODO: Have this show docstring for subcommand with an optional supression
-				if (subArgs.size() < obj->GetArgumentAmount())
-					return false;
-
-				obj->Execute(sender, subArgs);
-
-				return true;
-			}
-		}
-
-		return false;
-	}
 protected:
 	std::string m_name;
 private:
