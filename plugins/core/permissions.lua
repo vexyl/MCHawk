@@ -275,3 +275,4 @@ end
 PermissionsPlugin.SendNoPermissionMessage = function(client, permission)
 	Server.SendMessage(client, "&cMissing permissions: &9" .. permission)
 end
+

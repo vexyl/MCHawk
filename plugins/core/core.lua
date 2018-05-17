@@ -4,7 +4,7 @@ end
 
 CorePlugin.PluginsCommand = function(client, args)
 	Server.SendMessage(client, "&eLuaBridge/" .. _VERSION)
-	Server.SendMessage(client, "&e" .. CorePlugin.GetPluginCount() .. " plugin(s) loaded")
+	Server.SendMessage(client, "&e" .. #CorePlugin.pluginNames .. " plugin(s) loaded")
 	Server.SendMessage(client, "&ePlugins: &9" .. table.concat(CorePlugin.pluginNames, "&e, &9"))
 end
 
@@ -25,10 +25,6 @@ end
 
 CorePlugin.ReloadCommand = function(client, args)
 	Server.SendMessage(client, "&eNot yet")
-end
-
-CorePlugin.GetPluginCount = function()
-	return #CorePlugin.pluginNames
 end
 
 CorePlugin.AddTimer = function(name, func, time)

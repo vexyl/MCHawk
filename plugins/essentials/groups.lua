@@ -28,7 +28,7 @@ EssentialsPlugin.Groups_OnAuth = function(client, args)
 	local groups = EssentialsPlugin.Groups_playerTable[targetName]
 
 	if (groups == nil) then
-		groups = { "Guest" }
+		groups = { "guest" }
 	end
 
 	for k,group in ipairs(groups) do
@@ -50,16 +50,6 @@ EssentialsPlugin.Groups_OnAuth = function(client, args)
 			end
 		end
 	end
-end
-
-EssentialsPlugin.Groups_GroupExists = function(group)
-	for _,groupTable in pairs(EssentialsPlugin.Groups_groupsTable) do
-		if (group == groupTable[1]) then
-			return true
-		end
-	end
-
-	return false
 end
 
 EssentialsPlugin.Groups_GetGroupTable = function(group)

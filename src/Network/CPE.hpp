@@ -49,8 +49,8 @@ struct cextinfop {
 		Packet packet;
 		packet.Write(buffer, sizeof(buffer));
 
-		packet.Read(appName);
 		packet.Read(extCount);
+		packet.Read(appName);
 		//packet.Read(opcode);
 
 		return true;
@@ -70,8 +70,8 @@ struct cextentryp {
 		Packet packet;
 		packet.Write(buffer, sizeof(buffer));
 
-		packet.Read(extName);
 		packet.Read(version);
+		packet.Read(extName);
 		//packet.Read(opcode);
 
 		return true;
