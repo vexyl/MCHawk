@@ -11,13 +11,17 @@
 
 enum EventType { kOnConnect, kOnAuth, kOnMessage, kOnPosition, kOnBlock, kOnPluginLoaded, kOnDisconnect, kOnWorldJoin, kEventTypeEnd };
 
-extern lua_State* L;
-
 class LuaPluginHandler {
 public:
+	static lua_State* L;
+
 	LuaPluginHandler();
 
 	~LuaPluginHandler();
+
+	void Init();
+	void Cleanup();
+	void Reset();
 
 	void AddPlugin(LuaPlugin* plugin);
 	void LoadPlugin(std::string filename);

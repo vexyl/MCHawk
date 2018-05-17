@@ -4,22 +4,53 @@
 
 #include <iostream>
 
-lua_State* L;
+lua_State* LuaPluginHandler::L = nullptr;
 
 LuaPluginHandler::LuaPluginHandler()
 {
+	Init();
+}
+
+LuaPluginHandler::~LuaPluginHandler()
+{
+	Cleanup();
+}
+
+void LuaPluginHandler::Init()
+{
 	L = luaL_newstate();
+
+	assert(L != nullptr);
+
 	luaL_openlibs(L);
 
 	LuaServer::Init(L);
 }
 
-LuaPluginHandler::~LuaPluginHandler()
+void LuaPluginHandler::Cleanup()
 {
+	for (int i = 0; i < kEventTypeEnd; ++i) {
+		m_signalMap[i].disconnect_all_slots();
+		assert(m_signalMap[i].empty());
+	}
+
 	for (auto& obj : m_plugins)
 		delete obj;
+
+	lua_close(L);
+
+	L = nullptr;
 }
 
+void LuaPluginHandler::Reset()
+{
+	Cleanup();
+
+	m_plugins.clear();
+	m_pluginQueue.clear();
+
+	Init();
+}
 void LuaPluginHandler::AddPlugin(LuaPlugin* plugin)
 {
 	m_plugins.push_back(plugin);
@@ -59,7 +90,7 @@ void LuaPluginHandler::RegisterEvent(int type, luabridge::LuaRef func)
 {
 	if (func.isFunction()) {
 		try {
-			m_signalMap[type].connect(boost::bind((std::function<void(Client*, luabridge::LuaRef)>)func, _1, _2));
+			m_signalMap[type].connect(func);
 		} catch (luabridge::LuaException const& e) {
 			std::cerr << "LuaException: " << e.what() << std::endl;
 		}

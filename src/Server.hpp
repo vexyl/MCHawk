@@ -21,6 +21,9 @@
 
 class Server {
 public:
+	// FIXME: Temporary
+	bool reloadPluginsFlag;
+
 	Server();
 	~Server();
 
@@ -41,6 +44,9 @@ public:
 
 	std::vector<Client*> GetClients() { return m_clients; }
 	std::map<std::string, World*> GetWorlds() { return m_worlds; }
+
+	void LoadPlugins();
+	void ReloadPlugins();
 
 	void OnConnect(sf::TcpSocket *sock);
 	void OnAuth(Client* client, struct Protocol::cauthp clientAuth);

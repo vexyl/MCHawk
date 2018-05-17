@@ -17,6 +17,15 @@ CommandHandler::~CommandHandler()
 		delete obj.second;
 }
 
+void CommandHandler::Reset()
+{
+	for (auto& obj : m_commands)
+		delete obj.second;
+
+	m_commands.clear();
+	m_aliases.clear();
+}
+
 Command* CommandHandler::GetCommand(std::string name)
 {
 	auto iter = m_commands.find(name);

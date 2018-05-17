@@ -2,8 +2,6 @@
 
 #include <boost/algorithm/string.hpp>
 
-extern lua_State* L;
-
 void LuaServer::Init(lua_State* L)
 {
 	luabridge::getGlobalNamespace(L)
@@ -58,6 +56,7 @@ void LuaServer::Init(lua_State* L)
 		.addStaticFunction("GetCommandStrings", &LuaServer::LuaGetCommandStrings)
 		.addStaticFunction("IsOperator", &LuaServer::LuaIsOperator)
 		.addStaticFunction("TransportPlayer", &LuaServer::LuaTransportPlayer)
+		.addStaticFunction("ReloadPlugins", &LuaServer::LuaReloadPlugins)
 	.endClass();
 }
 
@@ -219,20 +218,25 @@ luabridge::LuaRef LuaServer::LuaWorldGetOptionNames(World* world)
 	return table;
 }
 
+void LuaServer::LuaReloadPlugins()
+{
+	Server::GetInstance()->reloadPluginsFlag = true;
+}
+
 // Struct to table stuff
 
 luabridge::LuaRef make_luatable()
 {
-	luabridge::LuaRef table(L);
-	table = luabridge::newTable(L);
+	luabridge::LuaRef table(LuaPluginHandler::L);
+	table = luabridge::newTable(LuaPluginHandler::L);
 
 	return table;
 }
 
 luabridge::LuaRef cauthp_to_luatable(const struct Protocol::cauthp clientAuth)
 {
-	luabridge::LuaRef table(L);
-	table = luabridge::newTable(L);
+	luabridge::LuaRef table(LuaPluginHandler::L);
+	table = luabridge::newTable(LuaPluginHandler::L);
 
 	std::string name((char*)clientAuth.name, 0, sizeof(clientAuth.name));
 
@@ -246,8 +250,8 @@ luabridge::LuaRef cauthp_to_luatable(const struct Protocol::cauthp clientAuth)
 
 luabridge::LuaRef cmsgp_to_luatable(const struct Protocol::cmsgp clientMsg)
 {
-	luabridge::LuaRef table(L);
-	table = luabridge::newTable(L);
+	luabridge::LuaRef table(LuaPluginHandler::L);
+	table = luabridge::newTable(LuaPluginHandler::L);
 
 	std::string message((char*)clientMsg.msg, 0, sizeof(clientMsg.msg));
 
@@ -261,8 +265,8 @@ luabridge::LuaRef cmsgp_to_luatable(const struct Protocol::cmsgp clientMsg)
 
 luabridge::LuaRef cblockp_to_luatable(const struct Protocol::cblockp clientBlock)
 {
-	luabridge::LuaRef table(L);
-	table = luabridge::newTable(L);
+	luabridge::LuaRef table(LuaPluginHandler::L);
+	table = luabridge::newTable(LuaPluginHandler::L);
 
 	table["type"] = clientBlock.type;
 	table["mode"] = clientBlock.mode;

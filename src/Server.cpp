@@ -32,7 +32,7 @@
 
 Server* Server::m_thisPtr = nullptr;
 
-Server::Server() : m_running(true)
+Server::Server() : reloadPluginsFlag(false), m_running(true)
 {
 	m_port = 25565;
 	m_version = 0x07;
@@ -112,6 +112,13 @@ void Server::Init()
 		}
 	}
 
+	LoadPlugins();
+
+	LOG(LogLevel::kInfo, "Server initialized and listening on port %d", m_port);
+}
+
+void Server::LoadPlugins()
+{
 	m_commandHandler.Register("help", new HelpCommand("help"), "h");
 	m_commandHandler.Register("tp", new TeleportCommand("tp"));
 	m_commandHandler.Register("summon", new SummonCommand("summon"));
@@ -143,8 +150,13 @@ void Server::Init()
 
 	// In case a script loaded another plugin while being loaded
 	m_pluginHandler.FlushPluginQueue();
+}
 
-	LOG(LogLevel::kInfo, "Server initialized and listening on port %d", m_port);
+void Server::ReloadPlugins()
+{
+	m_commandHandler.Reset();
+	m_pluginHandler.Reset();
+	LoadPlugins();
 }
 
 void Server::OnConnect(sf::TcpSocket *sock)
@@ -423,6 +435,11 @@ bool Server::Tick()
 	if (m_heartbeatClock.getElapsedTime().asSeconds() >= kHeartbeatTime) {
 		SendHeartbeat();
 		m_heartbeatClock.restart();
+	}
+
+	if (reloadPluginsFlag) {
+		ReloadPlugins();
+		reloadPluginsFlag = false;
 	}
 
 	// Plugins tick

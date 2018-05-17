@@ -29,6 +29,7 @@ struct LuaServer {
 	static bool LuaIsOperator(std::string name);
 	static void LuaTransportPlayer(Client* client, World* world);
 	static luabridge::LuaRef LuaWorldGetOptionNames(World* world);
+	static void LuaReloadPlugins();
 };
 
 luabridge::LuaRef make_luatable();

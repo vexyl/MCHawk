@@ -67,6 +67,8 @@ public:
 
 	typedef std::map<std::string, Command*> CommandMap;
 
+	void Reset();
+
 	Command* GetCommand(std::string name);
 	const CommandMap& GetCommandList() const { return m_commands; }
 
