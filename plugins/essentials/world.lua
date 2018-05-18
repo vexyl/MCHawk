@@ -1,6 +1,6 @@
 EssentialsPlugin.World = {
 Init = function()
-	local worldCmd = Server.AddCommand("luaworld", "lw", EssentialsPlugin.World.WorldCommand, "worlds - various commands related to worlds", 1, 0)
+	local worldCmd = Server.AddCommand("luaworld", "lw", function() end, "worlds - various commands related to worlds", 1, 0)
 	worldCmd:AddSubcommand("list", EssentialsPlugin.World.WorldCommand_List, "list - list all available worlds; active=green, inactive=red", 0, 0)
 	worldCmd:AddSubcommand("set", EssentialsPlugin.World.WorldCommand_Set, "set [option] [value] - sets world options; leave off arguments to see list of options; leave off value to see current value", 0, 1)
 	worldCmd:AddSubcommand("save", EssentialsPlugin.World.WorldCommand_Save, "save - saves world options and map data to file", 0, 1)
@@ -8,10 +8,6 @@ Init = function()
 	worldCmd:AddSubcommand("new", EssentialsPlugin.World.WorldCommand_New, "new <world name> <x> <y> <z>", 4, 0)
 
 	PermissionsPlugin.RequirePermission("essentials.world")
-end,
-
-WorldCommand = function(client, args)
-
 end,
 
 WorldCommand_List = function(client, args)

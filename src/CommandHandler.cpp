@@ -31,6 +31,11 @@ bool Command::HandleSubcommands(Client* sender, const CommandArgs& args)
 		}
 	}
 
+	if (!m_subcommands.empty()) {
+		Protocol::SendMessage(sender, "&cInvalid subcommand &f" + args.front());
+		return true;
+	}
+
 	return false;
 }
 
