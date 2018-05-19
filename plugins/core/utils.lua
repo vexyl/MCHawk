@@ -45,5 +45,5 @@ WORLD_NOT_FOUND = function(name)
 end
 
 WORLD_NOT_ACTIVE = function(name)
-	return "&cWorld &f" .. name .. " &cnot active (unloaded)."
+	return "&cWorld &f" .. name .. " &cnot active (unloaded)"
 end

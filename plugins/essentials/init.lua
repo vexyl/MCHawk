@@ -10,7 +10,7 @@ EssentialsPlugin.init = function()
 	Server.AddCommand("unbanip", "", EssentialsPlugin.Ban_UnbanIpCommand, "unbanip <ip address> - unbans ip from server", 1, 0)
 	Server.AddCommand("cuboid", "z", EssentialsPlugin.Cuboid_CuboidCommand, "cuboid [air] - places blocks in a cuboid region", 0, 0)
 	Server.AddCommand("emote", "me", EssentialsPlugin.Emote_EmoteCommand, "emote <message> - unleashes an emote upon the world", 1, 0)
-	Server.AddCommand("pm", "msg message whisper m", EssentialsPlugin.Pm_PmCommand, "pm <name> <message> - sends a private message to a player", 2, 0)
+	Server.AddCommand("pm", "msg message whisper", EssentialsPlugin.Pm_PmCommand, "pm <name> <message> - sends a private message to a player", 2, 0)
 	Server.AddCommand("billnye", "bn bill nye", EssentialsPlugin.BillNye_BillNyeCommand, "billnye <wisdom> - instills wisdom in fellow server members", 1, 0)
 	Server.AddCommand("cmds", "c cmd command commands", EssentialsPlugin.Cmds_CmdsCommand, "cmds - show short list of commands", 0, 0)
 	Server.AddCommand("kick", "", EssentialsPlugin.Kick_KickCommand, "kick <player> [reason] - kicks player from server", 1, 0)
@@ -19,7 +19,7 @@ EssentialsPlugin.init = function()
 	local groupsCmd = Server.AddCommand("groups", "gr grp grps group rank ranks", EssentialsPlugin.Groups_GroupsCommand, "groups - show available permission groups", 0, 0)
 	groupsCmd:AddSubcommand("reload", EssentialsPlugin.Groups_GroupsCommand_Reload, "reload - reads the groups file into memory", 0, 0)
 
-	Server.AddCommand("main", "def default",
+	Server.AddCommand("main", "m def default",
 		function(client, args)
 			EssentialsPlugin.Misc_GotoCommand(client, { "default" })
 		end,

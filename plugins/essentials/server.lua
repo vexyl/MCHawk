@@ -13,6 +13,7 @@ EssentialsPlugin.Server_ShutdownCommand = function(client, args)
 		if (CorePlugin.TimerExists("server_timers")) then
 			CorePlugin.RemoveTimer("server_timers")
 			Server.SystemWideMessage(client.name .. " aborted server shutdown.")
+			print("Server plugin: " .. client.name .. " aborted server shutdown.")
 		else
 			Server.SendMessage(client, "&cNo shutdown to abort")
 		end

@@ -39,16 +39,14 @@ EssentialsPlugin.Cuboid_OnBlock = function(client, block)
 end
 
 EssentialsPlugin.Cuboid_OnDisconnect = function(client, args)
-	EssentialsPlugin.Cuboid_Remove(client.name)
+	if (EssentialsPlugin.Cuboid_players[client.name] ~= nil) then
+		EssentialsPlugin.Cuboid_Remove(client.name)
+	end
 end
 
 EssentialsPlugin.Cuboid_OnWorldJoin = function(client, args)
-	EssentialsPlugin.Cuboid_Remove(client.name)
-end
-
-EssentialsPlugin.Cuboid_Remove = function(targetName)
-	if (EssentialsPlugin.Cuboid_players[targetName] ~= nil) then
-		EssentialsPlugin.Cuboid_Remove(targetName)
+	if (EssentialsPlugin.Cuboid_players[client.name] ~= nil) then
+		EssentialsPlugin.Cuboid_Remove(client.name)
 	end
 end
 
