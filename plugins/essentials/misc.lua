@@ -38,8 +38,8 @@ EssentialsPlugin.Pm_MessagePlayer = function(client, targetName, message)
 		return
 	end
 
-	Server.SendMessage(client, "&d[You -> " .. target.name .. "] " .. message)
-	Server.SendMessage(target, "&d[" .. client.name .. "] " .. message)
+	Server.SendMessage(client, "&dTo [" .. target.name .. "]: " .. message)
+	Server.SendMessage(target, "&d[" .. client.name .. "]: " .. message)
 end
 
 -- Yes, this is an essential command
