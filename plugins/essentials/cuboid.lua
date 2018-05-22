@@ -8,6 +8,12 @@ EssentialsPlugin.Cuboid_CuboidCommand = function(client, args)
 		return
 	end
 
+	if (EssentialsPlugin.Cuboid_players[client.name] ~= nil) then
+		EssentialsPlugin.Cuboid_Remove(client.name)
+		Server.SendMessage(client, "&eCuboid operation canceled")
+		return
+	end
+
 	Server.SendMessage(client, "&eMake two selections")
 
 	EssentialsPlugin.Cuboid_players[client.name] = {}

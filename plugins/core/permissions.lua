@@ -86,7 +86,7 @@ PermissionsPlugin.RevokeCommand = function(client, args)
 
 	PermissionsPlugin.SavePermissions()
 
-	Server.SendMessage(client, "&eRevoked player " .. targetName ..": &9" .. perms)
+	Server.SendMessage(client, "&eRevoked player " .. targetName .. ": &9" .. perms)
 
 	if (target ~= nil) then
 		Server.SendMessage(target, "&e" .. client.name .. " revoked you: &9" .. perms)
