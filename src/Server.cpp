@@ -100,16 +100,45 @@ void Server::Init()
 
 	SendHeartbeat();
 
-	// Load all worlds from config files
-	for (boost::filesystem::directory_iterator itr("worlds/"); itr != boost::filesystem::directory_iterator(); ++itr) {
-		if (boost::filesystem::is_regular_file(itr->status())) {
-			std::string filename = itr->path().filename().string();
+	if (boost::filesystem::exists("worlds")) {
+		try {
+			// Load all worlds from config files
+			for (boost::filesystem::directory_iterator itr("worlds/"); itr != boost::filesystem::directory_iterator(); ++itr) {
+				if (boost::filesystem::is_regular_file(itr->status())) {
+					std::string filename = itr->path().filename().string();
 
-			World* world = new World();
-			world->Load("worlds/" + filename);
+					World* world = new World();
+					world->Load("worlds/" + filename);
 
-			AddWorld(world);
+					AddWorld(world);
+				}
+			}
+		} catch (std::runtime_error& e) {
+			LOG(LogLevel::kWarning, "%s", e.what());
 		}
+	} else {
+		boost::filesystem::create_directories("worlds/maps");
+	}
+
+	// TODO: Put in a generic create world function
+	// Create default world if needed
+	if (GetWorld("default") == nullptr) {
+		LOG(LogLevel::kDebug, "No default world, creating one now...");
+		std::string name = "default";
+		short x = 64;
+		short y = 64;
+		short z = 64;
+		std::string filename = "worlds/maps/" + name + "_" + std::to_string(x) + "x" + std::to_string(y) + "x" + std::to_string(z) + ".raw";
+		World* w = new World(name);
+		w->GetMap().GenerateFlatMap(filename, x, y, z);
+		w->GetMap().SetFilename(filename);
+		w->SetSpawnPosition(Position(x/2*32+51, y/2*32+51, z/2*32+51));
+		w->SetOption("autosave", "true");
+		w->SetOption("autoload", "true");
+		w->SetActive(true);
+
+		AddWorld(w);
+		w->Save();
 	}
 
 	LoadPlugins();
