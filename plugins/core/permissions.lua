@@ -109,9 +109,7 @@ PermissionsPlugin.PermissionsCommand = function(client, args)
 	local perms = PermissionsPlugin.permissionTable[string.lower(targetName)]
 	local permissions = ""
 	if (perms ~= nil) then
-		for k, perm in pairs(perms) do
-			permissions = permissions .. "&9" .. perm .. "&e, "
-		end
+		permissions = "&9" .. table.concat(perms, "&e, &9")
 	elseif (target == nil and args[1] ~= nil) then
 		Server.SendMessage(client, PLAYER_NOT_FOUND(targetName))
 		return
