@@ -330,7 +330,7 @@ void Server::OnMessage(Client* client, struct Protocol::cmsgp clientMsg)
 		auto table = cmsgp_to_luatable(clientMsg); // FIXME: Temporary, don't need this since we already have the strings
 		m_pluginHandler.TriggerEvent(EventType::kOnMessage, client, table);
 
-		if (m_pluginHandler.GetEventFlag("NoDefaultCall")) {
+		if (m_pluginHandler.GetEventFlag("NoDefaultCall") > 0) {
 			LOG(LogLevel::kInfo, "[SUPPRESSED] %s: %s", name.c_str(), message.c_str());
 			return;
 		}
