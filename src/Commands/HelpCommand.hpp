@@ -29,6 +29,7 @@ public:
 			Protocol::SendMessage(sender, "&eFor a list of worlds, type &a/world list");
 			Protocol::SendMessage(sender, "&eTo go to a world, type &a/goto <world>");
 			Protocol::SendMessage(sender, "&eTo see a list of players, type &a/who &eor &a/players");
+			Protocol::SendMessage(sender, "&eFor information about the server, type &a/serverinfo");
 			return;
 		}
 
