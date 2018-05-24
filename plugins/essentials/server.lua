@@ -55,6 +55,7 @@ EssentialsPlugin.Server_SafeShutdown = function(reason)
 	for _,world in pairs(worlds) do
 		if (world:GetOption("autosave") == "true") then
 			world:Save()
+			world:SetOption("autosave", "false") -- So the world doesn't try to save again before shutdown
 		end
 	end
 

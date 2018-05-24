@@ -130,3 +130,17 @@ EssentialsPlugin.Misc_GotoCommand = function(client, args)
 
 	Server.TransportPlayer(client, world)
 end
+
+EssentialsPlugin.Misc_WhoCommand = function(client, args)
+	local message = "&ePlayer list: "
+
+	local clients = Server.GetClients()
+	for k,client in pairs(clients) do
+		message = message .. client:GetChatName() .. "&e(&a" .. client:GetWorld():GetName() .. "&e)"
+		if (k < #clients) then
+			message = message .. ", "
+		end
+	end
+
+	Server.SendMessage(client, message)
+end
