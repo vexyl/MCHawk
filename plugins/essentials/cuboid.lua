@@ -103,6 +103,7 @@ EssentialsPlugin.Cuboid_DoCuboid = function(client)
 		local maxBlocks = EssentialsPlugin.Cuboid_maxBlocks
 		if (blockCount > maxBlocks) then
 			Server.SendMessage(client, "&cToo many blocks; Max=" .. maxBlocks)
+			EssentialsPlugin.Cuboid_Remove(client.name)
 			return
 		end
 
