@@ -99,7 +99,7 @@ void Client::ProcessPacketsInQueue()
 				*it = p;
 			}
 
-			continue;
+			break; // No threading yet, so we don't want to process every packet in queue right away
 		}
 
 		// Packet processed successfully, move on
