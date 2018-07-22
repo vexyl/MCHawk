@@ -1,10 +1,11 @@
-// Learned from https://cppcodetips.wordpress.com/2014/01/02/a-simple-logger-class-in-c/
+﻿// Learned from https://cppcodetips.wordpress.com/2014/01/02/a-simple-logger-class-in-c/
 #include "Logger.hpp"
 #include "Utils.hpp"
 
 const std::string Logger::m_logFileName = "out.log";
-Logger* Logger::m_thisPtr = NULL;
+Logger* Logger::m_thisPtr = nullptr;
 std::ofstream Logger::m_logFile;
+std::string Logger::m_lastDateString;
 
 Logger* Logger::GetLogger()
 {
@@ -15,7 +16,9 @@ Logger* Logger::GetLogger()
 	return m_thisPtr;
 }
 
-void Logger::Log(LogLevel::LogLevel logLevel, const char *format, ...)
+// FIXME: ANSI color codes in console probably isn't a portable way to do this
+// FIXME: Should only show date in log if nothing has been logged that day
+void Logger::Log(LogLevel::LogLevel logLevel, const char* format, ...)
 {
 	char buffer[1024];
 
@@ -26,14 +29,22 @@ void Logger::Log(LogLevel::LogLevel logLevel, const char *format, ...)
 
 	va_end(args);
 
-	std::string message;
-	message = "[" + Utils::CurrentDateTime() + "] ";
+	std::string dateString = Utils::CurrentDate();
+	if (m_lastDateString != dateString) {
+		m_logFile << "--- " << dateString << " ---\n";
+		std::cerr << "--- " << dateString << " ---" << std::endl;
+		m_lastDateString = dateString;
+	}
+
+	std::string message = "[" + Utils::CurrentTime() + "] ";
 	if (logLevel == LogLevel::kDebug)
-		message += "DEBUG: ";
+		message += "\033[1;32mDEBUG\033[0m ";
+	else if (logLevel == LogLevel::kInfo)
+		message += "\033[0;32mINFO\033[0m ";
 	else if (logLevel == LogLevel::kWarning)
-		message += "WARNING: ";
+		message += "\033[0;31mWARNING\033[0m ";
 	else if (logLevel == LogLevel::kError)
-		message += "ERROR: ";
+		message += "\033[1;31mERROR\033[0m ";
 	message += buffer;
 
 	m_logFile << message << "\n";

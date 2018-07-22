@@ -1,4 +1,4 @@
-#ifndef LOGGER_H
+﻿#ifndef LOGGER_H
 #define LOGGER_H
 
 // Learned from https://cppcodetips.wordpress.com/2014/01/02/a-simple-logger-class-in-c/
@@ -25,7 +25,7 @@ namespace VerbosityLevel {
 class Logger {
 public:
 	Logger() { m_verbosityLevel = VerbosityLevel::kNormal; }
-	~Logger() { if (m_thisPtr != NULL) delete m_thisPtr; }
+	~Logger() { if (m_thisPtr != nullptr) delete m_thisPtr; }
 
 	static Logger* GetLogger();
 
@@ -37,6 +37,7 @@ private:
 	static Logger* m_thisPtr; // Singleton
 	static const std::string m_logFileName;
 	static std::ofstream m_logFile;
+	static std::string m_lastDateString;
 
 	VerbosityLevel::VerbosityLevel m_verbosityLevel;
 };

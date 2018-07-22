@@ -1,4 +1,4 @@
-#ifndef UTILS_H_
+﻿#ifndef UTILS_H_
 #define UTILS_H_
 
 #include <time.h>
@@ -11,6 +11,8 @@ namespace Utils {
 // http://www.cplusplus.com/reference/ctime/strftime/
 // https://cppcodetips.wordpress.com/2014/01/02/a-simple-logger-class-in-c/
 const std::string CurrentDateTime();
+const std::string CurrentDate();
+const std::string CurrentTime();
 
 // So curl won't output to stdout
 size_t write_callback_nop(char *ptr, size_t size, size_t nmemb, void *userdata);

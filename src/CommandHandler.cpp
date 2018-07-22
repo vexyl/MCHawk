@@ -83,8 +83,8 @@ void CommandHandler::Register(std::string name, Command* command, std::string al
 
 		boost::split(aliasList, aliases, boost::is_any_of(" "));
 
-		int size = (int)aliasList.size();
-		for (int i = 0; i < size; ++i) {
+		size_t size = aliasList.size();
+		for (size_t i = 0; i < size; ++i) {
 			std::string alias = aliasList[i];
 
 			std::pair<AliasMap::iterator, bool> res = m_aliases.insert(std::make_pair(alias, name));
