@@ -125,9 +125,9 @@ void CommandHandler::Execute(Client* sender, std::string name, const CommandArgs
 			return;
 		}
 
-		if (args.size() >= iter->second->GetArgumentAmount())
+		if (args.size() >= iter->second->GetArgumentAmount()) {
 			iter->second->Execute(sender, args);
-		else {
+		} else {
 			auto helpIter = m_commands.find("help");
 			if (helpIter != m_commands.end()) {
 				CommandArgs helpArgs = { name };
