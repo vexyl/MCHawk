@@ -36,18 +36,26 @@ void Logger::Log(LogLevel::LogLevel logLevel, const char* format, ...)
 		m_lastDateString = dateString;
 	}
 
-	std::string message = "[" + Utils::CurrentTime() + "] ";
-	if (logLevel == LogLevel::kDebug)
-		message += "\033[1;32mDEBUG\033[0m ";
-	else if (logLevel == LogLevel::kInfo)
-		message += "\033[0;32mINFO\033[0m ";
-	else if (logLevel == LogLevel::kWarning)
-		message += "\033[0;31mWARNING\033[0m ";
-	else if (logLevel == LogLevel::kError)
-		message += "\033[1;31mERROR\033[0m ";
-	message += buffer;
+	std::string consoleMessage = "[" + Utils::CurrentTime() + "] ";
+	std::string logFileMessage = "[" + Utils::CurrentTime() + "] ";
+	if (logLevel == LogLevel::kDebug) {
+		consoleMessage += "\033[1;32mDEBUG\033[0m ";
+		logFileMessage += "DEBUG ";
+	} else if (logLevel == LogLevel::kInfo) {
+		consoleMessage += "\033[0;32mINFO\033[0m ";
+		logFileMessage += "INFO ";
+	} else if (logLevel == LogLevel::kWarning) {
+		consoleMessage += "\033[0;31mWARNING\033[0m ";
+		logFileMessage += "WARNING ";
+	} else if (logLevel == LogLevel::kError) {
+		consoleMessage += "\033[1;31mERROR\033[0m ";
+		logFileMessage += "ERROR ";
+	}
 
-	m_logFile << message << "\n";
+	consoleMessage += buffer;
+	logFileMessage += buffer;
+
+	m_logFile << logFileMessage << "\n";
 	m_logFile.flush();
 
 	if (m_verbosityLevel < VerbosityLevel::kNormal) {
@@ -55,5 +63,5 @@ void Logger::Log(LogLevel::LogLevel logLevel, const char* format, ...)
 			return;
 	}
 
-	std::cerr << message << std::endl;
+	std::cerr << consoleMessage << std::endl;
 }
