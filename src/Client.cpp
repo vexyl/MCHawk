@@ -99,7 +99,7 @@ void Client::ProcessPacketsInQueue()
 				*it = p;
 			}
 
-			break;
+			continue;
 		}
 
 		// Packet processed successfully, move on
