@@ -2,6 +2,10 @@
 #include "Logger.hpp"
 #include "Utils.hpp"
 
+#ifdef _WIN32
+	#include <Windows.h>
+#endif
+
 const std::string Logger::m_logFileName = "out.log";
 Logger* Logger::m_thisPtr = nullptr;
 std::ofstream Logger::m_logFile;
@@ -16,8 +20,7 @@ Logger* Logger::GetLogger()
 	return m_thisPtr;
 }
 
-// FIXME: ANSI color codes in console probably isn't a portable way to do this
-// FIXME: Should only show date in log if nothing has been logged that day
+// TODO: Clean this up, make some generic output with color function
 void Logger::Log(LogLevel::LogLevel logLevel, const char* format, ...)
 {
 	char buffer[1024];
@@ -29,39 +32,103 @@ void Logger::Log(LogLevel::LogLevel logLevel, const char* format, ...)
 
 	va_end(args);
 
-	std::string dateString = Utils::CurrentDate();
+	bool mute = false;
+	if (m_verbosityLevel < VerbosityLevel::kNormal) {
+		if (logLevel == LogLevel::kDebug || logLevel == LogLevel::kWarning)
+			mute = true;
+	}
+
+	std::string dateString = "--- The date is " + Utils::CurrentDate() + " ---";
 	if (m_lastDateString != dateString) {
-		m_logFile << "--- " << dateString << " ---\n";
-		std::cerr << "--- " << dateString << " ---" << std::endl;
+		m_logFile << dateString << "\n";
+
+		if (!mute)
+			std::cerr << dateString << "\n";
+
 		m_lastDateString = dateString;
 	}
 
-	std::string consoleMessage = "[" + Utils::CurrentTime() + "] ";
 	std::string logFileMessage = "[" + Utils::CurrentTime() + "] ";
+
+	if (!mute)
+		std::cerr << "[" + Utils::CurrentTime() + "] ";
+
+#ifdef _WIN32
+	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	WORD wOldColorAttrs;
+	if (!mute) {
+		CONSOLE_SCREEN_BUFFER_INFO csbiInfo;
+		GetConsoleScreenBufferInfo(hConsole, &csbiInfo);
+		wOldColorAttrs = csbiInfo.wAttributes;
+	}
+#endif
+
 	if (logLevel == LogLevel::kDebug) {
-		consoleMessage += "\033[1;32mDEBUG\033[0m ";
+		if (!mute) {
+#ifdef __linux__
+			std::cerr << "\033[1;32mDEBUG\033[0m ";
+#elif _WIN32
+			SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+			std::cerr << "DEBUG ";
+#else
+			std::cerr << "DEBUG ";
+#endif
+		}
+
 		logFileMessage += "DEBUG ";
-	} else if (logLevel == LogLevel::kInfo) {
-		consoleMessage += "\033[0;32mINFO\033[0m ";
+	}
+	else if (logLevel == LogLevel::kInfo) {
+		if (!mute) {
+#ifdef __linux__
+			std::cerr << "\033[0;32mINFO\033[0m ";
+#elif _WIN32
+			SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN);
+			std::cerr << "INFO ";
+#else
+			std::cerr << "INFO ";
+#endif
+		}
+
 		logFileMessage += "INFO ";
-	} else if (logLevel == LogLevel::kWarning) {
-		consoleMessage += "\033[0;31mWARNING\033[0m ";
+	}
+	else if (logLevel == LogLevel::kWarning) {
+		if (!mute) {
+#ifdef __linux__
+			std::cerr << "\033[0;31mWARNING\033[0m ";
+#elif _WIN32
+			SetConsoleTextAttribute(hConsole, FOREGROUND_RED);
+			std::cerr << "WARNING ";
+#else
+			std::cerr << "WARNING ";
+#endif
+		}
+
 		logFileMessage += "WARNING ";
-	} else if (logLevel == LogLevel::kError) {
-		consoleMessage += "\033[1;31mERROR\033[0m ";
+	}
+	else if (logLevel == LogLevel::kError) {
+		if (!mute) {
+#ifdef __linux__
+			std::cerr << "\033[1;31mERROR\033[0m ";
+#elif _WIN32
+			SetConsoleTextAttribute(hConsole, FOREGROUND_RED | FOREGROUND_INTENSITY);
+			std::cerr << "ERROR ";
+#else
+			std::cerr << "ERROR ";
+#endif
+		}
+
 		logFileMessage += "ERROR ";
 	}
 
-	consoleMessage += buffer;
+	if (!mute) {
+#ifdef _WIN32
+		SetConsoleTextAttribute(hConsole, wOldColorAttrs);
+#endif
+		std::cout << buffer << std::endl;
+	}
+
 	logFileMessage += buffer;
 
 	m_logFile << logFileMessage << "\n";
 	m_logFile.flush();
-
-	if (m_verbosityLevel < VerbosityLevel::kNormal) {
-		if (logLevel == LogLevel::kDebug || logLevel == LogLevel::kWarning)
-			return;
-	}
-
-	std::cerr << consoleMessage << std::endl;
 }
