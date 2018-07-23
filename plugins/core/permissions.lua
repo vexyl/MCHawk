@@ -253,7 +253,7 @@ PermissionsPlugin.CheckPermissionNotify = function(client, permission)
 	end
 
 	-- Operators bypass permissions
-	if (client:GetUserType() == 0x64) then -- operator
+	if (client:GetUserType() >= 0x64) then -- operator or higher
 		return true
 	end
 

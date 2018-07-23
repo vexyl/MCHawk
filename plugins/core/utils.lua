@@ -47,3 +47,7 @@ end
 WORLD_NOT_ACTIVE = function(name)
 	return "&cWorld &f" .. name .. " &cnot active (unloaded)"
 end
+
+WORLD_ALREADY_EXISTS = function(name)
+	return "&cWorld &f" .. name .. " &calready exists"
+end

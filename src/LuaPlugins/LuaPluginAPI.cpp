@@ -57,6 +57,7 @@ void LuaServer::Init(lua_State* L)
 		.addStaticFunction("IsOperator", &LuaServer::LuaIsOperator)
 		.addStaticFunction("TransportPlayer", &LuaServer::LuaTransportPlayer)
 		.addStaticFunction("ReloadPlugins", &LuaServer::LuaReloadPlugins)
+		.addStaticFunction("CreateWorld", &LuaServer::LuaCreateWorld)
 	.endClass();
 }
 
@@ -221,6 +222,20 @@ luabridge::LuaRef LuaServer::LuaWorldGetOptionNames(World* world)
 void LuaServer::LuaReloadPlugins()
 {
 	Server::GetInstance()->reloadPluginsFlag = true;
+}
+
+void LuaServer::LuaCreateWorld(std::string worldName, short x, short y, short z)
+{
+	std::string filename = "worlds/maps/" + worldName + "_" + std::to_string(x) + "x" + std::to_string(y) + "x" + std::to_string(z) + ".raw";
+
+	World* world = new World(worldName);
+
+	world->GetMap().GenerateFlatMap(filename, x, y, z);
+	world->GetMap().SetFilename(filename);
+	world->SetSpawnPosition(Position(x/2*32+51, y/2*32+51, z/2*32+51));
+	world->SetActive(true);
+
+	Server::GetInstance()->AddWorld(world);
 }
 
 // Struct to table stuff

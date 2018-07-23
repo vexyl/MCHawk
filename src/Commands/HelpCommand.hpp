@@ -50,9 +50,16 @@ public:
 
 		// Does this command exist?
 		auto iter = commands.find(commandName);
-		if (iter != commands.end()) {
+
+		Command* testCommand = nullptr;
+		if (iter != commands.end())
+			testCommand = iter->second;
+		else
+			testCommand = server->GetCommandHandler().GetCommandByAlias(commandName);
+
+		if (testCommand != nullptr) {
 			// issued /help commandName
-			Command* subcheck = iter->second;
+			Command* subcheck = testCommand;
 			std::string docStringPrefix = "/";
 
 			if (args.size() > 1) {

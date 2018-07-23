@@ -30,6 +30,7 @@ struct LuaServer {
 	static void LuaTransportPlayer(Client* client, World* world);
 	static luabridge::LuaRef LuaWorldGetOptionNames(World* world);
 	static void LuaReloadPlugins();
+	static void LuaCreateWorld(std::string worldName, short x, short y, short z);
 };
 
 luabridge::LuaRef make_luatable();

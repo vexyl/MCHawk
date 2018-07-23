@@ -65,6 +65,18 @@ Command* CommandHandler::GetCommand(std::string name)
 	return iter->second;
 }
 
+Command* CommandHandler::GetCommandByAlias(std::string name)
+{
+	auto aliasIter = m_aliases.find(name);
+	if (aliasIter != m_aliases.end()) {
+		auto iter = m_commands.find(aliasIter->second);
+		if (iter != m_commands.end())
+			return iter->second;
+	}
+
+	return nullptr;
+}
+
 void CommandHandler::Register(std::string name, Command* command, std::string aliases)
 {
 	std::pair<CommandMap::iterator, bool> res = m_commands.insert(std::make_pair(name, command));
@@ -111,8 +123,10 @@ void CommandHandler::Execute(Client* sender, std::string name, const CommandArgs
 	// Not found, check aliases
 	if (iter == m_commands.end()) {
 		auto aliasIter = m_aliases.find(name);
-		if (aliasIter != m_aliases.end())
-			iter = m_commands.find(aliasIter->second);
+		if (aliasIter != m_aliases.end()) {
+			name = aliasIter->second;
+			iter = m_commands.find(name);
+		}
 	}
 
 	if (iter == m_commands.end()) {

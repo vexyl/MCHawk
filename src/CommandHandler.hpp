@@ -52,7 +52,8 @@ public:
 	void Reset();
 
 	Command* GetCommand(std::string name);
-	const CommandMap& GetCommandList() const { return m_commands; }
+	Command* GetCommandByAlias(std::string name);
+	CommandMap GetCommandList() const { return m_commands; }
 
 	void Register(std::string name, Command* command, std::string aliases="");
 	void Execute(Client* sender, std::string name, const CommandArgs& args);

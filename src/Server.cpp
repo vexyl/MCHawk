@@ -27,7 +27,6 @@
 #include "Commands/TeleportCommand.hpp"
 #include "Commands/SummonCommand.hpp"
 #include "Commands/OpCommand.hpp"
-#include "Commands/WorldCommand.hpp"
 
 Server* Server::m_thisPtr = nullptr;
 
@@ -151,7 +150,6 @@ void Server::LoadPlugins()
 	m_commandHandler.Register("tp", new TeleportCommand("tp"));
 	m_commandHandler.Register("summon", new SummonCommand("summon"));
 	m_commandHandler.Register("op", new OpCommand("op"));
-	m_commandHandler.Register("world", new WorldCommand("world"), "w map");
 
 	m_pluginHandler.LoadPlugin("plugins/core/init.lua"); // Load this first
 
