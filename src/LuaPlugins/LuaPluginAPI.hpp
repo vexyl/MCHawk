@@ -1,7 +1,6 @@
 ﻿#ifndef LUAPLUGINAPI_H_
 #define LUAPLUGINAPI_H_
 
-#include "../Server.hpp"
 #include "../Network/Protocol.hpp"
 #include "LuaCommand.hpp"
 

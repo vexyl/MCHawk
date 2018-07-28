@@ -19,7 +19,6 @@
 
 #include "Network/ClientStream.hpp"
 #include "Network/CPE.hpp"
-#include "Utils/Logger.hpp"
 #include "Utils/Utils.hpp"
 #include "LuaPlugins/LuaPluginAPI.hpp"
 
@@ -30,7 +29,7 @@
 
 Server* Server::m_thisPtr = nullptr;
 
-Server::Server() : reloadPluginsFlag(false), m_running(true)
+Server::Server() : m_logger("out.log"), reloadPluginsFlag(false), m_running(true)
 {
 	m_port = 25565;
 	m_version = 0x07;
@@ -82,7 +81,7 @@ void Server::Init()
 	}
 
 	if (!debug)
-		Logger::GetLogger()->SetVerbosityLevel(VerbosityLevel::kQuiet);
+		m_logger.SetVerbosityLevel(VerbosityLevel::kQuiet);
 
 	if (m_listener.listen(m_port) != sf::Socket::Done) {
 		LOG(LogLevel::kError, "Failed to listen on port %d", m_port);

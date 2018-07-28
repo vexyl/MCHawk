@@ -6,18 +6,10 @@
 	#include <Windows.h>
 #endif
 
-const std::string Logger::m_logFileName = "out.log";
-Logger* Logger::m_thisPtr = nullptr;
-std::ofstream Logger::m_logFile;
-std::string Logger::m_lastDateString;
-
-Logger* Logger::GetLogger()
+Logger::Logger(std::string filename)
 {
-	if (!m_thisPtr) {
-		m_thisPtr = new Logger();
-		m_logFile.open(m_logFileName.c_str(), std::ios::out | std::ios::app);
-	}
-	return m_thisPtr;
+	m_logFile.open(filename, std::ios::out | std::ios::app);
+	m_verbosityLevel = VerbosityLevel::kNormal;
 }
 
 // TODO: Clean this up, make some generic output with color function

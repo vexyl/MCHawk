@@ -4,8 +4,8 @@
 #include <string>
 #include <memory>
 
+#include "../Server.hpp" // For logging
 #include "../CommandHandler.hpp"
-#include "../Utils/Logger.hpp"
 #include "LuaStuff.hpp"
 
 luabridge::LuaRef make_luatable();

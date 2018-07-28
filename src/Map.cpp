@@ -4,7 +4,7 @@
 #include <string.h>
 #include <zlib.h>
 
-#include "Utils/Logger.hpp"
+#include "Server.hpp" // For logging
 
 #ifdef __linux__
 	#include <arpa/inet.h>
