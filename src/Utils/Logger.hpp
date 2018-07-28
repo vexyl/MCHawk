@@ -11,6 +11,9 @@
 #include <iostream>
 #include <fstream>
 
+#define LOGGER Logger::GetLogger();
+#define LOG(...) Logger::GetLogger()->Log(__VA_ARGS__);
+
 namespace LogLevel {
 	enum LogLevel { kInfo, kDebug, kError, kWarning, kChat};
 }
@@ -21,15 +24,20 @@ namespace VerbosityLevel {
 
 class Logger {
 public:
-	Logger(std::string filename);
+	Logger() { m_verbosityLevel = VerbosityLevel::kNormal; }
+	~Logger() { if (m_thisPtr != nullptr) delete m_thisPtr; }
+
+	static Logger* GetLogger();
 
 	void Log(LogLevel::LogLevel logLevel, const char *format, ...);
 
 	void SetVerbosityLevel(VerbosityLevel::VerbosityLevel verbosityLevel) { m_verbosityLevel = verbosityLevel; }
 
 private:
-	std::ofstream m_logFile;
-	std::string m_lastDateString;
+	static Logger* m_thisPtr; // Singleton
+	static const std::string m_logFileName;
+	static std::ofstream m_logFile;
+	static std::string m_lastDateString;
 
 	VerbosityLevel::VerbosityLevel m_verbosityLevel;
 };

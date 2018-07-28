@@ -1,5 +1,4 @@
 ﻿#include "LuaPluginAPI.hpp"
-#include "../Server.hpp" // For logging
 
 #include <boost/algorithm/string.hpp>
 

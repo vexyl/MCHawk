@@ -18,9 +18,6 @@
 #include "Position.hpp"
 #include "CommandHandler.hpp"
 #include "LuaPlugins/LuaPluginHandler.hpp"
-#include "Utils/Logger.hpp"
-
-#define LOG(...) Server::GetInstance()->GetLogger().Log(__VA_ARGS__);
 
 class Server {
 public:
@@ -47,8 +44,6 @@ public:
 
 	std::vector<Client*> GetClients() { return m_clients; }
 	std::map<std::string, World*> GetWorlds() { return m_worlds; }
-
-	Logger& GetLogger() { return m_logger; }
 
 	void LoadPlugins();
 	void ReloadPlugins();
@@ -92,7 +87,6 @@ private:
 
 	bool m_running;
 
-	Logger m_logger;
 	LuaPluginHandler m_pluginHandler;
 
 	// Configuration

@@ -2,7 +2,7 @@
 
 #include "Packet.hpp"
 #include "../Map.hpp"
-#include "../Server.hpp" // For logging
+#include "../Utils/Logger.hpp"
 
 bool Protocol::IsValidBlock(int type)
 {
