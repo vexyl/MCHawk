@@ -51,7 +51,7 @@ $(OUT): $(SRC) $(HEADERS)
 	$(CC) -o $(OUT) $(SRC) $(FLAGS)
 
 $(DEBUG): $(SRC) $(HEADERS)
-	$(CC) -o $(DEBUG) $(SRC) $(FLAGS)
+	$(CC) -g -o $(DEBUG) $(SRC) $(FLAGS)
 
 clean:
 	rm $(OUT) -f

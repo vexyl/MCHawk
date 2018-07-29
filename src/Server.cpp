@@ -334,11 +334,7 @@ void Server::OnMessage(Client* client, struct Protocol::cmsgp clientMsg)
 		// Done before message is modified for colors
 		LOG(LogLevel::kChat, "[BROADCAST] %s: %s", name.c_str(), message.c_str());
 
-		// Name colors for normal/op (temporary until plugins are implemented)
-		if (client->GetUserType() > 0)
-			message.insert(0, "&e" + client->GetChatName() + "&f: ");
-		else
-			message.insert(0, "&7" + client->GetChatName() + "&f: ");
+		message.insert(0, client->GetChatName() + "&f: ");
 
 		// ClassicalSharp color codes
 		// Why does the first color code get sent twice?

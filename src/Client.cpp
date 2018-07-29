@@ -3,7 +3,7 @@
 
 #include "Utils/Logger.hpp"
 
-int8_t Client::pid = 0;
+uint8_t Client::pid = 0;
 
 Client::Client() : m_world(nullptr)
 {

@@ -53,7 +53,7 @@ public:
 	void ProcessPacketsInQueue();
 
 private:
-	static int8_t pid;
+	static uint8_t pid;
 
 	std::string m_name;
 	std::string m_chatName;
