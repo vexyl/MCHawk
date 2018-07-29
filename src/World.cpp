@@ -223,13 +223,6 @@ void World::OnBlock(Client* client, struct Protocol::cblockp clientBlock)
 
 	Position position(clientBlock.x, clientBlock.y, clientBlock.z);
 
-	if (!client->CanBuild()) {
-		type = m_map.GetBlockType(clientBlock.x, clientBlock.y, clientBlock.z);
-		Protocol::SendBlock(client, position, type);
-		Protocol::SendMessage(client, "&cThis world is protected");
-		return;
-	}
-
 	bool validBlock = Protocol::IsValidBlock(type) || CPE::IsValidBlock(type);
 	if (!validBlock) {
 		Protocol::SendBlock(client, position, 0x00); // Invalid block, tell client to destroy it

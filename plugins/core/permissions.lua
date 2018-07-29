@@ -225,7 +225,6 @@ PermissionsPlugin.PermissionsExistsNotify = function(client, permissions)
 	return result
 end
 
--- TODO: Allow operators to override permissions: if (Server.IsOperator(name)) then return true end
 -- Doesn't check if permission exists
 PermissionsPlugin.CheckPermission = function(name, permission)
 	local name = string.lower(name)

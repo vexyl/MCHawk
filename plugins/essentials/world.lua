@@ -9,7 +9,24 @@ Init = function()
 
 	Server.AddCommand("worlds", "", function(client, args) EssentialsPlugin.World.Command_List(client, args) end, "worlds - shortcut for /world list", 0, 0)
 
+	Server.RegisterEvent(ClassicProtocol.BlockEvent, EssentialsPlugin.World.Event_OnBlock)
+
 	PermissionsPlugin.RequirePermission("essentials.world")
+
+	local worlds = Server.GetWorlds()
+	for _,world in pairs(worlds) do
+		PermissionsPlugin.RequirePermission(world:GetName() .. ".build")
+	end
+end,
+
+Event_OnBlock = function(client, block)
+	if (not client:CanBuild() and not PermissionsPlugin.CheckPermissionNotify(client, client:GetWorld():GetName() .. ".build")) then
+		-- reverse block change client-side
+		local btype = Server.MapGetBlockType(client, block.x, block.y, block.z)
+		Server.SendBlock(client, block.x, block.y, block.z, btype)
+		
+		Flags.NoDefaultCall = 1
+	end
 end,
 
 Command_List = function(client, args)
