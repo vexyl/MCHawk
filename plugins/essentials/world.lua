@@ -6,6 +6,8 @@ Init = function()
 	worldCmd:AddSubcommand("save", EssentialsPlugin.World.Command_Save, "save - saves world options and map data to file", 0, 1)
 	worldCmd:AddSubcommand("load", EssentialsPlugin.World.Command_Load, "load <world name> - loads world map into memory", 1, 0)
 	worldCmd:AddSubcommand("new", EssentialsPlugin.World.Command_New, "new <world name> <x> <y> <z>", 4, 0)
+	worldCmd:AddSubcommand("grant", EssentialsPlugin.World.Command_Grant, "grant <name> <permission>", 2, 0)
+	worldCmd:AddSubcommand("revoke", EssentialsPlugin.World.Command_Revoke, "revoke <name> <permission>", 2, 0)
 
 	Server.AddCommand("worlds", "", function(client, args) EssentialsPlugin.World.Command_List(client, args) end, "worlds - shortcut for /world list", 0, 0)
 
@@ -15,8 +17,14 @@ Init = function()
 
 	local worlds = Server.GetWorlds()
 	for _,world in pairs(worlds) do
+		PermissionsPlugin.RequirePermission(world:GetName() .. ".admin")
 		PermissionsPlugin.RequirePermission(world:GetName() .. ".build")
 	end
+end,
+
+HasWorldPermission = function(client)
+	return PermissionsPlugin.CheckPermissionNotify(client, client:GetWorld():GetName() .. ".admin")
+		or PermissionsPlugin.CheckPermissionNotify(client, "essentials.world")
 end,
 
 Event_OnBlock = function(client, block)
@@ -51,7 +59,7 @@ Command_List = function(client, args)
 end,
 
 Command_Set = function(client, args)
-	if (not PermissionsPlugin.CheckPermissionNotify(client, "essentials.world")) then
+	if (not EssentialsPlugin.World.HasWorldPermission(client)) then
 		return
 	end
 
@@ -91,7 +99,7 @@ Command_Set = function(client, args)
 end,
 
 Command_Save = function(client, args)
-	if (not PermissionsPlugin.CheckPermissionNotify(client, "essentials.world")) then
+	if (not EssentialsPlugin.World.HasWorldPermission(client)) then
 		return
 	end
 
@@ -122,7 +130,7 @@ Command_Load = function(client, args)
 end,
 
 Command_New = function(client, args)
-	if (not PermissionsPlugin.CheckPermissionNotify(client, "essentials.world")) then
+	if (PermissionsPlugin.CheckPermissionNotify(client, "essentials.world")) then
 		return
 	end
 
@@ -155,5 +163,23 @@ Command_New = function(client, args)
 	Server.CreateWorld(worldName, x, y, z)
 
 	Server.SendMessage(client, "&eWorld '" .. worldName .. "' with size " .. x .. "x" .. y .. "x" .. z .. " created successfully.")
+end,
+
+Command_Grant = function(client, args)
+	if (not EssentialsPlugin.World.HasWorldPermission(client)) then
+		return
+	end
+
+	args[2] = client:GetWorld():GetName() .. "." .. args[2]
+	PermissionsPlugin.GrantCommand(client, args, true)
+end,
+
+Command_Revoke = function(client, args)
+	if (not EssentialsPlugin.World.HasWorldPermission(client)) then
+		return
+	end
+
+	args[2] = client:GetWorld():GetName() .. "." .. args[2]
+	PermissionsPlugin.RevokeCommand(client, args, true)
 end
 }

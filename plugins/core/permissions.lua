@@ -18,8 +18,8 @@ PermissionsPlugin.init = function()
 	print("Permissions plugin init")
 end
 
-PermissionsPlugin.GrantCommand = function(client, args)
-	if (not PermissionsPlugin.CheckPermissionNotify(client, "permissions")) then
+PermissionsPlugin.GrantCommand = function(client, args, override)
+	if (not PermissionsPlugin.CheckPermissionNotify(client, "permissions") and override == nil) then
 		return
 	end
 
@@ -56,8 +56,8 @@ PermissionsPlugin.GrantCommand = function(client, args)
 	end
 end
 
-PermissionsPlugin.RevokeCommand = function(client, args)
-	if (not PermissionsPlugin.CheckPermissionNotify(client, "permissions")) then
+PermissionsPlugin.RevokeCommand = function(client, args, override)
+	if (not PermissionsPlugin.CheckPermissionNotify(client, "permissions") and override == nil) then
 		return
 	end
 
