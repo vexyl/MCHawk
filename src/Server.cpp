@@ -821,13 +821,3 @@ World* Server::GetWorldByName(std::string name, bool exact)
 
 	return world;
 }
-
-std::vector<std::string> Server::GetWorldNames()
-{
-	std::vector<std::string> worldNames;
-
-	for (auto& obj : m_worlds)
-		worldNames.push_back(obj.first);
-
-	return worldNames;
-}

@@ -74,7 +74,6 @@ public:
 	void RemoveWorld(std::string name);
 	World* GetWorld(std::string name);
 	World* GetWorldByName(std::string name, bool exact=false);
-	std::vector<std::string> GetWorldNames();
 
 private:
 	enum { kHeartbeatTime = 60 /* seconds */, kSaveTime = 600 /* seconds */ };
