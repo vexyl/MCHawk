@@ -3,11 +3,22 @@ EssentialsPlugin.Server_ShutdownCommand = function(client, args)
 		return
 	end
 
+	if (CorePlugin.TimerExists("server_timers")) then
+		Server.SendMessage(client, "&cNo shutdown to abort")
+		return
+	end
+
 	local index = 1 -- used to concatenate reason message
 
 	local time = 15
 	if (args[1] == "-t" and args[2] ~= nil) then
 		time = tonumber(args[2])
+
+		if (time == nil) then
+			Server.SendMessage(client, "&cMalformed input")
+			return
+		end
+
 		index = 3 -- skip time arguments
 	elseif (args[1] == "-a") then
 		if (CorePlugin.TimerExists("server_timers")) then
