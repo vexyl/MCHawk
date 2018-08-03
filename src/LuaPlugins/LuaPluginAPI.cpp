@@ -265,7 +265,7 @@ void LuaServer::LuaLogDebug(std::string message)
 
 void LuaServer::LuaLog(std::string message)
 {
-	LOG(LogLevel::kChat, message.c_str());
+	LOG(LogLevel::kNormal, message.c_str());
 }
 
 

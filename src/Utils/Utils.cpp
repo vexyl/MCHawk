@@ -8,21 +8,6 @@ namespace Utils {
 
 // http://www.cplusplus.com/reference/ctime/strftime/
 // https://cppcodetips.wordpress.com/2014/01/02/a-simple-logger-class-in-c/
-const std::string CurrentDateTime() {
-	time_t rawtime;
-	struct tm *timeinfo;
-	char buffer[80];
-
-	time(&rawtime);
-	timeinfo = localtime(&rawtime);
-
-	strftime(buffer, 80, "%F %T", timeinfo);
-
-	return std::string(buffer);
-}
-
-// http://www.cplusplus.com/reference/ctime/strftime/
-// https://cppcodetips.wordpress.com/2014/01/02/a-simple-logger-class-in-c/
 const std::string CurrentDate() {
 	time_t rawtime;
 	struct tm *timeinfo;

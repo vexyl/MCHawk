@@ -306,13 +306,13 @@ void Server::OnMessage(Client* client, struct Protocol::cmsgp clientMsg)
 
 	// Chat mute check--IsChatMuted() unmutes if timer expires
 	if (client->IsChatMuted()) {
-		LOG(LogLevel::kChat, "[Muted (%s)] %s", name.c_str(), message.c_str());
+		LOG(LogLevel::kNormal, "[Muted (%s)] %s", name.c_str(), message.c_str());
 		return;
 	}
 
 	// Is it a command or a chat message?
 	if (message.at(0) == '/') {
-		LOG(LogLevel::kChat, "[Command (%s)] %s", name.c_str(), message.c_str());
+		LOG(LogLevel::kNormal, "[Command (%s)] %s", name.c_str(), message.c_str());
 
 		// Strip leading '/'
 		std::string command = message.substr(1);
@@ -327,12 +327,12 @@ void Server::OnMessage(Client* client, struct Protocol::cmsgp clientMsg)
 		m_pluginHandler.TriggerEvent(EventType::kOnMessage, client, table);
 
 		if (m_pluginHandler.GetEventFlag("NoDefaultCall") > 0) {
-			LOG(LogLevel::kChat, "[SUPPRESSED] %s: %s", name.c_str(), message.c_str());
+			LOG(LogLevel::kNormal, "[SUPPRESSED] %s: %s", name.c_str(), message.c_str());
 			return;
 		}
 
 		// Done before message is modified for colors
-		LOG(LogLevel::kChat, "[BROADCAST] %s: %s", name.c_str(), message.c_str());
+		LOG(LogLevel::kNormal, "[BROADCAST] %s: %s", name.c_str(), message.c_str());
 
 		message.insert(0, client->GetChatName() + "&f: ");
 

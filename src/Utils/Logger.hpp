@@ -15,7 +15,7 @@
 #define LOG(...) Logger::GetLogger()->Log(__VA_ARGS__);
 
 namespace LogLevel {
-	enum LogLevel { kInfo, kDebug, kError, kWarning, kChat};
+	enum LogLevel { kNormal, kInfo, kDebug, kWarning, kError};
 }
 
 namespace VerbosityLevel {

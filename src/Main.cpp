@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Vexyl
  * Started in March, 2017
 */

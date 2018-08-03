@@ -10,7 +10,6 @@ namespace Utils {
 
 // http://www.cplusplus.com/reference/ctime/strftime/
 // https://cppcodetips.wordpress.com/2014/01/02/a-simple-logger-class-in-c/
-const std::string CurrentDateTime();
 const std::string CurrentDate();
 const std::string CurrentTime();
 

@@ -14,8 +14,6 @@ PermissionsPlugin.init = function()
 
 	PermissionsPlugin.LoadPermissions()
 	PermissionsPlugin.RequirePermission("permissions")
-
-	print("Permissions plugin init")
 end
 
 PermissionsPlugin.GrantCommand = function(client, args, override)
