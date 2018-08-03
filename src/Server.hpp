@@ -44,6 +44,7 @@ public:
 
 	std::vector<Client*> GetClients() { return m_clients; }
 	std::map<std::string, World*> GetWorlds() { return m_worlds; }
+	std::string GetName() { return "&bMCHawk"; }
 
 	void LoadPlugins();
 	void ReloadPlugins();

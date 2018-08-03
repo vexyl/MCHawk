@@ -9,7 +9,7 @@ CorePlugin.PluginsCommand = function(client, args)
 end
 
 CorePlugin.ServerInfoCommand = function(client, args)
-	Server.SendMessage(client, "&eThis server is running &bMCHawk")
+	Server.SendMessage(client, "&eThis server is running " .. Server.GetName())
 	Server.SendMessage(client, "&eWritten in &3C++ &eand &3Lua &efor plugins");
 	Server.SendMessage(client, "&eGithub Repo: https://github.com/vexyl/MCHawk");
 

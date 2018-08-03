@@ -52,6 +52,7 @@ void LuaServer::Init(lua_State* L)
 		.addStaticFunction("GetClients", &LuaServer::LuaGetClients)
 		.addStaticFunction("GetWorlds", &LuaServer::LuaGetWorlds)
 		.addStaticFunction("GetWorldByName", &LuaServer::LuaGetWorldByName)
+		.addStaticFunction("GetName", &LuaServer::LuaServerGetName)
 		.addStaticFunction("Shutdown", &LuaServer::LuaServerShutdown)
 		.addStaticFunction("GetCommandStrings", &LuaServer::LuaGetCommandStrings)
 		.addStaticFunction("IsOperator", &LuaServer::LuaIsOperator)
@@ -178,6 +179,11 @@ luabridge::LuaRef LuaServer::LuaGetWorlds()
 World* LuaServer::LuaGetWorldByName(std::string name, bool exact)
 {
 	return Server::GetInstance()->GetWorldByName(name, exact);
+}
+
+std::string LuaServer::LuaServerGetName()
+{
+	return Server::GetInstance()->GetName();
 }
 
 void LuaServer::LuaServerShutdown()

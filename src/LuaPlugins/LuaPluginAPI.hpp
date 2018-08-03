@@ -24,6 +24,7 @@ struct LuaServer {
 	static luabridge::LuaRef LuaGetClients();
 	static luabridge::LuaRef LuaGetWorlds();
 	static World* LuaGetWorldByName(std::string name, bool exact);
+	static std::string LuaServerGetName();
 	static void LuaServerShutdown();
 	static luabridge::LuaRef LuaGetCommandStrings();
 	static bool LuaIsOperator(std::string name);

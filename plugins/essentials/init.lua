@@ -46,7 +46,7 @@ EssentialsPlugin.init = function()
 	Server.RegisterEvent(ClassicProtocol.AuthEvent,
 		function(client, args)
 			Server.SendMessage(client, "https://github.com/vexyl/MCHawk")
-			Server.SendMessage(client, "&eWelcome to this Minecraft classic server running &bMCHawk&e.")
+			Server.SendMessage(client, "&eWelcome to this Minecraft classic server running " .. Server.GetName() .. "&e.")
 			Server.SendMessage(client, "&eType &a/help &eor &a/goto freebuild &eto get started.")
 		end
 	)
