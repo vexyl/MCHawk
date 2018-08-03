@@ -130,7 +130,7 @@ Command_Load = function(client, args)
 end,
 
 Command_New = function(client, args)
-	if (PermissionsPlugin.CheckPermissionNotify(client, "essentials.world")) then
+	if (not PermissionsPlugin.CheckPermissionNotify(client, "essentials.world")) then
 		return
 	end
 
