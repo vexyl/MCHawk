@@ -144,3 +144,23 @@ EssentialsPlugin.Misc_WhoCommand = function(client, args)
 
 	Server.SendMessage(client, message)
 end
+
+EssentialsPlugin.Misc_WhoIsCommand = function(client, args)
+	local targetName = args[1]
+	local target = Server.GetClientByName(targetName)
+	if (target == nil) then
+		Server.SendMessage(client, PLAYER_NOT_FOUND(targetName))
+		return
+	end
+
+	local name = target.name
+
+	Server.SendMessage(client, "&eWhoIs &f" .. name .. ":")
+	Server.SendMessage(client, "&e------")
+	Server.SendMessage(client, "&eChat name: &f" .. target:GetChatName())
+
+	if (PermissionsPlugin.CheckPermissionIfExists(name, "essentials.server")) then
+		local ipString = target:GetIpString()
+		Server.SendMessage(client, "&eIP: &f" .. ipString)
+	end
+end

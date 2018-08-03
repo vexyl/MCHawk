@@ -246,6 +246,15 @@ PermissionsPlugin.CheckPermission = function(name, permission)
 	return result
 end
 
+PermissionsPlugin.CheckPermissionIfExists = function(name, permission)
+	if (not PermissionsPlugin.PermissionExists(permission)) then
+		print("Permission plugin: invalid permission " .. permission .. " check in CheckPermissionIfExists")
+		return false
+	end
+
+	return PermissionsPlugin.CheckPermission(name, permission)
+end
+
 PermissionsPlugin.CheckPermissionNotify = function(client, permission)
 	if (not PermissionsPlugin.PermissionsExistsNotify(client, permission)) then
 		return false
