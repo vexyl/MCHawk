@@ -3,11 +3,6 @@ EssentialsPlugin.Server_ShutdownCommand = function(client, args)
 		return
 	end
 
-	if (CorePlugin.TimerExists("server_timers")) then
-		Server.SendMessage(client, "&cNo shutdown to abort")
-		return
-	end
-
 	local index = 1 -- used to concatenate reason message
 
 	local time = 15
@@ -29,6 +24,11 @@ EssentialsPlugin.Server_ShutdownCommand = function(client, args)
 			Server.SendMessage(client, "&cNo shutdown to abort")
 		end
 
+		return
+	end
+
+	if (CorePlugin.TimerExists("server_timers")) then
+		Server.SendMessage(client, "&cShutdown already in progress")
 		return
 	end
 
