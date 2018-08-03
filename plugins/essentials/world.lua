@@ -24,11 +24,14 @@ end,
 
 HasWorldPermission = function(client)
 	return PermissionsPlugin.CheckPermissionNotify(client, client:GetWorld():GetName() .. ".admin")
-		or PermissionsPlugin.CheckPermissionNotify(client, "essentials.world")
+		or PermissionsPlugin.CheckPermissionIfExists(client.name, "essentials.world")
 end,
 
 Event_OnBlock = function(client, block)
-	if (not client:CanBuild() and not PermissionsPlugin.CheckPermissionNotify(client, client:GetWorld():GetName() .. ".build")) then
+	if (not client:CanBuild()
+			and not PermissionsPlugin.CheckPermissionIfExists(client.name, client:GetWorld():GetName() .. ".admin")
+			and not PermissionsPlugin.CheckPermissionIfExists(client.name, "essentials.world")
+			and not PermissionsPlugin.CheckPermissionNotify(client, client:GetWorld():GetName() .. ".build")) then
 		-- reverse block change client-side
 		local btype = Server.MapGetBlockType(client, block.x, block.y, block.z)
 		Server.SendBlock(client, block.x, block.y, block.z, btype)
