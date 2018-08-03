@@ -58,6 +58,11 @@ void LuaServer::Init(lua_State* L)
 		.addStaticFunction("TransportPlayer", &LuaServer::LuaTransportPlayer)
 		.addStaticFunction("ReloadPlugins", &LuaServer::LuaReloadPlugins)
 		.addStaticFunction("CreateWorld", &LuaServer::LuaCreateWorld)
+		.addStaticFunction("LogError", &LuaServer::LuaLogError)
+		.addStaticFunction("LogWarning", &LuaServer::LuaLogWarning)
+		.addStaticFunction("LogInfo", &LuaServer::LuaLogInfo)
+		.addStaticFunction("LogDebug", &LuaServer::LuaLogDebug)
+		.addStaticFunction("Log", &LuaServer::LuaLog)
 	.endClass();
 }
 
@@ -237,6 +242,32 @@ void LuaServer::LuaCreateWorld(std::string worldName, short x, short y, short z)
 
 	Server::GetInstance()->AddWorld(world);
 }
+
+void LuaServer::LuaLogError(std::string message)
+{
+	LOG(LogLevel::kError, message.c_str());
+}
+
+void LuaServer::LuaLogWarning(std::string message)
+{
+	LOG(LogLevel::kWarning, message.c_str());
+}
+
+void LuaServer::LuaLogInfo(std::string message)
+{
+	LOG(LogLevel::kInfo, message.c_str());
+}
+
+void LuaServer::LuaLogDebug(std::string message)
+{
+	LOG(LogLevel::kDebug, message.c_str());
+}
+
+void LuaServer::LuaLog(std::string message)
+{
+	LOG(LogLevel::kChat, message.c_str());
+}
+
 
 // Struct to table stuff
 

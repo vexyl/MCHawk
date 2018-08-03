@@ -31,6 +31,11 @@ struct LuaServer {
 	static luabridge::LuaRef LuaWorldGetOptionNames(World* world);
 	static void LuaReloadPlugins();
 	static void LuaCreateWorld(std::string worldName, short x, short y, short z);
+	static void LuaLogError(std::string message);
+	static void LuaLogWarning(std::string message);
+	static void LuaLogInfo(std::string message);
+	static void LuaLogDebug(std::string message);
+	static void LuaLog(std::string message);
 };
 
 luabridge::LuaRef make_luatable();

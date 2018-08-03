@@ -247,11 +247,10 @@ void World::OnBlock(Client* client, struct Protocol::cblockp clientBlock)
 	m_mapChanged = true;
 }
 
-// FIXME: Send wrapped message
 void World::BroadcastMessage(std::string message)
 {
 	for (auto& obj : m_clients)
-		Protocol::SendMessage(obj, "&e[WORLD]: " + message);
+		Server::GetInstance()->SendWrappedMessage(obj, "&e[WORLD]: " + message);
 }
 
 void World::SendBlockToClients(int type, short x, short y, short z)
