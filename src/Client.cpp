@@ -13,7 +13,6 @@ Client::Client() : m_world(nullptr)
 
 	active = false;
 	authed = false;
-	kicked = false;
 
 	m_chatMuted = false;
 }

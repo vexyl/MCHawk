@@ -249,7 +249,7 @@ void Server::OnAuth(Client* client, struct Protocol::cauthp clientAuth)
 
 	Client* checkClient = GetClientByName(name);
 	if (checkClient != nullptr)
-		KickClient(checkClient, "Logged in from somewhere else", true);
+		KickClient(checkClient, "Logged in from somewhere else");
 
 	// Won't refuse client if replacing ghost player (see checkClient above)
 	if (m_numClients >= m_maxClients && checkClient == nullptr) {
@@ -509,8 +509,13 @@ bool Server::Tick()
 
 				LOG(LogLevel::kInfo, "Player %s disconnected (%s)", name.c_str(), ipString.c_str());
 
-				if (!oldClient->kicked)
-					BroadcastMessage("&ePlayer " + name + " left the game.");
+				if (!oldClient->leaveMessage.empty())
+					oldClient->leaveMessage = " (" + oldClient->leaveMessage + ")";
+
+				// will append client's leave message if there's anything there
+				// e.g., it's set by KickClient to show the kick reason
+				std::string leaveMessage = "&ePlayer " + name + " left the game" + oldClient->leaveMessage;
+				BroadcastMessage(leaveMessage);
 
 				oldClient->GetWorld()->RemoveClient(oldClient->GetPid());
 
@@ -556,26 +561,19 @@ void Server::SendHeartbeat()
 		LOG(LogLevel::kWarning, "Failed to send heartbeat");
 }
 
-void Server::KickClient(Client* client, std::string reason, bool notify)
+void Server::KickClient(Client* client, std::string reason)
 {
-	if (reason.empty())
-		reason = "Kicked";
-
 	Protocol::SendKick(client, reason);
 
 	// FIXME: Maybe queue disconnect? Sometimes client gets I/O error when kicked
 	client->active = false;
+	client->leaveMessage = reason;
 
 	if (client->authed) {
 		LOG(LogLevel::kInfo, "Kicked player %s (%s | %s)", client->GetName().c_str(), client->GetIpString().c_str(), (reason.empty() ? "None" : reason.c_str()));
 	} else {
 		LOG(LogLevel::kInfo, "Kicked unauthorized player (%s | %s)", client->GetIpString().c_str(), (reason.empty() ? "None" : reason.c_str()));
 	}
-
-	if (notify)
-		BroadcastMessage("&eKicked player " + client->GetName() + " (" + reason + ")");
-
-	client->kicked = true;
 }
 
 // FIXME: This is temporary, it works for the most part but is horribly messy and inefficient

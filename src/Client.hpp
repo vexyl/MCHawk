@@ -18,7 +18,7 @@ public:
 	ClientStream stream;
 	bool active;
 	bool authed;
-	bool kicked;
+	std::string leaveMessage;
 
 	Client();
 
