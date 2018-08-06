@@ -62,6 +62,25 @@ EssentialsPlugin.Groups_GetGroupTable = function(group)
 	return nil
 end
 
+EssentialsPlugin.Groups_GetPlayerGroups = function(client)
+	local targetName = string.lower(client.name)
+	local groups = EssentialsPlugin.Groups_playerTable[targetName]
+
+	if (groups == nil) then
+		groups = { "guest" }
+	end
+
+	local groupStrings = {}
+	for _,group in ipairs(groups) do
+		local groupTable = EssentialsPlugin.Groups_GetGroupTable(group)
+		local color = groupTable[2]
+
+		table.insert(groupStrings, color .. group)
+	end
+
+	return groupStrings
+end
+
 EssentialsPlugin.Groups_LoadGroups = function()
 	local f = io.open("groups.txt", "r")
 	if f then

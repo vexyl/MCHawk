@@ -159,7 +159,11 @@ EssentialsPlugin.Misc_WhoIsCommand = function(client, args)
 	Server.SendMessage(client, "&e------")
 	Server.SendMessage(client, "&eChat name: &f" .. target:GetChatName())
 
-	if (PermissionsPlugin.CheckPermissionIfExists(client.name, "essentials.server")) then
+	local groupMessage = "&eGroups: " .. table.concat(EssentialsPlugin.Groups_GetPlayerGroups(target), "&e, ")
+
+	Server.SendMessage(client, groupMessage)
+
+	if (PermissionsPlugin.CheckPermissionIfExists(client.name, "essentials.whois")) then
 		local ipString = target:GetIpString()
 		Server.SendMessage(client, "&eIP: &f" .. ipString)
 	end

@@ -58,6 +58,7 @@ EssentialsPlugin.init = function()
 	PermissionsPlugin.RequirePermission("essentials.kick")
 	PermissionsPlugin.RequirePermission("essentials.cuboid")
 	PermissionsPlugin.RequirePermission("essentials.groups")
+	PermissionsPlugin.RequirePermission("essentials.whois")
 
 	EssentialsPlugin.Ban_LoadBans()
 	EssentialsPlugin.Groups_LoadGroups()
