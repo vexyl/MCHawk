@@ -14,19 +14,16 @@ EssentialsPlugin.Ban_BanCommand = function(client, args)
 		return
 	end
 
-	local message1 = "Banned"
-	local message2 = "&e" .. client.name .. " has banned " .. name .. " from the server."
+	local message = "Banned by " .. client.name
 	local reason = nil
 
 	if (args[2] ~= nil) then
 		reason = table.concat(args, " ", 2) -- skip name argument
 		reason = reason:gsub(":+", "") -- strip semicolons as it is used to delimit ban lists
-		message1 = message1 .. ": " .. reason
-		message2 = message2 .. " (" .. reason .. ")"
+		message = message .. ": " .. reason
 	end
 
-	Server.KickClient(player, message1)
-	Server.BroadcastMessage(message2)
+	Server.KickClient(player, message)
 
 	EssentialsPlugin.Ban_banList[name] = { reason }
 	EssentialsPlugin.Ban_SaveBans()
@@ -47,7 +44,7 @@ EssentialsPlugin.Ban_UnbanCommand = function(client, args)
 	EssentialsPlugin.Ban_banList[name] = nil
 	EssentialsPlugin.Ban_SaveBans()
 
-	Server.SendMessage(client, "&eUnbanned player " .. name)
+	Server.BroadcastMessage("&e" .. client.name .. " unbanned player " .. name)
 end
 
 EssentialsPlugin.Ban_BanIpCommand = function(client, args)
@@ -68,17 +65,13 @@ EssentialsPlugin.Ban_BanIpCommand = function(client, args)
 	local clients = Server.GetClients()
 	for _,v in pairs(clients) do
 		if (v:GetIpString() == ip) then
-			local message1 = "IP Banned"
-			local message2 = "&e" .. client.name .. " IP banned " .. v.name
+			local message = "IP Banned"
 
 			if (reason ~= nil) then
-				message1 = message1 .. ": " .. reason
-				message2 = message2 .. " (" .. reason .. ")"
+				message = message .. ": " .. reason
 			end
 
-			Server.KickClient(v, message1)
-			EssentialsPlugin.Ban_banList[string.lower(v.name)] = { reason } -- ban name too
-			Server.SystemWideMessage(message2)
+			Server.KickClient(v, message)
 
 			break;
 		end

@@ -81,17 +81,14 @@ EssentialsPlugin.Kick_KickCommand = function(client, args)
 
 	targetName = target.name;
 
-	local message = client.name .. " kicked " .. targetName
-	local reason = ""
+	local reason = "Kicked by " .. client.name
 
 	local index = 2 -- where reason should start
 	if (args[index] ~= nil) then
-		reason = table.concat(args, " ", index)
-		message = message .. " (" .. reason .. ")"
+		reason = reason .. ": " .. table.concat(args, " ", index)
 	end
 
 	Server.KickClient(target, reason)
-	Server.SystemWideMessage(message)
 end
 
 EssentialsPlugin.Misc_OnWorldJoin = function(client, args)
