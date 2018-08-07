@@ -29,7 +29,7 @@ public:
 
 	void SetActive(bool active);
 	void SetSpawnPosition(Position spawnPosition);
-	void SetOption(std::string option, std::string value);
+	bool SetOption(std::string option, std::string value, bool createNewOption=false);
 	bool IsValidOption(std::string option);
 
 	std::vector<std::string> GetOptionNames();

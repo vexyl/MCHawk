@@ -81,7 +81,7 @@ Command_Set = function(client, args)
 
 	if (#args == 1) then
 		local value = world:GetOption(option)
-		if (value ~= nil) then
+		if (value ~= "") then
 			Server.SendMessage(client, "&e" .. option .. "=" .. value)
 		else
 			Server.SendMessage(client, "&cInvalid option")
@@ -97,8 +97,11 @@ Command_Set = function(client, args)
 		return
 	end
 
-	world:SetOption(option, value)	
-	Server.SendMessage(client, "&eSet option " .. option .. " to " .. value)
+	if (world:SetOption(option, value)) then
+		Server.SendMessage(client, "&eSet option " .. option .. " to " .. value)
+	else
+		Server.SendMessage(client, "&cInvalid option")
+	end
 end,
 
 Command_Save = function(client, args)

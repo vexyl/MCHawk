@@ -12,9 +12,9 @@
 // m_mapChanged set to true so when the .ini first saves the map file gets saved too
 World::World(std::string name) : m_name(name), m_active(false), m_mapChanged(true)
 {
-	SetOption("build", "true");
-	SetOption("autosave", "false");
-	SetOption("autoload", "false");
+	SetOption("build", "true", true);
+	SetOption("autosave", "false", true);
+	SetOption("autoload", "false", true);
 }
 
 World::World() : World("")
@@ -164,9 +164,12 @@ void World::SetSpawnPosition(Position spawnPosition)
 	m_spawnPosition = spawnPosition;
 }
 
-void World::SetOption(std::string option, std::string value)
+bool World::SetOption(std::string option, std::string value, bool createNewOption)
 {
+	if (!IsValidOption(option) && !createNewOption)
+		return false;
 	m_options[option] = value;
+	return true;
 }
 
 std::vector<std::string> World::GetOptionNames()
@@ -181,19 +184,14 @@ std::vector<std::string> World::GetOptionNames()
 
 std::string World::GetOption(std::string option)
 {
+	if (!IsValidOption(option))
+		return "";
 	return m_options[option];
 }
 
 bool World::IsValidOption(std::string option)
 {
-	bool result = false;
-
-	for (auto& obj : m_options) {
-		if (option == obj.first)
-			result = true;
-	}
-
-	return result;
+	return m_options.find(option) != m_options.end();
 }
 
 void World::Tick()

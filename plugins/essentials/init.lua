@@ -3,7 +3,7 @@ EssentialsPlugin = {}
 EssentialsPlugin.name = "essentials" -- should match folder name!
 
 EssentialsPlugin.init = function()
-	Server.AddCommand("shutdown", "", EssentialsPlugin.Server_ShutdownCommand, "shutdown [message] - shutdowns the server", 0, 0)
+	Server.AddCommand("shutdown", "", EssentialsPlugin.Server_ShutdownCommand, "shutdown [message] - shuts down the server", 0, 0)
 	Server.AddCommand("ban", "", EssentialsPlugin.Ban_BanCommand, "ban <player> [reason] - bans player from server", 1, 0)
 	Server.AddCommand("unban", "", EssentialsPlugin.Ban_UnbanCommand, "unban <player> - unbans player from server", 1, 0)
 	Server.AddCommand("banip", "", EssentialsPlugin.Ban_BanIpCommand, "banip <ip address> [reason] - bans ip from server", 1, 0)
