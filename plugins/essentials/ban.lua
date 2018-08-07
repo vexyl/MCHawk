@@ -130,7 +130,7 @@ EssentialsPlugin.Ban_OnConnect = function(client, args)
 		end
 
 		Server.KickClient(client, message)
-		print("Ban plugin prevented player " .. name .. " from joining.")
+		Server.LogDebug("Ban plugin prevented player " .. name .. " from joining.")
 		Flags.NoDefaultCall = 1
 	end
 end

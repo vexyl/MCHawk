@@ -21,6 +21,11 @@ EssentialsPlugin.Groups_GroupsCommand_Reload = function(client, args)
 	EssentialsPlugin.Groups_LoadGroups()
 
 	Server.SendMessage(client, "&eReloaded groups")
+
+	-- hack to reload current players
+	for _,v in pairs(Server.GetClients()) do
+		EssentialsPlugin.Groups_OnAuth(v, nil)
+	end
 end
 
 EssentialsPlugin.Groups_OnAuth = function(client, args)

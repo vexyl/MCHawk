@@ -23,8 +23,8 @@ Init = function()
 end,
 
 HasWorldPermission = function(client)
-	return PermissionsPlugin.CheckPermissionNotify(client, client:GetWorld():GetName() .. ".admin")
-		or PermissionsPlugin.CheckPermissionIfExists(client.name, "essentials.world")
+	return PermissionsPlugin.CheckPermissionIfExists(client.name, "essentials.world")
+		or PermissionsPlugin.CheckPermissionNotify(client, client:GetWorld():GetName() .. ".admin")
 end,
 
 Event_OnBlock = function(client, block)

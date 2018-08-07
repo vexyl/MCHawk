@@ -186,7 +186,7 @@ end
 
 PermissionsPlugin.RequirePermission = function(permission)
 	table.insert(PermissionsPlugin.permissionList, permission)
-	print("PermissionsPlugin new permission: " .. permission)
+	Server.LogDebug("PermissionsPlugin new permission: " .. permission)
 end
 
 PermissionsPlugin.PermissionExists = function(permission)
