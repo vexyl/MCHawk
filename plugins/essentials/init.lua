@@ -31,7 +31,6 @@ EssentialsPlugin.init = function()
 		function(client, args)
 			local message = "invoked the sacred rights of RAGEQUIT"
 			Server.KickClient(client, message)
-			Server.SystemWideMessage(client:GetChatName() .. " &e" .. message)
 		end,
 	"ragequit - throw a fit and leave the server in tears", 0, 0)
 
