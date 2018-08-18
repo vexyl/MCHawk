@@ -25,10 +25,10 @@ void Logger::Log(LogLevel::LogLevel logLevel, const char* format, ...)
 {
 	char buffer[1024];
 
-	va_list args;
+	std::va_list args;
 	va_start(args, format);
 
-	vsnprintf(buffer, 1024, format, args);
+	std::vsnprintf(buffer, 1024, format, args);
 
 	va_end(args);
 

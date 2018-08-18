@@ -1,8 +1,8 @@
 ﻿#ifndef SERVER_H_
 #define SERVER_H_
 
-#include <string.h>
-#include <assert.h>
+#include <cstring>
+#include <cassert>
 
 #include <string>
 #include <vector>

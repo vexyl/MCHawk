@@ -3,7 +3,7 @@
 
 #define calcMapOffset(x, y, z, xSize, zSize) ((y * zSize + z) * xSize + x)
 
-#include <stdint.h>
+#include <cstdint>
 
 #include <string>
 

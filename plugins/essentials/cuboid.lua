@@ -32,7 +32,6 @@ EssentialsPlugin.Cuboid_OnBlock = function(client, block)
 			EssentialsPlugin.Cuboid_players[client.name]["1"] = block
 		elseif (EssentialsPlugin.Cuboid_count[client.name] == 2) then
 			EssentialsPlugin.Cuboid_players[client.name]["2"] = block
-
 			EssentialsPlugin.Cuboid_DoCuboid(client)
 		end
 

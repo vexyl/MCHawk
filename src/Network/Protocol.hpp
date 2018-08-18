@@ -6,7 +6,7 @@
 #include <string>
 #include <vector>
 
-#include <stdint.h>
+#include <cstdint>
 
 #ifdef __linux__
 	#include <arpa/inet.h>
@@ -19,6 +19,7 @@
 #include "../Position.hpp"
 
 namespace Protocol {
+
 enum PacketType {
 	kServerInfo				= 0x00,
 	kServerPing				= 0x01,
@@ -218,6 +219,7 @@ void SendUserType(Client* client, uint8_t userType);
 void SendClientsTo(Client* client, const std::vector<Client*>& clients);
 void SpawnClient(Client* client, Position pos, const std::vector<Client*>& clients);
 void DespawnClient(int8_t pid, const std::vector<Client*>& clients);
+
 } // namespace Protocol
 
 #endif // PROTOCOL_H_

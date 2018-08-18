@@ -229,9 +229,9 @@ void Server::OnAuth(Client* client, struct Protocol::cauthp clientAuth)
 			assert(MD5_DIGEST_LENGTH < sizeof(mdString));
 
 			for (int i = 0; i < MD5_DIGEST_LENGTH; ++i)
-				sprintf(&mdString[i*2], "%02x", (unsigned int)result[i]);
+				std::sprintf(&mdString[i*2], "%02x", (unsigned int)result[i]);
 
-			if (strcmp(mdString, key.c_str()) != 0) {
+			if (std::strcmp(mdString, key.c_str()) != 0) {
 				LOG(LogLevel::kDebug, "Refusing player %s (sent invalid key)", name.c_str());
 				KickClient(client, "Invalid key: Refresh server list");
 				return;
@@ -544,7 +544,7 @@ void Server::SendHeartbeat()
 	std::string software = "MCHawk";
 	std::string isPublic = (m_serverPublic ? "True" : "False");
 
-	snprintf(postData, sizeof(postData), "public=%s&max=%d&users=%d&port=%d&version=%d&salt=%s&name=%s&software=%s", isPublic.c_str(), m_maxClients, m_numClients, m_port, m_version, m_salt.c_str(), m_serverName.c_str(), software.c_str());
+	std::snprintf(postData, sizeof(postData), "public=%s&max=%d&users=%d&port=%d&version=%d&salt=%s&name=%s&software=%s", isPublic.c_str(), m_maxClients, m_numClients, m_port, m_version, m_salt.c_str(), m_serverName.c_str(), software.c_str());
 
 	sf::Http http;
 	http.setHost("http://www.classicube.net/");

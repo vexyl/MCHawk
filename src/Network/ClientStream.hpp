@@ -1,7 +1,7 @@
 ﻿#ifndef CLIENTSTREAM_H_
 #define CLIENTSTREAM_H_
 
-#include <string.h>
+#include <cstring>
 
 #include <SFML/Network.hpp>
 
@@ -31,8 +31,8 @@ struct ClientStream {
 
 	bool consume_data(void *dst, size_t size) {
 		if (count < size) { return false; }
-		memcpy(dst, buf, size);
-		memmove(buf, &buf[size], count-size);
+		std::memcpy(dst, buf, size);
+		std::memmove(buf, &buf[size], count-size);
 		count -= size;
 		return true;
 	}

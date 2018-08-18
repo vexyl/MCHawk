@@ -130,7 +130,7 @@ void CommandHandler::Execute(Client* sender, std::string name, const CommandArgs
 	}
 
 	if (iter == m_commands.end()) {
-		Server::SendWrappedMessage(sender, "&cUnknown command: " + name);
+		Server::SendWrappedMessage(sender, "&cUnknown command: &f" + name);
 	} else {
 		// Check if player has permission
 		bool hasPermission = sender->GetUserType() >= iter->second->GetPermissionLevel();

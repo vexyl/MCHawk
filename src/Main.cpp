@@ -5,13 +5,18 @@
 
 #include "Server.hpp"
 
+#include <iostream>
+
+#include <cstdlib>
+#include <ctime>
+
 #ifdef _WIN32
 	#pragma comment(lib, "Ws2_32.lib")
 #endif
 
 int main()
 {
-	srand(time(0));
+	std::srand(std::time(0));
 
 	sf::Clock clock;
 	Server* server = Server::GetInstance();

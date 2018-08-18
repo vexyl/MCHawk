@@ -5,8 +5,8 @@
 // TODO: Multiple log file support
 // How to do this without singletons?
 
-#include <stdio.h>
-#include <stdarg.h>
+#include <cstdio>
+#include <cstdarg>
 
 #include <iostream>
 #include <fstream>

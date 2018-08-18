@@ -1,8 +1,8 @@
 ﻿#ifndef CLIENT_H_
 #define CLIENT_H_
 
-#include <string.h>
-#include <assert.h>
+#include <cstring>
+#include <cassert>
 
 #include <string>
 

@@ -1,7 +1,7 @@
 ﻿#include "Map.hpp"
 
-#include <assert.h>
-#include <string.h>
+#include <cassert>
+#include <cstring>
 #include <zlib.h>
 
 #include "Utils/Logger.hpp"
@@ -20,7 +20,7 @@ Map::Map() : m_buffer(nullptr)
 Map::~Map()
 {
 	if (m_buffer != nullptr)
-		free(m_buffer);
+		std::free(m_buffer);
 }
 
 void Map::SetDimensions(short x, short y, short z)
@@ -47,28 +47,28 @@ void Map::LoadFromFile(std::string filename)
 		delete m_buffer;
 
 
-	FILE *fp = fopen(filename.c_str(), "rb");
+	std::FILE *fp = std::fopen(filename.c_str(), "rb");
 	if (fp == nullptr) {
 		LOG(LogLevel::kError, "Can't open map file for reading");
-		exit(1);
+		std::exit(1);
 	}
 
-	fseek(fp, 0, SEEK_END);
-	m_bufferSize = ftell(fp);
-	rewind(fp);
+	std::fseek(fp, 0, SEEK_END);
+	m_bufferSize = std::ftell(fp);
+	std::rewind(fp);
 
-	m_buffer = (uint8_t*)malloc(sizeof(uint8_t) * m_bufferSize);
+	m_buffer = (uint8_t*)std::malloc(sizeof(uint8_t) * m_bufferSize);
 	if (m_buffer == nullptr) {
 		LOG(LogLevel::kError, "Couldn't allocate memory for map buffer");
-		exit(1);
+		std::exit(1);
 	}
 
-	if (fread(m_buffer, sizeof(uint8_t), m_bufferSize, fp) != m_bufferSize) {
+	if (std::fread(m_buffer, sizeof(uint8_t), m_bufferSize, fp) != m_bufferSize) {
 		LOG(LogLevel::kError, "Couldn't read map from file");
-		exit(1);
+		std::exit(1);
 	}
 
-	fclose(fp);
+	std::fclose(fp);
 
 	LOG(LogLevel::kInfo, "Loaded map file %s (%d bytes)", filename.c_str(), m_bufferSize);
 }
@@ -80,12 +80,12 @@ void Map::GenerateFlatMap(std::string filename, short x, short y, short z)
 	SetDimensions(x, y, z);
 
 	m_bufferSize = x*y*z+4;
-	m_buffer = (uint8_t*)malloc(sizeof(uint8_t) * m_bufferSize);
+	m_buffer = (uint8_t*)std::malloc(sizeof(uint8_t) * m_bufferSize);
 
-	memset(m_buffer, 0, m_bufferSize);
+	std::memset(m_buffer, 0, m_bufferSize);
 
 	int sz = htonl(m_bufferSize-4);
-	memcpy(m_buffer, &sz, sizeof(sz));
+	std::memcpy(m_buffer, &sz, sizeof(sz));
 
 	for (short gen_y = 0; gen_y < y/2; gen_y++) {
 		for (short gen_x = 0; gen_x < x; gen_x++) {
@@ -104,18 +104,18 @@ void Map::GenerateFlatMap(std::string filename, short x, short y, short z)
 // TODO: Use C++ file streams
 void Map::SaveToFile(std::string filename)
 {
-	FILE *fp = fopen(filename.c_str(), "wb");
+	std::FILE *fp = std::fopen(filename.c_str(), "wb");
 	if (fp == nullptr) {
 		LOG(LogLevel::kError, "Can't open map file for writing");
-		exit(1);
+		std::exit(1);
 	}
 
-	if (fwrite(m_buffer, sizeof(uint8_t), m_bufferSize, fp) != m_bufferSize) {
+	if (std::fwrite(m_buffer, sizeof(uint8_t), m_bufferSize, fp) != m_bufferSize) {
 		LOG(LogLevel::kError, "Couldn't write map to file");
-		exit(1);
+		std::exit(1);
 	}
 
-	fclose(fp);
+	std::fclose(fp);
 
 	LOG(LogLevel::kDebug, "Saved map file %s (%d bytes)", filename.c_str(), m_bufferSize);
 }
@@ -159,13 +159,13 @@ void Map::CompressBuffer(uint8_t** outCompBuffer, size_t* outCompSize)
 {
 	assert(*outCompBuffer==nullptr && m_buffer != nullptr);
 
-	*outCompBuffer = (uint8_t*)malloc(sizeof(uint8_t) * m_bufferSize);
+	*outCompBuffer = (uint8_t*)std::malloc(sizeof(uint8_t) * m_bufferSize);
 	if (*outCompBuffer == nullptr) {
 		LOG(LogLevel::kError, "Couldn't allocate memory for map buffer");
-		exit(1);
+		std::exit(1);
 	}
 
-	memset(*outCompBuffer, 0, m_bufferSize);
+	std::memset(*outCompBuffer, 0, m_bufferSize);
 
 	z_stream strm;
 	strm.zalloc = Z_NULL;
@@ -179,7 +179,7 @@ void Map::CompressBuffer(uint8_t** outCompBuffer, size_t* outCompSize)
 	int ret = deflateInit2(&strm, Z_BEST_COMPRESSION, Z_DEFLATED, (MAX_WBITS + 16), 8, Z_DEFAULT_STRATEGY);
 	if (ret != Z_OK) {
 		LOG(LogLevel::kDebug, "Zlib error: deflateInit2()");
-		exit(1);
+		std::exit(1);
 	}
 
 	strm.avail_out = (uLong)m_bufferSize;
@@ -192,7 +192,7 @@ void Map::CompressBuffer(uint8_t** outCompBuffer, size_t* outCompSize)
 		case Z_DATA_ERROR:
 		case Z_MEM_ERROR:
 			LOG(LogLevel::kError, "Zlib error: inflate()");
-			exit(1);
+			std::exit(1);
 	}
 
 	deflateEnd(&strm);

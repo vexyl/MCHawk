@@ -3,12 +3,13 @@
 
 #include "../Client.hpp"
 
-#include <stdint.h>
+#include <cstdint>
 
 #include "ClientStream.hpp"
 #include "Packet.hpp"
 
 namespace CPE {
+
 enum PacketType {
 	kExtInfo = 0x10,
 	kExtEntry = 0x11,
@@ -103,6 +104,7 @@ bool IsValidBlock(int type);
 void SendExtInfo(Client* client, std::string appName, short extCount);
 void SendExtEntry(Client* client, std::string extName, int version);
 void SendCustomBlocks(Client* client, uint8_t support);
+
 } // namespace CPE
 
 #endif // CPE_H_
