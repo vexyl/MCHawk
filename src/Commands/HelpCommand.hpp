@@ -17,8 +17,6 @@ public:
 
 	virtual void Execute(Client* sender, const CommandArgs& args)
 	{
-		(void)args; // Quiet compiler
-
 		Server* server = Server::GetInstance();
 		uint8_t userType = sender->GetUserType();
 
