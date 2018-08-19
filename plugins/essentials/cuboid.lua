@@ -105,6 +105,12 @@ EssentialsPlugin.Cuboid_DoCuboid = function(client)
 			return
 		end
 
+		if (btype == 7) then -- if blockType is Bedrock
+			Server.SendMessage(client, "&cBedrock is not allowed")
+			EssentialsPlugin.Cuboid_Remove(client.name)
+			return
+		end
+		
 		for x = x1, x2, xstep do
 			for y = y1, y2, ystep do
 				for z = z1, z2, zstep do

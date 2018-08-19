@@ -7,7 +7,7 @@
 bool Protocol::IsValidBlock(int type)
 {
 	for (int i = BlockType::kStartOfBlockTypes; i < BlockType::kEndOfBlockTypes; ++i) {
-		if (type == i)
+		if (type == i && type != BlockType::kBedrock)
 			return true;
 	}
 
