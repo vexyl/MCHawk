@@ -29,7 +29,7 @@ public:
 	std::string GetIpString();
 	std::string GetName() const { return m_name; }
 	std::string GetChatName() { return m_chatName; }
-	int8_t GetPid() { return m_pid; }
+	uint8_t GetPid() { return m_pid; }
 	uint8_t GetUserType() { return m_userType; }
 
 	Position GetPosition() { return m_position; }
