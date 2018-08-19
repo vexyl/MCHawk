@@ -70,7 +70,6 @@ EssentialsPlugin.Cuboid_DoCuboid = function(client)
 		local z2 = blocks["2"].z
 
 		local btype = blocks["1"].type
-		local mode = blocks["1"].mode
 
 		-- Set block type to air if player is used /z air
 		if (EssentialsPlugin.Cuboid_destroy[client.name] == 1) then

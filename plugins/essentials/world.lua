@@ -1,4 +1,9 @@
 EssentialsPlugin.World = {
+-- TODO: Allow max xyz to be modified
+xMax = 512,
+yMax = 64,
+zMax = 512,
+
 Init = function()
 	local worldCmd = Server.AddCommand("world", "w map", function() end, "world - various commands related to worlds", 1, 0)
 	worldCmd:AddSubcommand("list", EssentialsPlugin.World.Command_List, "list - list all available worlds; active=green, inactive=red", 0, 0)
@@ -156,8 +161,11 @@ Command_New = function(client, args)
 		return
 	end
 
-	if ((x > 512 or x <= 0) or (y > 64 or y <=0) or (z > 512 or z <= 0)) then
-		Server.SendMessage(client, "&cInvalid size. Max map size is &f512&cx&f64&cx&f512&c.")
+	local xMax = EssentialsPlugin.World.xMax
+	local yMax = EssentialsPlugin.World.yMax
+	local zMax = EssentialsPlugin.World.zMax
+	if ((x > xMax or x <= 0) or (y > yMax or y <=0) or (z > zMax or z <= 0)) then
+		Server.SendMessage(client, "&cInvalid size. Max map size is &f" .. xMax .. "&cx&f" .. yMax .. "&cx&f" .. zMax .. "&c.")
 		return
 	end
 
@@ -168,7 +176,7 @@ Command_New = function(client, args)
 
 	Server.CreateWorld(worldName, x, y, z)
 
-	Server.SendMessage(client, "&eWorld '" .. worldName .. "' with size " .. x .. "x" .. y .. "x" .. z .. " created successfully.")
+	Server.SendMessage(client, "&eWorld '&a" .. worldName .. "&e' with size &f" .. x .. "&ex&f" .. y .. "&ex&f" .. z .. " &ecreated successfully.")
 end,
 
 Command_Grant = function(client, args)
