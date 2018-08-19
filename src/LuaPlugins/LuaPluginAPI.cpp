@@ -126,12 +126,14 @@ void LuaServer::LuaPlaceBlock(Client* client, int type, short x, short y, short 
 {
 	World* world = client->GetWorld();
 	Map& map = world->GetMap();
+	int originalType = map.GetBlockType(x, y, z);
+	bool valid = false;
+	if (Protocol::IsValidBlock(type)) {
+		valid = map.SetBlock(x, y, z, type);
+	}
 
-	bool valid = map.SetBlock(x, y, z, type);
-
-	if (!valid) {
-		int type = map.GetBlockType(x, y, z);
-		Protocol::SendBlock(client, Position(x, y, z), type);
+	if (!valid || !Protocol::IsValidBlock(type)) {
+		Protocol::SendBlock(client, Position(x, y, z), originalType);
 		return;
 	}
 
