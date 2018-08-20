@@ -13,8 +13,6 @@ Client::Client() : m_world(nullptr)
 
 	active = false;
 	authed = false;
-
-	m_chatMuted = false;
 }
 
 Client::~Client()
@@ -65,7 +63,7 @@ bool Client::IsChatMuted()
 	if (m_chatMuteTime > 0 && m_chatMuteClock.getElapsedTime().asMilliseconds() >= m_chatMuteTime)
 		SetChatMute(0); // disable chat mute by setting timer to 0ms
 
-	return (m_chatMuteTime == 0) ? false : true;
+	return (m_chatMuteTime == 0);
 }
 
 void Client::QueuePacket(Packet* packet)

@@ -67,7 +67,6 @@ private:
 	std::vector<Packet*> m_packetQueue;
 
 	sf::Clock m_chatMuteClock;
-	bool m_chatMuted;
 	int32_t m_chatMuteTime;
 
 	std::string m_worldName;
