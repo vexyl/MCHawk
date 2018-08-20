@@ -98,7 +98,7 @@ struct ccustomblockp {
 	}
 };
 
-bool IsValidBlock(int type);
+bool IsValidBlock(uint8_t type);
 
 // Send packet functions
 void SendExtInfo(Client* client, std::string appName, short extCount);

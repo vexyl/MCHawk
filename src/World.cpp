@@ -251,7 +251,7 @@ void World::BroadcastMessage(std::string message)
 		Server::GetInstance()->SendWrappedMessage(obj, "&e[WORLD]: " + message);
 }
 
-void World::SendBlockToClients(int type, short x, short y, short z)
+void World::SendBlockToClients(uint8_t type, short x, short y, short z)
 {
 	for (auto& obj : m_clients)
 		Protocol::SendBlock(obj, Position(x, y, z), type);

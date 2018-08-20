@@ -87,7 +87,7 @@ void LuaServer::LuaKickClient(Client* client, std::string reason)
 	Server::GetInstance()->KickClient(client, reason);
 }
 
-void LuaServer::LuaSendBlock(Client* client, short x, short y, short z, int type)
+void LuaServer::LuaSendBlock(Client* client, short x, short y, short z, uint8_t type)
 {
 	Protocol::SendBlock(client, Position(x, y, z), type);
 }
@@ -122,7 +122,7 @@ LuaCommand* LuaServer::LuaAddCommand(std::string name, std::string aliases, luab
 	return command;
 }
 
-void LuaServer::LuaPlaceBlock(Client* client, int type, short x, short y, short z)
+void LuaServer::LuaPlaceBlock(Client* client, uint8_t type, short x, short y, short z)
 {
 	World* world = client->GetWorld();
 	Map& map = world->GetMap();
@@ -130,7 +130,7 @@ void LuaServer::LuaPlaceBlock(Client* client, int type, short x, short y, short 
 	bool valid = map.SetBlock(x, y, z, type);
 
 	if (!valid) {
-		int type = map.GetBlockType(x, y, z);
+		uint8_t type = map.GetBlockType(x, y, z);
 		Protocol::SendBlock(client, Position(x, y, z), type);
 		return;
 	}

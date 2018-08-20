@@ -4,7 +4,7 @@
 #include "../Map.hpp"
 #include "../Utils/Logger.hpp"
 
-bool Protocol::IsValidBlock(int type)
+bool Protocol::IsValidBlock(uint8_t type)
 {
 	for (int i = BlockType::kStartOfBlockTypes; i < BlockType::kEndOfBlockTypes; ++i) {
 		if (type == i)

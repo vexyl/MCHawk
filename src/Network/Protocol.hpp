@@ -203,7 +203,7 @@ struct cblockp {
 	}
 };
 
-bool IsValidBlock(int type);
+bool IsValidBlock(uint8_t type);
 
 Packet* make_spawn_packet(int8_t pid, std::string name, Position position, int8_t yaw, int8_t pitch);
 

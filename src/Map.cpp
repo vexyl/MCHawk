@@ -120,11 +120,11 @@ void Map::SaveToFile(std::string filename)
 	LOG(LogLevel::kDebug, "Saved map file %s (%d bytes)", filename.c_str(), m_bufferSize);
 }
 
-bool Map::SetBlock(short x, short y, short z, int8_t type)
+bool Map::SetBlock(short x, short y, short z, uint8_t type)
 {
 	int offset = calcMapOffset(x, y, z, m_x, m_z) + 4;
 
-	if ((offset + 1) > (int)m_bufferSize) {
+	if (offset < 0 || offset >= (int)m_bufferSize) {
 		LOG(LogLevel::kWarning, "Attempted map write passed buffer size");
 		return false;
 	}
@@ -134,23 +134,13 @@ bool Map::SetBlock(short x, short y, short z, int8_t type)
 	return true;
 }
 
-// block type is -1 on error
-Map::Block Map::GetBlock(short x, short y, short z)
-{
-	int offset = calcMapOffset(x, y, z, m_x, m_z) + 4;
-	if (offset < (int)m_bufferSize)
-		return Block(x, y, z, m_buffer[offset]);
-
-	return Block();
-}
-
-// returns -1 on error
-int8_t Map::GetBlockType(short x, short y, short z)
+// returns 0 if out of bounds
+uint8_t Map::GetBlockType(short x, short y, short z)
 {
 	int offset = calcMapOffset(x, y, z, m_x, m_z) + 4;
 
-	if ((offset + 1) > (int)m_bufferSize)
-		return -1;
+	if (offset < 0 || offset >= (int)m_bufferSize)
+		return 0;
 
 	return m_buffer[offset];
 }

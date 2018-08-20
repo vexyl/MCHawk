@@ -1,6 +1,6 @@
 ﻿#include "CPE.hpp"
 
-bool CPE::IsValidBlock(int type)
+bool CPE::IsValidBlock(uint8_t type)
 {
 	for (int i = BlockType::kStartOfBlockTypes; i < BlockType::kEndOfBlockTypes; ++i) {
 		if (type == i)
