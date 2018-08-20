@@ -11,14 +11,6 @@
 
 class Map {
 public:
-	struct Block {
-		Block(short inX, short inY, short inZ, int8_t inType) : x(inX), y(inY), z(inZ), type(inType) { }
-		Block() : Block(0, 0, 0, -1) { }
-
-		short x, y, z;
-		int8_t type;
-	};
-
 	Map();
 
 	~Map();
