@@ -5,12 +5,9 @@
 
 uint8_t Client::pid = 0;
 
-Client::Client() : m_world(nullptr)
+Client::Client() : m_world(nullptr), m_userType(0), m_yaw(0), m_pitch(0), m_chatMuteTime(0)
 {
 	m_pid = pid++;
-	m_userType = 0;
-	m_yaw = m_pitch = 0;
-
 	active = false;
 	authed = false;
 }
@@ -63,7 +60,7 @@ bool Client::IsChatMuted()
 	if (m_chatMuteTime > 0 && m_chatMuteClock.getElapsedTime().asMilliseconds() >= m_chatMuteTime)
 		SetChatMute(0); // disable chat mute by setting timer to 0ms
 
-	return (m_chatMuteTime == 0);
+	return m_chatMuteTime > 0;
 }
 
 void Client::QueuePacket(Packet* packet)
