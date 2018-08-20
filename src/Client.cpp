@@ -56,20 +56,16 @@ void Client::SetPositionOrientation(Position position, uint8_t yaw, uint8_t pitc
 
 void Client::SetChatMute(int32_t chatMuteTime)
 {
-	m_chatMuted = (chatMuteTime == 0) ? 0 : 1;
 	m_chatMuteTime = chatMuteTime;
-
 	m_chatMuteClock.restart();
 }
 
 bool Client::IsChatMuted()
 {
-	if (m_chatMuted && m_chatMuteTime > 0 && m_chatMuteClock.getElapsedTime().asMilliseconds() >= m_chatMuteTime) {
-		SetChatMute(false);
-		m_chatMuted = false;
-	}
+	if (m_chatMuteTime > 0 && m_chatMuteClock.getElapsedTime().asMilliseconds() >= m_chatMuteTime)
+		SetChatMute(0); // disable chat mute by setting timer to 0ms
 
-	return m_chatMuted;
+	return (m_chatMuteTime == 0) ? false : true;
 }
 
 void Client::QueuePacket(Packet* packet)
