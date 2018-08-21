@@ -77,7 +77,6 @@ EssentialsPlugin.Groups_GetPlayerGroups = function(client)
 
 	local groupStrings = {}
 	for _,group in ipairs(groups) do
-	print(group)
 		local groupTable = EssentialsPlugin.Groups_GetGroupTable(group)
 		local color = groupTable[2]
 
