@@ -77,6 +77,7 @@ EssentialsPlugin.Groups_GetPlayerGroups = function(client)
 
 	local groupStrings = {}
 	for _,group in ipairs(groups) do
+	print(group)
 		local groupTable = EssentialsPlugin.Groups_GetGroupTable(group)
 		local color = groupTable[2]
 
@@ -144,5 +145,10 @@ EssentialsPlugin.Groups_LoadGroups = function()
 		f:close()
 	else
 		print("Couldn't open groups.txt")
+	end
+	
+	local guestTable = EssentialsPlugin.Groups_GetGroupTable("guest")
+	if (guestTable == nil) then
+		table.insert(EssentialsPlugin.Groups_groupsTable, { "guest", "&7", nil })
 	end
 end
