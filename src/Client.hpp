@@ -60,6 +60,9 @@ private:
 	std::string m_ipString;
 	uint8_t m_pid;
 
+	std::string m_worldName;
+	World* m_world;
+
 	uint8_t m_userType;
 	Position m_position;
 	uint8_t m_yaw, m_pitch;
@@ -68,9 +71,6 @@ private:
 
 	sf::Clock m_chatMuteClock;
 	int32_t m_chatMuteTime;
-
-	std::string m_worldName;
-	World* m_world;
 };
 
 #endif // CLIENT_H_

@@ -5,9 +5,8 @@
 
 uint8_t Client::pid = 0;
 
-Client::Client() : m_world(nullptr), m_userType(0), m_yaw(0), m_pitch(0), m_chatMuteTime(0)
+Client::Client() : m_pid(pid++), m_world(nullptr), m_userType(0), m_yaw(0), m_pitch(0), m_chatMuteTime(0)
 {
-	m_pid = pid++;
 	active = false;
 	authed = false;
 }
