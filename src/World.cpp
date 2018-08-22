@@ -9,8 +9,8 @@
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/ini_parser.hpp>
 
-// m_mapChanged set to true so when the .ini first saves the map file gets saved too
-World::World(std::string name) : m_name(name), m_active(false), m_mapChanged(true)
+// m_saveFlag set to true for new worlds so they'll be saved when autosave is set to true
+World::World(std::string name) : m_name(name), m_active(false), m_saveFlag(true)
 {
 	SetOption("build", "true", true);
 	SetOption("autosave", "false", true);
@@ -58,9 +58,11 @@ void World::Load(std::string filename)
 	} catch (std::runtime_error& e) {
 		LOG(LogLevel::kWarning, "%s", e.what());
 	}
+
+	m_saveFlag = false;
 }
 
-void World::Save()
+void World::Save(bool forceSave)
 {
 	try {
 		boost::property_tree::ptree pt;
@@ -104,8 +106,10 @@ void World::Save()
 		LOG(LogLevel::kWarning, "%s", e.what());
 	}
 
-	if (GetActive())
-		SaveMapIfChanged();
+	if (m_saveFlag|| forceSave) {
+		m_map.SaveToFile();
+		m_saveFlag = false;
+	}
 }
 
 void World::AddClient(Client* client)
@@ -117,7 +121,7 @@ void World::AddClient(Client* client)
 
 	Server::GetInstance()->GetPluginHandler().TriggerEvent(EventType::kOnWorldJoin, client, table);
 
-	LOG(LogLevel::kDebug, "Player with pid=%d added to world '%s'", client->GetPid(), m_name.c_str());
+	LOG(LogLevel::kDebug, "Player %s added to world '%s'", client->GetName().c_str(), m_name.c_str());
 
 	Protocol::SendMap(client, m_map);
 	Protocol::SpawnClient(client, m_spawnPosition, m_clients);
@@ -134,24 +138,13 @@ void World::RemoveClient(int8_t pid)
 	while (iter != m_clients.end()) {
 		if ((*iter)->GetPid() == pid) {
 			m_clients.erase(iter);
-			LOG(LogLevel::kDebug, "Player with pid=%d removed from world '%s'", pid, m_name.c_str());
+			LOG(LogLevel::kDebug, "Player %s removed from world '%s'", (*iter)->GetName().c_str(), m_name.c_str());
 			Protocol::DespawnClient(pid, m_clients);
 			break;
 		}
 
 		++iter;
 	}
-}
-
-bool World::SaveMapIfChanged()
-{
-	if (m_mapChanged) {
-		m_map.SaveToFile();
-		m_mapChanged = false;
-		return true;
-	}
-
-	return false;
 }
 
 void World::SetActive(bool active)
@@ -196,11 +189,12 @@ bool World::IsValidOption(std::string option)
 
 void World::Tick()
 {
+	if (!m_active)
+		return;
+
 	if (GetOption("autosave") == "true") {
 		if (m_autosaveClock.getElapsedTime().asSeconds() >= kAutosaveTime) {
-			if (GetActive() && SaveMapIfChanged())
-				BroadcastMessage("Map saved");
-			Save(); // Saves settings, skips map save since SaveMapIfChanged() was called above
+			Save();
 			m_autosaveClock.restart();
 		}
 	}
@@ -242,7 +236,7 @@ void World::OnBlock(Client* client, struct Protocol::cblockp clientBlock)
 		}
 	}
 
-	m_mapChanged = true;
+	m_saveFlag = true;
 }
 
 void World::BroadcastMessage(std::string message)

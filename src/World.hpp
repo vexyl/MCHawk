@@ -24,8 +24,7 @@ public:
 	void RemoveClient(int8_t pid);
 
 	void Load(std::string filename);
-	void Save();
-	bool SaveMapIfChanged();
+	void Save(bool forceSave=false);
 
 	void SetActive(bool active);
 	void SetSpawnPosition(Position spawnPosition);
@@ -55,7 +54,7 @@ private:
 	sf::Clock m_autosaveClock;
 
 	bool m_active;
-	bool m_mapChanged;
+	bool m_saveFlag;
 };
 
 #endif // WORLD_H_

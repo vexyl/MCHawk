@@ -136,7 +136,7 @@ void Server::Init()
 		w->SetActive(true);
 
 		AddWorld(w);
-		w->Save();
+		w->Save(true /* force save */);
 	}
 
 	LoadPlugins();
