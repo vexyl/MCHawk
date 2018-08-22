@@ -24,7 +24,7 @@ public:
 	void RemoveClient(int8_t pid);
 
 	void Load(std::string filename);
-	void Save(bool forceSave=false);
+	void Save();
 
 	void SetActive(bool active);
 	void SetSpawnPosition(Position spawnPosition);

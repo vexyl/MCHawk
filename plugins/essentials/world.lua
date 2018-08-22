@@ -115,7 +115,7 @@ Command_Save = function(client, args)
 	end
 
 	local world = client:GetWorld()
-	world:Save(true)
+	world:Save()
 	Server.SendMessage(client, "&eWorld saved")
 end,
 

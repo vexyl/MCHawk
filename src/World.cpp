@@ -62,7 +62,7 @@ void World::Load(std::string filename)
 	m_saveFlag = false;
 }
 
-void World::Save(bool forceSave)
+void World::Save()
 {
 	try {
 		boost::property_tree::ptree pt;
@@ -106,7 +106,7 @@ void World::Save(bool forceSave)
 		LOG(LogLevel::kWarning, "%s", e.what());
 	}
 
-	if (m_saveFlag|| forceSave) {
+	if (m_saveFlag) {
 		m_map.SaveToFile();
 		m_saveFlag = false;
 	}
