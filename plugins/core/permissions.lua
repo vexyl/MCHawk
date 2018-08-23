@@ -227,6 +227,12 @@ end
 PermissionsPlugin.CheckPermission = function(name, permission)
 	local name = string.lower(name)
 
+	-- Operators bypass permissions
+	local client = Server.GetClientByName(name)
+	if (client ~= nil and client:GetUserType() >= 0x64) then -- operator or higher
+		return true
+	end
+	
 	local result = false
 
 	local perms = PermissionsPlugin.permissionTable[name];
@@ -256,11 +262,6 @@ end
 PermissionsPlugin.CheckPermissionNotify = function(client, permission)
 	if (not PermissionsPlugin.PermissionsExistsNotify(client, permission)) then
 		return false
-	end
-
-	-- Operators bypass permissions
-	if (client:GetUserType() >= 0x64) then -- operator or higher
-		return true
 	end
 
 	local result = PermissionsPlugin.CheckPermission(client.name, permission)
