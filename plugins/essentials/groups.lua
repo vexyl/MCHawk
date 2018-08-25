@@ -48,7 +48,7 @@ EssentialsPlugin.Groups_OnAuth = function(client, args)
 
 		if (perms ~= nil) then
 			for _,perm in pairs(perms) do
-				if (not PermissionsPlugin.CheckPermission(targetName, perm)) then
+				if (not PermissionsPlugin.HasPermission(targetName, perm)) then
 					PermissionsPlugin.GrantPermission(targetName, perm)
 					Server.SendMessage(client, "&eConsole granted you &9" .. perm)
 				end

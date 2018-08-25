@@ -76,7 +76,7 @@ PermissionsPlugin.RevokeCommand = function(client, args, override)
 
 	for k, targetPerm in pairs(args) do
 		if (k ~= 1) then -- skip name
-			if (PermissionsPlugin.HasPermissiontargetName, targetPerm)) then
+			if (PermissionsPlugin.HasPermission(targetName, targetPerm)) then
 				PermissionsPlugin.RevokePermission(targetName, targetPerm)
 			end
 		end
@@ -234,7 +234,7 @@ PermissionsPlugin.CheckPermission = function(name, permission)
 		return true
 	end
 	
-	return HasPermission(name, permission)
+	return PermissionsPlugin.HasPermission(name, permission)
 end
 
 -- Doesn't check if permission exists
