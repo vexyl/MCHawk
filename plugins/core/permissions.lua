@@ -17,7 +17,7 @@ PermissionsPlugin.init = function()
 end
 
 PermissionsPlugin.GrantCommand = function(client, args, override)
-	if (not PermissionsPlugin.CheckPermissionNotify(client, "permissions") and override == nil) then
+	if (not PermissionsPlugin.CheckPermissionNotify(client, "permissions") and override ~= true) then
 		return
 	end
 
@@ -39,7 +39,7 @@ PermissionsPlugin.GrantCommand = function(client, args, override)
 
 	for k, targetPerm in pairs(args) do
 		if (k ~= 1) then -- skip name
-			if (not PermissionsPlugin.CheckPermission(targetName, targetPerm)) then
+			if (not PermissionsPlugin.HasPermission(targetName, targetPerm)) then
 				PermissionsPlugin.GrantPermission(targetName, targetPerm)
 			end
 		end
@@ -76,7 +76,7 @@ PermissionsPlugin.RevokeCommand = function(client, args, override)
 
 	for k, targetPerm in pairs(args) do
 		if (k ~= 1) then -- skip name
-			if (PermissionsPlugin.CheckPermission(targetName, targetPerm)) then
+			if (PermissionsPlugin.HasPermissiontargetName, targetPerm)) then
 				PermissionsPlugin.RevokePermission(targetName, targetPerm)
 			end
 		end
@@ -224,30 +224,33 @@ PermissionsPlugin.PermissionsExistsNotify = function(client, permissions)
 end
 
 -- Doesn't check if permission exists
+-- Ops bypass permissions, use this when checking permission for a command
 PermissionsPlugin.CheckPermission = function(name, permission)
-	local name = string.lower(name)
-
+	name = string.lower(name)
+	
 	-- Operators bypass permissions
 	local client = Server.GetClientByName(name)
 	if (client ~= nil and client:GetUserType() >= 0x64) then -- operator or higher
 		return true
 	end
 	
-	local result = false
+	return HasPermission(name, permission)
+end
 
+-- Doesn't check if permission exists
+PermissionsPlugin.HasPermission = function(name, permission)
+	name = string.lower(name)
+	
 	local perms = PermissionsPlugin.permissionTable[name];
-	if (perms == nil) then
-		result = false
-	else
+	if (perms ~= nil) then
 		for k, v in pairs(perms) do
 			if (v == permission) then
-				result = true
-				break
+				return true
 			end
 		end
 	end
 
-	return result
+	return false
 end
 
 PermissionsPlugin.CheckPermissionIfExists = function(name, permission)
