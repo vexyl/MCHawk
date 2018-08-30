@@ -1,7 +1,7 @@
 ﻿/*
  * Vexyl
  * Started in March, 2017
-*/
+ */
 
 #include "Server.hpp"
 

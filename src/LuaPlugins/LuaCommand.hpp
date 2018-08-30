@@ -29,8 +29,13 @@ public:
 
 	virtual void Execute(Client* sender, const CommandArgs& args)
 	{
-		if (!args.empty() && HandleSubcommands(sender, args))
-			return;
+		if (!args.empty()) {
+			try {
+				HandleSubcommands(sender, args);
+			} catch (...) {
+				return;
+			}
+		}
 
 		if (m_func != nullptr) {
 			try {

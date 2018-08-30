@@ -9,9 +9,9 @@
 
 class LuaPlugin {
 public:
-	bool LoadScript(lua_State* L, const std::string& filename);
+	void LoadScript(lua_State* L, const std::string& filename);
 
-	bool Init();
+	void Init();
 	void Tick();
 
 	std::string GetName() const { return m_name; }

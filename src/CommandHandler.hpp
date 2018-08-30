@@ -30,7 +30,7 @@ public:
 
 	void AddSubcommand(Command* command) { m_subcommands.push_back(command); }
 
-	bool HandleSubcommands(Client* sender, const CommandArgs& args);
+	void HandleSubcommands(Client* sender, const CommandArgs& args);
 
 protected:
 	std::string m_name;

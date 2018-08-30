@@ -126,15 +126,16 @@ void LuaServer::LuaPlaceBlock(Client* client, uint8_t type, short x, short y, sh
 	World* world = client->GetWorld();
 	Map& map = world->GetMap();
 
-	bool valid = map.SetBlock(x, y, z, type);
+	try {
+		map.SetBlock(x, y, z, type);
+		world->SendBlockToClients(type, x, y, z);
+	} catch(std::runtime_error const& e) {
+		LOG(LogLevel::kWarning, "Exception in LuaPlaceBlock: %s", e.what());
 
-	if (!valid) {
+		// Reverse block
 		uint8_t type = map.GetBlockType(x, y, z);
 		Protocol::SendBlock(client, Position(x, y, z), type);
-		return;
 	}
-
-	world->SendBlockToClients(type, x, y, z);
 }
 
 int LuaServer::LuaMapGetBlockType(Client* client, short x, short y, short z)

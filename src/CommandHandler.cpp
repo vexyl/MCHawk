@@ -11,7 +11,7 @@
 #include "Utils/Logger.hpp"
 #include "Network/Protocol.hpp"
 
-bool Command::HandleSubcommands(Client* sender, const CommandArgs& args)
+void Command::HandleSubcommands(Client* sender, const CommandArgs& args)
 {
 	for (auto& obj : m_subcommands) {
 		if (args[0] == obj->GetName()) {
@@ -22,21 +22,18 @@ bool Command::HandleSubcommands(Client* sender, const CommandArgs& args)
 			// FIXME: Repeated code; have command handler take care of subcommands
 			if (subArgs.size() < obj->GetArgumentAmount()) {
 				Protocol::SendMessage(sender, "&b" + obj->GetDocString());
-				return true;
+				throw std::runtime_error("Not enough arguments to subcommand " + m_name + "->" + obj->GetName());
 			}
 
 			obj->Execute(sender, subArgs);
-
-			return true;
+			return;
 		}
 	}
 
 	if (!m_subcommands.empty()) {
 		Protocol::SendMessage(sender, "&cInvalid subcommand &f" + args.front());
-		return true;
+		throw std::runtime_error("Invalid subcommand " + m_name + "->" + args.front());
 	}
-
-	return false;
 }
 
 CommandHandler::~CommandHandler()

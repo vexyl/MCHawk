@@ -33,7 +33,7 @@ public:
 	void SaveToFile(std::string filename);
 	void SaveToFile() { SaveToFile(m_filename); }
 
-	bool SetBlock(short x, short y, short z, uint8_t type);
+	void SetBlock(short x, short y, short z, uint8_t type);
 	uint8_t GetBlockType(short x, short y, short z);
 
 	void CompressBuffer(uint8_t** outCompBuffer, size_t* outCompSize);

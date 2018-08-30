@@ -4,8 +4,7 @@
 
 #include <iostream>
 
-// TODO: Return value or throw exception and only Init() if no errors
-bool LuaPlugin::LoadScript(lua_State* L, const std::string& filename)
+void LuaPlugin::LoadScript(lua_State* L, const std::string& filename)
 {
 	if (luaL_dofile(L, filename.c_str()) == 0) {
 		luabridge::LuaRef thisString = luabridge::getGlobal(L, "this");
@@ -24,38 +23,30 @@ bool LuaPlugin::LoadScript(lua_State* L, const std::string& filename)
 			if (pluginTable["init"].isFunction()) {
 				m_initFunc = std::make_unique<luabridge::LuaRef>(pluginTable["init"]);
 			} else {
-				std::cerr << "Couldn't find init function for plugin " << m_name << " (" << filename << ")" << std::endl;
-				return false;
+				throw std::runtime_error("Couldn't find init function for plugin " + m_name + " (" + filename + ")");
 			}
 
 			if (pluginTable["tick"].isFunction())
 				m_tickFunc = std::make_unique<luabridge::LuaRef>(pluginTable["tick"]);
 		} else {
-			std::cerr << "Couldn't find Plugin table for plugin " << m_name << " (" << filename << ")" << std::endl;
-			return false;
+			throw std::runtime_error("Couldn't find Plugin table for plugin " + m_name + " (" + filename + ")");
 		}
 
 		std::cout << "Loaded script " << filename << std::endl;
 	} else {
-		std::cerr << "Failed to load script " << filename << ": " << lua_tostring(L, -1) << std::endl;
-		return false;
+		throw std::runtime_error("Failed to load script " + filename + ": " + lua_tostring(L, -1));
 	}
-
-	return true;
 }
 
-bool LuaPlugin::Init()
+void LuaPlugin::Init()
 {
 	if (m_initFunc != nullptr) {
 		try {
 			(*m_initFunc)();
 		} catch (luabridge::LuaException const& e) {
-			std::cerr << "LuaException: " << e.what() << std::endl;
-			return false;
+			throw std::runtime_error("LuaBridge (plugin->" + m_name + ") | " + std::string(e.what()));
 		}
 	}
-
-	return true;
 }
 
 void LuaPlugin::Tick()

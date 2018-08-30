@@ -60,7 +60,11 @@ void LuaPluginHandler::LoadPlugin(std::string filename)
 {
 	LuaPlugin* plugin = new LuaPlugin;
 
-	if (!plugin->LoadScript(L, filename) || !plugin->Init()) {
+	try {
+		plugin->LoadScript(L, filename);
+		plugin->Init();
+	} catch(std::runtime_error const& e) {
+		LOG(LogLevel::kWarning, "LuaPluginHandler exception in LoadPlugin(): %s", e.what());
 		delete plugin;
 		return;
 	}

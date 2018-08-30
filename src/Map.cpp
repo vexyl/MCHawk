@@ -120,18 +120,14 @@ void Map::SaveToFile(std::string filename)
 	LOG(LogLevel::kDebug, "Saved map file %s (%d bytes)", filename.c_str(), m_bufferSize);
 }
 
-bool Map::SetBlock(short x, short y, short z, uint8_t type)
+void Map::SetBlock(short x, short y, short z, uint8_t type)
 {
 	int offset = calcMapOffset(x, y, z, m_x, m_z) + 4;
 
-	if (offset < 0 || offset >= (int)m_bufferSize) {
-		LOG(LogLevel::kWarning, "Attempted map write passed buffer size");
-		return false;
-	}
+	if (offset < 0 || offset >= (int)m_bufferSize)
+		throw std::runtime_error("map->" + m_filename + " | buffer overlow");
 
 	m_buffer[offset] = type;
-
-	return true;
 }
 
 // returns 0 if out of bounds
