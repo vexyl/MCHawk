@@ -14,7 +14,7 @@
 
 Map::Map() : m_buffer(nullptr)
 {
-	SetDimensions(0, 0, 0);
+	SetDimensions(Position());
 }
 
 Map::~Map()
@@ -23,11 +23,11 @@ Map::~Map()
 		std::free(m_buffer);
 }
 
-void Map::SetDimensions(short x, short y, short z)
+void Map::SetDimensions(const Position& pos)
 {
-	m_x = x;
-	m_y = y;
-	m_z = z;
+	m_x = pos.x;
+	m_y = pos.y;
+	m_z = pos.z;
 }
 
 void Map::SetFilename(std::string filename)
@@ -77,7 +77,7 @@ void Map::GenerateFlatMap(std::string filename, short x, short y, short z)
 {
 	m_filename = filename;
 
-	SetDimensions(x, y, z);
+	SetDimensions(Position(x, y, z));
 
 	m_bufferSize = x*y*z+4;
 	m_buffer = (uint8_t*)std::malloc(sizeof(uint8_t) * m_bufferSize);
@@ -90,10 +90,11 @@ void Map::GenerateFlatMap(std::string filename, short x, short y, short z)
 	for (short gen_y = 0; gen_y < y/2; gen_y++) {
 		for (short gen_x = 0; gen_x < x; gen_x++) {
 			for (short gen_z = 0; gen_z < z; gen_z++) {
+				Position pos(gen_x, gen_y, gen_z);
 				if (gen_y < (y/2 - 1))
-					SetBlock(Position(gen_x, gen_y, gen_z), 0x03);
+					SetBlock(pos, 0x03);
 				else
-					SetBlock(Position(gen_x, gen_y, gen_z), 0x02);
+					SetBlock(pos, 0x02);
 			}
 		}
 	}

@@ -44,7 +44,7 @@ void World::Load(std::string filename)
 		std::string autoload = pt.get<std::string>("Options.autoload");
 
 		m_name = name;
-		m_map.SetDimensions(x_size, y_size, z_size);
+		m_map.SetDimensions(Position(x_size, y_size, z_size));
 		m_map.SetFilename("worlds/" + mapFilename);
 		SetSpawnPosition(Position(sx, sy, sz));
 		SetOption("autosave", autosave);
@@ -202,7 +202,7 @@ void World::Tick()
 
 void World::OnPosition(Client* client, struct Protocol::cposp clientPos)
 {
-	client->SetPositionOrientation(Position(clientPos.x, clientPos.y, clientPos.z), clientPos.yaw, clientPos.pitch);
+	client->SetPositionOrientation(Position(clientPos.pos.x, clientPos.pos.y, clientPos.pos.z), clientPos.yaw, clientPos.pitch);
 	Protocol::SendPlayerPositionUpdate(client, m_clients);
 }
 
