@@ -213,7 +213,7 @@ void World::OnBlock(Client* client, struct Protocol::cblockp clientBlock)
 	if (clientBlock.mode == 0x00) // Breaking mode
 		type = 0x00; // Air block type
 
-	Position position(clientBlock.x, clientBlock.y, clientBlock.z);
+	Position position(clientBlock.pos);
 
 	bool validBlock = Protocol::IsValidBlock(type) || CPE::IsValidBlock(type);
 	if (!validBlock) {
@@ -223,7 +223,7 @@ void World::OnBlock(Client* client, struct Protocol::cblockp clientBlock)
 	}
 
 	try {
-		m_map.SetBlock(clientBlock.x, clientBlock.y, clientBlock.z, type);
+		m_map.SetBlock(clientBlock.pos, type);
 	} catch(std::runtime_error const& e) {
 		LOG(LogLevel::kWarning, "Exception in LuaPlaceBlock: %s", e.what());
 

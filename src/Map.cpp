@@ -91,9 +91,9 @@ void Map::GenerateFlatMap(std::string filename, short x, short y, short z)
 		for (short gen_x = 0; gen_x < x; gen_x++) {
 			for (short gen_z = 0; gen_z < z; gen_z++) {
 				if (gen_y < (y/2 - 1))
-					SetBlock(gen_x, gen_y, gen_z, 0x03);
+					SetBlock(Position(gen_x, gen_y, gen_z), 0x03);
 				else
-					SetBlock(gen_x, gen_y, gen_z, 0x02);
+					SetBlock(Position(gen_x, gen_y, gen_z), 0x02);
 			}
 		}
 	}
@@ -120,9 +120,9 @@ void Map::SaveToFile(std::string filename)
 	LOG(LogLevel::kDebug, "Saved map file %s (%d bytes)", filename.c_str(), m_bufferSize);
 }
 
-void Map::SetBlock(short x, short y, short z, uint8_t type)
+void Map::SetBlock(Position& pos, uint8_t type)
 {
-	int offset = calcMapOffset(x, y, z, m_x, m_z) + 4;
+	int offset = calcMapOffset(pos.x, pos.y, pos.z, m_x, m_z) + 4;
 
 	if (offset < 0 || offset >= (int)m_bufferSize)
 		throw std::runtime_error("map->" + m_filename + " | buffer overlow");

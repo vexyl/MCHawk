@@ -2,16 +2,10 @@
 #define POSITION_H_
 
 struct Position {
-	int16_t x, y, z;
+	unsigned short x, y, z;
 
-	Position(int16_t inX, int16_t inY, int16_t inZ)
-	{
-		x = inX;
-		y = inY;
-		z = inZ;
-	}
-
-	Position() { Position(0, 0, 0); }
+	Position(unsigned short x = 0, unsigned short y = 0, unsigned short z = 0) : x(x), y(y), z(z) {}
+	Position(const Position& src) : x(src.x), y(src.y), z(src.z) {}
 };
 
 #endif // POSITION_H_
