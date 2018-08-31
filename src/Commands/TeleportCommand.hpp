@@ -31,13 +31,12 @@ public:
 			return;
 		}
 
-		std::string srcWorldName = sender->GetWorld()->GetName();
-		std::string destWorldName = client->GetWorld()->GetName();
+		World* srcWorld = sender->GetWorld();
+		World* destWorld = client->GetWorld();
 
-		if (srcWorldName != destWorldName) {
-			World* world = server->GetWorld(destWorldName);
-			sender->GetWorld()->RemoveClient(sender->GetPid());
-			world->AddClient(sender);
+		if (srcWorld != destWorld) {
+			srcWorld->RemoveClient(sender->GetPid());
+			destWorld->AddClient(sender);
 		}
 
 		Protocol::SendPosition(sender, -1 /* Self ID */, client->GetPosition(), client->GetYaw(), client->GetPitch());
