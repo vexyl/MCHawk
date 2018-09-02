@@ -30,11 +30,10 @@ public:
 
 	void AddSubcommand(Command* command) { m_subcommands.push_back(command); }
 
-	void HandleSubcommands(Client* sender, const CommandArgs& args);
+	Command* HandleSubcommands(Client* sender, const CommandArgs& args);
 
 protected:
 	std::string m_name;
-private:
 	std::vector<Command*> m_subcommands;
 };
 

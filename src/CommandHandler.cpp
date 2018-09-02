@@ -11,7 +11,8 @@
 #include "Utils/Logger.hpp"
 #include "Network/Protocol.hpp"
 
-void Command::HandleSubcommands(Client* sender, const CommandArgs& args)
+// Returns subcommand pointer if found, else it returns nullptr
+Command* Command::HandleSubcommands(Client* sender, const CommandArgs& args)
 {
 	for (auto& obj : m_subcommands) {
 		if (args[0] == obj->GetName()) {
@@ -22,18 +23,16 @@ void Command::HandleSubcommands(Client* sender, const CommandArgs& args)
 			// FIXME: Repeated code; have command handler take care of subcommands
 			if (subArgs.size() < obj->GetArgumentAmount()) {
 				Protocol::SendMessage(sender, "&b" + obj->GetDocString());
-				throw std::runtime_error("Not enough arguments to subcommand " + m_name + "->" + obj->GetName());
+				return nullptr;
 			}
 
 			obj->Execute(sender, subArgs);
-			return;
+			return obj;
 		}
 	}
 
-	if (!m_subcommands.empty()) {
-		Protocol::SendMessage(sender, "&cInvalid subcommand &f" + args.front());
-		throw std::runtime_error("Invalid subcommand " + m_name + "->" + args.front());
-	}
+	Protocol::SendMessage(sender, "&cInvalid subcommand &f" + args.front());
+	return nullptr;
 }
 
 CommandHandler::~CommandHandler()
@@ -169,6 +168,6 @@ void CommandHandler::Handle(Client* sender, std::string command)
 
 		Execute(sender, commandName, tokens);
 	} catch (std::runtime_error& e) {
-		LOG(LogLevel::kDebug, "%s", e.what());
+		LOG(LogLevel::kWarning, "%s", e.what());
 	}
 }

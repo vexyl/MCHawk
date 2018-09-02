@@ -29,25 +29,17 @@ public:
 
 	virtual void Execute(Client* sender, const CommandArgs& args)
 	{
-		if (!args.empty()) {
-			try {
-				HandleSubcommands(sender, args);
-			} catch (...) {
-				return;
-			}
-		}
+		if (!args.empty() && !m_subcommands.empty()
+				&& HandleSubcommands(sender, args) != nullptr)
+			return;
 
 		if (m_func != nullptr) {
-			try {
-				auto table = make_luatable();
+			auto table = make_luatable();
 
-				for (int i = 1; i < (int)args.size() + 1; ++i)
-					table[i] = args[i-1];
+			for (int i = 1; i < (int)args.size() + 1; ++i)
+				table[i] = args[i-1];
 
-				(*m_func)(sender, table);
-			} catch (luabridge::LuaException const& e) {
-				std::cerr << "In Lua command " << m_name << " | " << "LuaException: " << e.what() << std::endl;
-			}
+			(*m_func)(sender, table);
 		}
 	}
 
@@ -58,10 +50,8 @@ public:
 	LuaCommand* AddSubcommand(std::string subcommand, luabridge::LuaRef func, std::string docString,
 		unsigned argumentAmount, unsigned permissionLevel)
 	{
-		if (!func.isFunction()) {
-			std::cerr << "Failed adding Lua subcommand " << subcommand << ": function does not exist" << std::endl;
-			return nullptr;
-		}
+		if (!func.isFunction())
+			throw std::runtime_error("Failed adding Lua subcommand " + subcommand + ": function does not exist");
 
 		LuaCommand* command = new LuaCommand(subcommand, func, docString, argumentAmount, permissionLevel);
 

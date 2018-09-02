@@ -16,7 +16,7 @@
 
 int main()
 {
-	std::srand(std::time(0));
+	std::srand(0);
 
 	sf::Clock clock;
 	Server* server = Server::GetInstance();
