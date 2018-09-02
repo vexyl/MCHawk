@@ -92,9 +92,9 @@ void Protocol::SendMap(Client* client, Map& map)
 
 	free(compBuffer);
 
-	short mapX = map.GetXSize();
-	short mapY = map.GetYSize();
-	short mapZ = map.GetZSize();
+	int16_t mapX = map.GetXSize();
+	int16_t mapY = map.GetYSize();
+	int16_t mapZ = map.GetZSize();
 
 	Packet* packet = new Packet(Protocol::PacketType::kServerLevelFinal);
 
