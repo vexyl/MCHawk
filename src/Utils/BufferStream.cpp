@@ -39,7 +39,7 @@ void BufferStream::Write(const void* inData, size_t inByteCount)
 
 void BufferStream::Read(void* outData, uint32_t inByteCount)
 {
-	int32_t resultHead = (int32_t)m_head - inByteCount;
+	int32_t resultHead = static_cast<int32_t>(m_head) - inByteCount;
 	if (resultHead < 0) {
 		std::cerr << "Memory access violation" << std::endl;
 		exit(1);
@@ -51,9 +51,7 @@ void BufferStream::Read(void* outData, uint32_t inByteCount)
 
 void BufferStream::WriteZeroes(size_t inByteCount)
 {
-	uint8_t zero = 0;
-
 	ReallocIfNeeded(inByteCount);
-	for (int i = 0; i < (int)inByteCount; ++i)
-		Write(zero);
+	for (unsigned int i = 0; i < inByteCount; ++i)
+		Write(static_cast<uint8_t>(0));
 }
