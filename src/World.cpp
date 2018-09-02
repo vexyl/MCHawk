@@ -44,7 +44,7 @@ void World::Load(std::string filename)
 		std::string autoload = pt.get<std::string>("Options.autoload");
 
 		m_name = name;
-		m_map.SetDimensions(x_size, y_size, z_size);
+		m_map.SetDimensions(Position(x_size, y_size, z_size));
 		m_map.SetFilename("worlds/" + mapFilename);
 		SetSpawnPosition(Position(sx, sy, sz));
 		SetOption("autosave", autosave);
@@ -202,7 +202,7 @@ void World::Tick()
 
 void World::OnPosition(Client* client, struct Protocol::cposp clientPos)
 {
-	client->SetPositionOrientation(Position(clientPos.x, clientPos.y, clientPos.z), clientPos.yaw, clientPos.pitch);
+	client->SetPositionOrientation(clientPos.pos, clientPos.yaw, clientPos.pitch);
 	Protocol::SendPlayerPositionUpdate(client, m_clients);
 }
 
@@ -213,7 +213,7 @@ void World::OnBlock(Client* client, struct Protocol::cblockp clientBlock)
 	if (clientBlock.mode == 0x00) // Breaking mode
 		type = 0x00; // Air block type
 
-	Position position(clientBlock.x, clientBlock.y, clientBlock.z);
+	Position position(clientBlock.pos);
 
 	bool validBlock = Protocol::IsValidBlock(type) || CPE::IsValidBlock(type);
 	if (!validBlock) {
@@ -223,7 +223,7 @@ void World::OnBlock(Client* client, struct Protocol::cblockp clientBlock)
 	}
 
 	try {
-		m_map.SetBlock(clientBlock.x, clientBlock.y, clientBlock.z, type);
+		m_map.SetBlock(clientBlock.pos, type);
 	} catch(std::runtime_error const& e) {
 		LOG(LogLevel::kWarning, "Exception in LuaPlaceBlock: %s", e.what());
 

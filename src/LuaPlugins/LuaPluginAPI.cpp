@@ -127,7 +127,8 @@ void LuaServer::LuaPlaceBlock(Client* client, uint8_t type, short x, short y, sh
 	Map& map = world->GetMap();
 
 	try {
-		map.SetBlock(x, y, z, type);
+		Position pos(x, y, z);
+		map.SetBlock(pos, type);
 		world->SendBlockToClients(type, x, y, z);
 	} catch(std::runtime_error const& e) {
 		LOG(LogLevel::kWarning, "Exception in LuaPlaceBlock: %s", e.what());
@@ -322,9 +323,9 @@ luabridge::LuaRef cblockp_to_luatable(const struct Protocol::cblockp clientBlock
 
 	table["type"] = clientBlock.type;
 	table["mode"] = clientBlock.mode;
-	table["x"] = clientBlock.x;
-	table["y"] = clientBlock.y;
-	table["z"] = clientBlock.z;
+	table["x"] = clientBlock.pos.x;
+	table["y"] = clientBlock.pos.y;
+	table["z"] = clientBlock.pos.z;
 
 	return table;
 }

@@ -147,7 +147,7 @@ struct cmsgp {
 struct cposp {
 	uint8_t opcode;
 	uint8_t pid;
-	short x, y, z;
+	Position pos;
 	uint8_t yaw, pitch;
 
 	bool Read(ClientStream& stream)
@@ -160,15 +160,15 @@ struct cposp {
 
 		packet.Read(pitch);
 		packet.Read(yaw);
-		packet.Read(z);
-		packet.Read(y);
-		packet.Read(x);
+		packet.Read(pos.z);
+		packet.Read(pos.y);
+		packet.Read(pos.x);
 		packet.Read(pid);
 		//packet.Read(opcode);
 
-		x = ntohs(x);
-		y = ntohs(y);
-		z = ntohs(z);
+		pos.x = ntohs(pos.x);
+		pos.y = ntohs(pos.y);
+		pos.z = ntohs(pos.z);
 
 		return true;
 	}
@@ -176,7 +176,7 @@ struct cposp {
 
 struct cblockp {
 	uint8_t opcode;
-	short x, y, z;
+	Position pos;
 	uint8_t mode;
 	uint8_t type;
 
@@ -190,14 +190,14 @@ struct cblockp {
 
 		packet.Read(type);
 		packet.Read(mode);
-		packet.Read(z);
-		packet.Read(y);
-		packet.Read(x);
+		packet.Read(pos.z);
+		packet.Read(pos.y);
+		packet.Read(pos.x);
 		//packet.Read(opcode);
 
-		x = ntohs(x);
-		y = ntohs(y);
-		z = ntohs(z);
+		pos.x = ntohs(pos.x);
+		pos.y = ntohs(pos.y);
+		pos.z = ntohs(pos.z);
 
 		return true;
 	}

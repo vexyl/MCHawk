@@ -15,14 +15,14 @@ public:
 
 	~Map();
 
-	void SetDimensions(short x, short y, short z);
+	void SetDimensions(const Position& pos);
 	void SetFilename(std::string filename);
 
 	uint8_t* GetBuffer() { return m_buffer; }
 	size_t GetBufferSize() { return m_bufferSize; }
-	short GetXSize() { return m_x; }
-	short GetYSize() { return m_y; }
-	short GetZSize() { return m_z; }
+	int16_t& GetXSize() { return m_x; }
+	int16_t& GetYSize() { return m_y; }
+	int16_t& GetZSize() { return m_z; }
 	std::string GetFilename() { return m_filename; }
 
 	void GenerateFlatMap(std::string filename, short x, short y, short z);
@@ -33,7 +33,7 @@ public:
 	void SaveToFile(std::string filename);
 	void SaveToFile() { SaveToFile(m_filename); }
 
-	void SetBlock(short x, short y, short z, uint8_t type);
+	void SetBlock(Position& pos, uint8_t type);
 	uint8_t GetBlockType(short x, short y, short z);
 
 	void CompressBuffer(uint8_t** outCompBuffer, size_t* outCompSize);
@@ -44,7 +44,7 @@ private:
 
 	std::string m_filename;
 
-	short m_x, m_y, m_z; // Size
+	int16_t m_x, m_y, m_z; // Size
 };
 
 #endif // MAP_H_
