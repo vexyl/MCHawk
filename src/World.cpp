@@ -202,7 +202,7 @@ void World::Tick()
 
 void World::OnPosition(Client* client, struct Protocol::cposp clientPos)
 {
-	client->SetPositionOrientation(Position(clientPos.pos.x, clientPos.pos.y, clientPos.pos.z), clientPos.yaw, clientPos.pitch);
+	client->SetPositionOrientation(clientPos.pos, clientPos.yaw, clientPos.pitch);
 	Protocol::SendPlayerPositionUpdate(client, m_clients);
 }
 
