@@ -14,7 +14,7 @@ public:
 
 	~SummonCommand() {}
 
-	virtual void Execute(Client* sender, const CommandArgs& args)
+	virtual void Execute(Client* sender, const CommandArgs& args) override
 	{
 		Server* server = Server::GetInstance();
 		std::string name = args.front();
@@ -47,9 +47,9 @@ public:
 		Protocol::SendMessage(client, "&e" + senderName + " has summoned you");
 	}
 
-	virtual std::string GetDocString() { return "summon <name> - summons a player to your position"; }
-	virtual unsigned int GetArgumentAmount() { return 1; }
-	virtual unsigned int GetPermissionLevel() { return 1; }
+	virtual std::string GetDocString() override { return "summon <name> - summons a player to your position"; }
+	virtual unsigned int GetArgumentAmount() override { return 1; }
+	virtual unsigned int GetPermissionLevel() override { return 1; }
 
 private:
 

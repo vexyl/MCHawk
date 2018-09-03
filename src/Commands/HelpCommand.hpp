@@ -15,7 +15,7 @@ public:
 
 	~HelpCommand() {}
 
-	virtual void Execute(Client* sender, const CommandArgs& args)
+	virtual void Execute(Client* sender, const CommandArgs& args) override
 	{
 		Server* server = Server::GetInstance();
 		uint8_t userType = sender->GetUserType();
@@ -133,9 +133,9 @@ public:
 		Protocol::SendMessage(sender, "&f--- &bpage " + std::to_string(page) + " of " + std::to_string(maxPages) + " &f---");
 	}
 
-	virtual std::string GetDocString() { return "help [command/page number] - displays this help message"; }
-	virtual unsigned int GetArgumentAmount() { return 0; }
-	virtual unsigned int GetPermissionLevel() { return 0; }
+	virtual std::string GetDocString() override { return "help [command/page number] - displays this help message"; }
+	virtual unsigned int GetArgumentAmount() override { return 0; }
+	virtual unsigned int GetPermissionLevel() override { return 0; }
 
 private:
 
