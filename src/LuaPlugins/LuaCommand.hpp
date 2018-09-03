@@ -27,7 +27,7 @@ public:
 
 	~LuaCommand() {}
 
-	virtual void Execute(Client* sender, const CommandArgs& args)
+	virtual void Execute(Client* sender, const CommandArgs& args) override
 	{
 		if (!args.empty() && !m_subcommands.empty()
 				&& HandleSubcommands(sender, args) != nullptr)
@@ -43,9 +43,9 @@ public:
 		}
 	}
 
-	virtual std::string GetDocString() { return m_docString; }
-	virtual unsigned int GetArgumentAmount() { return m_argumentAmount; }
-	virtual unsigned int GetPermissionLevel() { return m_permissionLevel; }
+	virtual std::string GetDocString() override { return m_docString; }
+	virtual unsigned int GetArgumentAmount() override { return m_argumentAmount; }
+	virtual unsigned int GetPermissionLevel() override { return m_permissionLevel; }
 
 	LuaCommand* AddSubcommand(std::string subcommand, luabridge::LuaRef func, std::string docString,
 		unsigned argumentAmount, unsigned permissionLevel)

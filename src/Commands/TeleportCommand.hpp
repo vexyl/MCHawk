@@ -12,7 +12,7 @@ public:
 
 	~TeleportCommand() {}
 
-	virtual void Execute(Client* sender, const CommandArgs& args)
+	virtual void Execute(Client* sender, const CommandArgs& args) override
 	{
 		Server* server = Server::GetInstance();
 		std::string name = args.front();
@@ -43,9 +43,9 @@ public:
 		Protocol::SendMessage(sender, "&eTeleported to " + name);
 	}
 
-	virtual std::string GetDocString() { return "tp <name> - teleports to player"; }
-	virtual unsigned int GetArgumentAmount() { return 1; }
-	virtual unsigned int GetPermissionLevel() { return 0; }
+	virtual std::string GetDocString() override { return "tp <name> - teleports to player"; }
+	virtual unsigned int GetArgumentAmount() override { return 1; }
+	virtual unsigned int GetPermissionLevel() override { return 0; }
 
 private:
 
