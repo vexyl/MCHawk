@@ -13,8 +13,7 @@ Client::Client() : m_pid(pid++), m_world(nullptr), m_userType(0), m_yaw(0), m_pi
 
 Client::~Client()
 {
-	if (stream.socket != nullptr)
-		delete stream.socket;
+	delete stream.socket;
 
 	for (auto& obj : m_packetQueue)
 		delete obj;

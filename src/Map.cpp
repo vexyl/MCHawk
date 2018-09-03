@@ -19,8 +19,7 @@ Map::Map() : m_buffer(nullptr)
 
 Map::~Map()
 {
-	if (m_buffer != nullptr)
-		std::free(m_buffer);
+	std::free(m_buffer);
 }
 
 void Map::SetDimensions(const Position& pos)
@@ -43,8 +42,7 @@ void Map::Load()
 // TODO: Use C++ file streams
 void Map::LoadFromFile(std::string filename)
 {
-	if (m_buffer != nullptr)
-		delete m_buffer;
+	delete m_buffer;
 
 
 	std::FILE *fp = std::fopen(filename.c_str(), "rb");

@@ -25,7 +25,7 @@ namespace VerbosityLevel {
 class Logger {
 public:
 	Logger() { m_verbosityLevel = VerbosityLevel::kNormal; }
-	~Logger() { if (m_thisPtr != nullptr) delete m_thisPtr; }
+	~Logger() { delete m_thisPtr; }
 
 	static Logger* GetLogger();
 

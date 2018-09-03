@@ -11,7 +11,6 @@
 
 BufferStream::~BufferStream()
 {
-	assert(m_buffer != nullptr);
 	std::free(m_buffer);
 }
 
