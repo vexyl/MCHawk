@@ -71,7 +71,7 @@ void Server::Init()
 
 		m_serverName = pt.get<std::string>("Server.name");
 		m_serverMotd = pt.get<std::string>("Server.motd");
-		m_port = pt.get<int>("Server.port");
+		m_port = pt.get<unsigned short>("Server.port");
 		m_serverHeartbeat = pt.get<bool>("Server.heartbeat");
 		m_serverPublic = pt.get<bool>("Server.public");
 		m_maxClients = pt.get<int>("Server.max_users");
@@ -85,7 +85,7 @@ void Server::Init()
 		Logger::GetLogger()->SetVerbosityLevel(VerbosityLevel::kQuiet);
 
 	if (m_listener.listen(m_port) != sf::Socket::Done) {
-		LOG(LogLevel::kError, "Failed to listen on port %d", m_port);
+		LOG(LogLevel::kError, "Failed to listen on port %hu", m_port);
 		exit(1);
 	}
 
@@ -141,7 +141,7 @@ void Server::Init()
 
 	LoadPlugins();
 
-	LOG(LogLevel::kInfo, "Server initialized and listening on port %d", m_port);
+	LOG(LogLevel::kInfo, "Server initialized and listening on port %hu", m_port);
 }
 
 void Server::LoadPlugins()
@@ -544,7 +544,7 @@ void Server::SendHeartbeat()
 	std::string software = "MCHawk";
 	std::string isPublic = (m_serverPublic ? "True" : "False");
 
-	std::snprintf(postData, sizeof(postData), "public=%s&max=%d&users=%d&port=%d&version=%d&salt=%s&name=%s&software=%s", isPublic.c_str(), m_maxClients, m_numClients, m_port, m_version, m_salt.c_str(), m_serverName.c_str(), software.c_str());
+	std::snprintf(postData, sizeof(postData), "public=%s&max=%d&users=%d&port=%hu&version=%d&salt=%s&name=%s&software=%s", isPublic.c_str(), m_maxClients, m_numClients, m_port, m_version, m_salt.c_str(), m_serverName.c_str(), software.c_str());
 
 	sf::Http http;
 	http.setHost("http://www.classicube.net/");
