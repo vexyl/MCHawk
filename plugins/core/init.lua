@@ -49,7 +49,7 @@ include(CorePlugin, "core.lua")
 setmetatable(_G,
 	{ __newindex = function(_, name, value)
 		if (name == "this" or name:find("Plugin") ~= nil) then
-			rawset(_G,name,value)
+			rawset(_G, name, value)
 		else
 			print("LuaPlugin error: " .. name .. " was not declared!")
 		end

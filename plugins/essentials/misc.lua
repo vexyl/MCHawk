@@ -15,7 +15,6 @@ EssentialsPlugin.Pm_OnMessage = function(client, args)
 	local message = args["message"]
 
 	if (string.sub(message, 1, 1) == "@") then
-
 		local tokens = split(message)
 		if (tokens[2] ~= nil) then
 			local targetName = string.sub(tokens[1], 2, -1)

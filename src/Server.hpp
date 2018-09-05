@@ -83,7 +83,7 @@ private:
 
 	sf::TcpListener m_listener;
 
-	int m_port;
+	unsigned short m_port;
 
 	bool m_running;
 

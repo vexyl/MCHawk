@@ -96,7 +96,7 @@ void LuaPluginHandler::RegisterEvent(int type, luabridge::LuaRef func)
 		try {
 			m_signalMap[type].connect(boost::bind((std::function<void(Client*, luabridge::LuaRef)>)func, _1, _2));
 		} catch (luabridge::LuaException const& e) {
-			std::cerr << "LuaException: " << e.what() << std::endl;
+			LOG(LogLevel::kWarning, "LuaPluginHandler exception in RegisterEvent(): %s", e.what());
 		}
 	}
 }
@@ -106,7 +106,7 @@ void LuaPluginHandler::TriggerEvent(int type, Client* client, luabridge::LuaRef 
 	try {
 		m_signalMap[type](client, table);
 	} catch (luabridge::LuaException const& e) {
-		std::cerr << "LuaException: " << e.what() << std::endl;
+		LOG(LogLevel::kWarning, "LuaPluginHandler exception in TriggerEvent(): %s", e.what());
 	}
 }
 

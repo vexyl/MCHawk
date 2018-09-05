@@ -28,7 +28,7 @@ EssentialsPlugin.Server_ShutdownCommand = function(client, args)
 	end
 
 	if (CorePlugin.TimerExists("server_timers")) then
-		Server.SendMessage(client, "&cShutdown already in progress")
+		Server.SendMessage(client, "&cShutdown already in progress (use /shutdown -a to abort)")
 		return
 	end
 

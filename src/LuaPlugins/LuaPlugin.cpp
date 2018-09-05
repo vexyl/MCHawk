@@ -55,7 +55,7 @@ void LuaPlugin::Tick()
 		try {
 			(*m_tickFunc)();
 		} catch (luabridge::LuaException const& e) {
-			std::cerr << "LuaException: " << e.what() << std::endl;
+			throw std::runtime_error("LuaBridge (plugin->" + m_name + ") | " + std::string(e.what()));
 		}
 	}
 }

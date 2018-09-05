@@ -109,10 +109,8 @@ void LuaServer::LuaRegisterEvent(int type, luabridge::LuaRef func)
 LuaCommand* LuaServer::LuaAddCommand(std::string name, std::string aliases, luabridge::LuaRef func, std::string docString,
 	unsigned argumentAmount, unsigned permissionLevel)
 {
-	if (!func.isFunction()) {
-		std::cerr << "Failed adding Lua command " << name << ": function does not exist" << std::endl;
-		return nullptr;
-	}
+	if (!func.isFunction())
+		throw std::runtime_error("Failed to add Lua command " + name + ": function does not exist");
 
 	LuaCommand* command = new LuaCommand(name, func, docString, argumentAmount, permissionLevel);
 
