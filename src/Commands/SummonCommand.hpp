@@ -34,15 +34,16 @@ public:
 			return;
 		}
 
-		World* srcWorld = sender->GetWorld();
-		World* destWorld = client->GetWorld();
+		World* srcWorld = client->GetWorld();
+		World* destWorld = sender->GetWorld();
 
 		if (srcWorld != destWorld) {
-			srcWorld->RemoveClient(sender->GetPid());
-			destWorld->AddClient(sender);
+			srcWorld->RemoveClient(client->GetPid());
+			destWorld->AddClient(client);
 		}
 
 		Protocol::SendPosition(client, -1 /* Self ID */, sender->GetPosition(), client->GetYaw(), client->GetPitch());
+
 		Protocol::SendMessage(sender, "&eSummoned player " + name);
 		Protocol::SendMessage(client, "&e" + senderName + " has summoned you");
 	}
