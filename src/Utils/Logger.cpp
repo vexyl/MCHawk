@@ -124,7 +124,7 @@ void Logger::Log(LogLevel::LogLevel logLevel, const char* format, ...)
 #ifdef _WIN32
 		SetConsoleTextAttribute(hConsole, wOldColorAttrs);
 #endif
-		std::cout << buffer << std::endl;
+		std::cerr << buffer << std::endl;
 	}
 
 	logFileMessage += buffer;
