@@ -306,13 +306,13 @@ void Server::OnMessage(Client* client, struct Protocol::cmsgp clientMsg)
 
 	// Chat mute check--IsChatMuted() unmutes if timer expires
 	if (client->IsChatMuted()) {
-		LOG(LogLevel::kNormal, "[Muted (%s)] %s", name.c_str(), message.c_str());
+		LOG(LogLevel::kNormal, "[MUTED (%s)] %s", name.c_str(), message.c_str());
 		return;
 	}
 
 	// Is it a command or a chat message?
 	if (message.at(0) == '/') {
-		LOG(LogLevel::kNormal, "[Command (%s)] %s", name.c_str(), message.c_str());
+		LOG(LogLevel::kNormal, "[COMMAND (%s)] %s", name.c_str(), message.c_str());
 
 		// Strip leading '/'
 		std::string command = message.substr(1);
@@ -389,7 +389,7 @@ void Server::HandlePacket(Client* client, uint8_t opcode)
 		struct Protocol::cposp clientPos;
 
 		if (clientPos.Read(stream)) {
-			auto table = make_luatable();
+			auto table = cposp_to_luatable(clientPos);
 			m_pluginHandler.TriggerEvent(EventType::kOnPosition, client, table);
 
 			if (m_pluginHandler.GetEventFlag("NoDefaultCall") <= 0)

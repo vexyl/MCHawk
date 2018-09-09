@@ -12,6 +12,7 @@ void LuaServer::Init(lua_State* L)
 		.addFunction("SetChatMute", &Client::SetChatMute)
 		.addFunction("GetUserType", &Client::GetUserType)
 		.addFunction("CanBuild", &Client::CanBuild)
+		.addFunction("GetName", &Client::GetName)
 		.addFunction("SetChatName", &Client::SetChatName)
 		.addFunction("GetChatName", &Client::GetChatName)
 	.endClass()
@@ -310,6 +311,21 @@ luabridge::LuaRef cmsgp_to_luatable(const struct Protocol::cmsgp clientMsg)
 	boost::trim_right(message);
 
 	table["message"] = message;
+
+	return table;
+}
+
+luabridge::LuaRef cposp_to_luatable(const struct Protocol::cposp clientPos)
+{
+	luabridge::LuaRef table(LuaPluginHandler::L);
+	table = luabridge::newTable(LuaPluginHandler::L);
+
+	table["pid"] = clientPos.pid;
+	table["x"] = clientPos.pos.x;
+	table["y"] = clientPos.pos.y;
+	table["z"] = clientPos.pos.z;
+	table["yaw"] = clientPos.yaw;
+	table["pitch"] = clientPos.pitch;
 
 	return table;
 }

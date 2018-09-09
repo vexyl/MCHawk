@@ -35,7 +35,7 @@ public:
 		return m_thisPtr;
 	}
 
-	void FreeInstance();
+	static void FreeInstance();
 
 	void Init();
 

@@ -37,7 +37,7 @@ int main()
 		}
 	}
 
-	server->FreeInstance();
+	Server::FreeInstance();
 
 	std::cout << "Exiting normally." << std::endl;
 
