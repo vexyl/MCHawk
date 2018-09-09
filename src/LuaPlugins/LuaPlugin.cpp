@@ -1,6 +1,7 @@
 ﻿// https://eliasdaler.wordpress.com/2014/07/18/using-lua-with-cpp-luabridge/
 
 #include "LuaPlugin.hpp"
+#include "../Utils/Logger.hpp"
 
 #include <iostream>
 
@@ -32,7 +33,7 @@ void LuaPlugin::LoadScript(lua_State* L, const std::string& filename)
 			throw std::runtime_error("Couldn't find Plugin table for plugin " + m_name + " (" + filename + ")");
 		}
 
-		std::cout << "Loaded script " << filename << std::endl;
+		LOG(LogLevel::kDebug, "Loaded script %s", filename.c_str());
 	} else {
 		throw std::runtime_error("Failed to load script " + filename + ": " + lua_tostring(L, -1));
 	}
