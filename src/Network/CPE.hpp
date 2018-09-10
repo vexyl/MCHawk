@@ -1,4 +1,4 @@
-﻿#ifndef CPE_H_
+#ifndef CPE_H_
 #define CPE_H_
 
 #include "../Client.hpp"
@@ -11,91 +11,91 @@
 namespace CPE {
 
 enum PacketType {
-	kExtInfo = 0x10,
-	kExtEntry = 0x11,
-	kCustomBlocks = 0x13
+  kExtInfo = 0x10,
+  kExtEntry = 0x11,
+  kCustomBlocks = 0x13
 };
 
 enum BlockType {
-	kStartOfBlockTypes=0x32,
-	kCobblestoneSlab=kStartOfBlockTypes,
-	kRope,
-	kSandstone,
-	kSnow,
-	kFire,
-	kLightPinkWool,
-	kForestGreenWool,
-	kBrownWool,
-	kDeepBlue,
-	kTurquoise,
-	kIce,
-	kCeramicTile,
-	kMagma,
-	kPillar,
-	kCrate,
-	kStoneBrick,
-	kEndOfBlockTypes
+  kStartOfBlockTypes=0x32,
+  kCobblestoneSlab=kStartOfBlockTypes,
+  kRope,
+  kSandstone,
+  kSnow,
+  kFire,
+  kLightPinkWool,
+  kForestGreenWool,
+  kBrownWool,
+  kDeepBlue,
+  kTurquoise,
+  kIce,
+  kCeramicTile,
+  kMagma,
+  kPillar,
+  kCrate,
+  kStoneBrick,
+  kEndOfBlockTypes
 };
 
 struct cextinfop {
-	uint8_t opcode;
-	std::string appName;
-	short extCount;
+  uint8_t opcode;
+  std::string appName;
+  short extCount;
 
-	bool Read(ClientStream& stream)
-	{
-		uint8_t buffer[67];
-		if (!stream.consume_data(buffer, sizeof(buffer))) return false;
+  bool Read(ClientStream& stream)
+  {
+    uint8_t buffer[67];
+    if (!stream.consume_data(buffer, sizeof(buffer))) return false;
 
-		Packet packet;
-		packet.Write(buffer, sizeof(buffer));
+    Packet packet;
+    packet.Write(buffer, sizeof(buffer));
 
-		packet.Read(extCount);
-		packet.Read(appName);
-		//packet.Read(opcode);
+    packet.Read(extCount);
+    packet.Read(appName);
+    //packet.Read(opcode);
 
-		return true;
-	}
+    return true;
+  }
 };
 
 struct cextentryp {
-	uint8_t opcode;
-	std::string extName;
-	short version;
+  uint8_t opcode;
+  std::string extName;
+  short version;
 
-	bool Read(ClientStream& stream)
-	{
-		uint8_t buffer[69];
-		if (!stream.consume_data(buffer, sizeof(buffer))) return false;
+  bool Read(ClientStream& stream)
+  {
+    uint8_t buffer[69];
+    if (!stream.consume_data(buffer, sizeof(buffer))) return false;
 
-		Packet packet;
-		packet.Write(buffer, sizeof(buffer));
+    Packet packet;
+    packet.Write(buffer, sizeof(buffer));
 
-		packet.Read(version);
-		packet.Read(extName);
-		//packet.Read(opcode);
+    packet.Read(version);
+    packet.Read(extName);
+    //packet.Read(opcode);
 
-		return true;
-	}
+    return true;
+  }
 };
 
 struct ccustomblockp {
-	uint8_t opcode;
-	uint8_t support;
+  uint8_t opcode;
+  uint8_t support;
 
-	bool Read(ClientStream& stream)
-	{
-		uint8_t buffer[2];
-		if (!stream.consume_data(buffer, sizeof(buffer))) return false;
+  bool Read(ClientStream& stream)
+  {
+    uint8_t buffer[2];
+    if (!stream.consume_data(buffer, sizeof(buffer))) return false;
 
-		Packet packet;
-		packet.Write(buffer, sizeof(buffer));
+    Packet packet;
+    packet.Write(buffer, sizeof(buffer));
 
-		packet.Read(support);
-		//packet.Read(opcode);
+    packet.Read(support);
+    //packet.Read(opcode);
 
-		return true;
-	}
+    return true;
+  }
 };
 
 bool IsValidBlock(uint8_t type);

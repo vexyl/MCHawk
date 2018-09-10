@@ -1,4 +1,4 @@
-﻿#ifndef LUAPLUGINHANDLER_H_
+#ifndef LUAPLUGINHANDLER_H_
 #define LUAPLUGINHANDLER_H_
 
 #include "LuaPlugin.hpp"
@@ -13,49 +13,49 @@ enum EventType { kOnConnect, kOnAuth, kOnMessage, kOnPosition, kOnBlock, kOnPlug
 
 class LuaPluginHandler {
 public:
-	static lua_State* L;
+  static lua_State* L;
 
-	LuaPluginHandler();
+  LuaPluginHandler();
 
-	~LuaPluginHandler();
+  ~LuaPluginHandler();
 
-	void Init();
-	void Cleanup();
-	void Reset();
+  void Init();
+  void Cleanup();
+  void Reset();
 
-	void AddPlugin(LuaPlugin* plugin);
-	void LoadPlugin(std::string filename);
-	void QueuePlugin(std::string filename);
-	void FlushPluginQueue();
-	void RegisterEvent(int type, luabridge::LuaRef func);
-	void TriggerEvent(int type, Client* client, luabridge::LuaRef table);
-	void TickPlugins();
+  void AddPlugin(LuaPlugin* plugin);
+  void LoadPlugin(std::string filename);
+  void QueuePlugin(std::string filename);
+  void FlushPluginQueue();
+  void RegisterEvent(int type, luabridge::LuaRef func);
+  void TriggerEvent(int type, Client* client, luabridge::LuaRef table);
+  void TickPlugins();
 
-	int GetEventFlag(std::string name)
-	{
-		auto table = luabridge::getGlobal(L, "Flags");
+  int GetEventFlag(std::string name)
+  {
+    auto table = luabridge::getGlobal(L, "Flags");
 
-		if (!table.isTable())
-			return -1;
+    if (!table.isTable())
+      return -1;
 
-		auto t = table[name];
+    auto t = table[name];
 
-		if (t.isNil())
-			return -1;
+    if (t.isNil())
+      return -1;
 
-		int flag = t.cast<int>();
+    int flag = t.cast<int>();
 
-		if (flag)
-			table[name] = 0;
+    if (flag)
+      table[name] = 0;
 
-		return flag;
-	}
+    return flag;
+  }
 
 private:
-	std::array<boost::signals2::signal<void(Client*, luabridge::LuaRef)>, kEventTypeEnd> m_signalMap;
+  std::array<boost::signals2::signal<void(Client*, luabridge::LuaRef)>, kEventTypeEnd> m_signalMap;
 
-	std::vector<LuaPlugin*> m_plugins;
-	std::vector<std::string> m_pluginQueue;
+  std::vector<LuaPlugin*> m_plugins;
+  std::vector<std::string> m_pluginQueue;
 };
 
 #endif // LUAPLUGINHANDLER_H_

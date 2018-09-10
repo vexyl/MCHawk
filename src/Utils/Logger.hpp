@@ -1,4 +1,4 @@
-﻿#ifndef LOGGER_H
+#ifndef LOGGER_H
 #define LOGGER_H
 
 // Learned from https://cppcodetips.wordpress.com/2014/01/02/a-simple-logger-class-in-c/
@@ -15,31 +15,31 @@
 #define LOG(...) Logger::GetLogger()->Log(__VA_ARGS__);
 
 namespace LogLevel {
-	enum LogLevel { kNormal, kInfo, kDebug, kWarning, kError};
+  enum LogLevel { kNormal, kInfo, kDebug, kWarning, kError};
 }
 
 namespace VerbosityLevel {
-	enum VerbosityLevel { kQuiet, kNormal };
+  enum VerbosityLevel { kQuiet, kNormal };
 }
 
 class Logger {
 public:
-	Logger() { m_verbosityLevel = VerbosityLevel::kNormal; }
-	~Logger() { delete m_thisPtr; }
+  Logger() { m_verbosityLevel = VerbosityLevel::kNormal; }
+  ~Logger() { delete m_thisPtr; }
 
-	static Logger* GetLogger();
+  static Logger* GetLogger();
 
-	void Log(LogLevel::LogLevel logLevel, const char *format, ...);
+  void Log(LogLevel::LogLevel logLevel, const char *format, ...);
 
-	void SetVerbosityLevel(VerbosityLevel::VerbosityLevel verbosityLevel) { m_verbosityLevel = verbosityLevel; }
+  void SetVerbosityLevel(VerbosityLevel::VerbosityLevel verbosityLevel) { m_verbosityLevel = verbosityLevel; }
 
 private:
-	static Logger* m_thisPtr; // Singleton
-	static const std::string m_logFileName;
-	static std::ofstream m_logFile;
-	static std::string m_lastDateString;
+  static Logger* m_thisPtr; // Singleton
+  static const std::string m_logFileName;
+  static std::ofstream m_logFile;
+  static std::string m_lastDateString;
 
-	VerbosityLevel::VerbosityLevel m_verbosityLevel;
+  VerbosityLevel::VerbosityLevel m_verbosityLevel;
 };
 
 #endif // LOGGER_H
