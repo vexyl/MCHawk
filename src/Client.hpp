@@ -1,4 +1,4 @@
-﻿#ifndef CLIENT_H_
+#ifndef CLIENT_H_
 #define CLIENT_H_
 
 #include <cstring>
@@ -15,62 +15,62 @@ class World;
 
 class Client {
 public:
-	ClientStream stream;
-	bool active;
-	bool authed;
-	std::string leaveMessage;
+  ClientStream stream;
+  bool active;
+  bool authed;
+  std::string leaveMessage;
 
-	Client();
+  Client();
 
-	~Client();
+  ~Client();
 
-	bool CanBuild();
+  bool CanBuild();
 
-	std::string GetIpString();
-	std::string GetName() const { return m_name; }
-	std::string GetChatName() { return m_chatName; }
-	uint8_t GetPid() { return m_pid; }
-	uint8_t GetUserType() { return m_userType; }
+  std::string GetIpString();
+  std::string GetName() const { return m_name; }
+  std::string GetChatName() { return m_chatName; }
+  uint8_t GetPid() { return m_pid; }
+  uint8_t GetUserType() { return m_userType; }
 
-	Position GetPosition() { return m_position; }
-	uint8_t GetYaw() { return m_yaw; }
-	uint8_t GetPitch() { return m_pitch; }
-	World* GetWorld() { return m_world; }
+  Position GetPosition() { return m_position; }
+  uint8_t GetYaw() { return m_yaw; }
+  uint8_t GetPitch() { return m_pitch; }
+  World* GetWorld() { return m_world; }
 
-	bool IsActive() { return active; }
+  bool IsActive() { return active; }
 
-	void SetName(std::string name) { m_name = name; }
-	void SetChatName(std::string name) { m_chatName = name; }
-	void SetPositionOrientation(Position position, uint8_t yaw, uint8_t pitch);
-	void SetUserType(uint8_t userType) { m_userType = userType; }
-	void SetChatMute(int32_t chatMuteTime=0);
-	void SetWorld(World* world) { m_world = world; }
+  void SetName(std::string name) { m_name = name; }
+  void SetChatName(std::string name) { m_chatName = name; }
+  void SetPositionOrientation(Position position, uint8_t yaw, uint8_t pitch);
+  void SetUserType(uint8_t userType) { m_userType = userType; }
+  void SetChatMute(int32_t chatMuteTime=0);
+  void SetWorld(World* world) { m_world = world; }
 
-	bool IsChatMuted();
+  bool IsChatMuted();
 
-	void QueuePacket(Packet* packet);
+  void QueuePacket(Packet* packet);
 
-	void ProcessPacketsInQueue();
+  void ProcessPacketsInQueue();
 
 private:
-	static uint8_t pid;
+  static uint8_t pid;
 
-	std::string m_name;
-	std::string m_chatName;
-	std::string m_ipString;
-	uint8_t m_pid;
+  std::string m_name;
+  std::string m_chatName;
+  std::string m_ipString;
+  uint8_t m_pid;
 
-	std::string m_worldName;
-	World* m_world;
+  std::string m_worldName;
+  World* m_world;
 
-	uint8_t m_userType;
-	Position m_position;
-	uint8_t m_yaw, m_pitch;
+  uint8_t m_userType;
+  Position m_position;
+  uint8_t m_yaw, m_pitch;
 
-	std::vector<Packet*> m_packetQueue;
+  std::vector<Packet*> m_packetQueue;
 
-	sf::Clock m_chatMuteClock;
-	int32_t m_chatMuteTime;
+  sf::Clock m_chatMuteClock;
+  int32_t m_chatMuteTime;
 };
 
 #endif // CLIENT_H_

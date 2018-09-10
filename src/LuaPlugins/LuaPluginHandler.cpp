@@ -1,4 +1,4 @@
-﻿#include "LuaPluginHandler.hpp"
+#include "LuaPluginHandler.hpp"
 
 #include "LuaPluginAPI.hpp"
 
@@ -8,110 +8,110 @@ lua_State* LuaPluginHandler::L = nullptr;
 
 LuaPluginHandler::LuaPluginHandler()
 {
-	Init();
+  Init();
 }
 
 LuaPluginHandler::~LuaPluginHandler()
 {
-	Cleanup();
+  Cleanup();
 }
 
 void LuaPluginHandler::Init()
 {
-	L = luaL_newstate();
+  L = luaL_newstate();
 
-	assert(L != nullptr);
+  assert(L != nullptr);
 
-	luaL_openlibs(L);
+  luaL_openlibs(L);
 
-	LuaServer::Init(L);
+  LuaServer::Init(L);
 }
 
 void LuaPluginHandler::Cleanup()
 {
-	for (int i = 0; i < kEventTypeEnd; ++i) {
-		m_signalMap[i].disconnect_all_slots();
-		assert(m_signalMap[i].empty());
-	}
+  for (int i = 0; i < kEventTypeEnd; ++i) {
+    m_signalMap[i].disconnect_all_slots();
+    assert(m_signalMap[i].empty());
+  }
 
-	for (auto& obj : m_plugins)
-		delete obj;
+  for (auto& obj : m_plugins)
+    delete obj;
 
-	lua_close(L);
+  lua_close(L);
 
-	L = nullptr;
+  L = nullptr;
 }
 
 void LuaPluginHandler::Reset()
 {
-	Cleanup();
+  Cleanup();
 
-	m_plugins.clear();
-	m_pluginQueue.clear();
+  m_plugins.clear();
+  m_pluginQueue.clear();
 
-	Init();
+  Init();
 }
 void LuaPluginHandler::AddPlugin(LuaPlugin* plugin)
 {
-	m_plugins.push_back(plugin);
+  m_plugins.push_back(plugin);
 }
 
 void LuaPluginHandler::LoadPlugin(std::string filename)
 {
-	LuaPlugin* plugin = new LuaPlugin;
+  LuaPlugin* plugin = new LuaPlugin;
 
-	try {
-		plugin->LoadScript(L, filename);
-		plugin->Init();
-	} catch(std::runtime_error const& e) {
-		LOG(LogLevel::kWarning, "LuaPluginHandler exception in LoadPlugin(): %s", e.what());
-		delete plugin;
-		return;
-	}
+  try {
+    plugin->LoadScript(L, filename);
+    plugin->Init();
+  } catch(std::runtime_error const& e) {
+    LOG(LogLevel::kWarning, "LuaPluginHandler exception in LoadPlugin(): %s", e.what());
+    delete plugin;
+    return;
+  }
 
-	AddPlugin(plugin);
+  AddPlugin(plugin);
 
-	auto table = make_luatable();
-	table["name"] = plugin->GetName();
+  auto table = make_luatable();
+  table["name"] = plugin->GetName();
 
-	TriggerEvent(EventType::kOnPluginLoaded, nullptr, table);
+  TriggerEvent(EventType::kOnPluginLoaded, nullptr, table);
 }
 
 void LuaPluginHandler::QueuePlugin(std::string filename)
 {
-	m_pluginQueue.push_back(filename);
+  m_pluginQueue.push_back(filename);
 }
 
 void LuaPluginHandler::FlushPluginQueue()
 {
-	for (auto& filename : m_pluginQueue)
-		LoadPlugin(filename);
+  for (auto& filename : m_pluginQueue)
+    LoadPlugin(filename);
 
-	m_pluginQueue.clear();
+  m_pluginQueue.clear();
 }
 
 void LuaPluginHandler::RegisterEvent(int type, luabridge::LuaRef func)
 {
-	if (func.isFunction()) {
-		try {
-			m_signalMap[type].connect(boost::bind((std::function<void(Client*, luabridge::LuaRef)>)func, _1, _2));
-		} catch (luabridge::LuaException const& e) {
-			LOG(LogLevel::kWarning, "LuaPluginHandler exception in RegisterEvent(): %s", e.what());
-		}
-	}
+  if (func.isFunction()) {
+    try {
+      m_signalMap[type].connect(boost::bind((std::function<void(Client*, luabridge::LuaRef)>)func, _1, _2));
+    } catch (luabridge::LuaException const& e) {
+      LOG(LogLevel::kWarning, "LuaPluginHandler exception in RegisterEvent(): %s", e.what());
+    }
+  }
 }
 
 void LuaPluginHandler::TriggerEvent(int type, Client* client, luabridge::LuaRef table)
 {
-	try {
-		m_signalMap[type](client, table);
-	} catch (luabridge::LuaException const& e) {
-		LOG(LogLevel::kWarning, "LuaPluginHandler exception in TriggerEvent(): %s", e.what());
-	}
+  try {
+    m_signalMap[type](client, table);
+  } catch (luabridge::LuaException const& e) {
+    LOG(LogLevel::kWarning, "LuaPluginHandler exception in TriggerEvent(): %s", e.what());
+  }
 }
 
 void LuaPluginHandler::TickPlugins()
 {
-	for (auto& obj : m_plugins)
-		obj->Tick();
+  for (auto& obj : m_plugins)
+    obj->Tick();
 }

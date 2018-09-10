@@ -1,10 +1,10 @@
-﻿#ifndef LUASTUFF_H_
+#ifndef LUASTUFF_H_
 #define LUASTUFF_H_
 
 extern "C" {
-	#include <lua5.2/lua.h>
-	#include <lua5.2/lauxlib.h>
-	#include <lua5.2/lualib.h>
+  #include <lua5.2/lua.h>
+  #include <lua5.2/lauxlib.h>
+  #include <lua5.2/lualib.h>
 }
 
 #include <LuaBridge.h>

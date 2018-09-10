@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Vexyl
  * Started in March, 2017
  */
@@ -11,35 +11,35 @@
 #include <ctime>
 
 #ifdef _WIN32
-	#pragma comment(lib, "Ws2_32.lib")
+  #pragma comment(lib, "Ws2_32.lib")
 #endif
 
 int main()
 {
-	std::srand(0);
+  std::srand(0);
 
-	sf::Clock clock;
-	Server* server = Server::GetInstance();
+  sf::Clock clock;
+  Server* server = Server::GetInstance();
 
-	server->Init();
+  server->Init();
 
-	bool running = true;
-	while (running) {
-		clock.restart();
+  bool running = true;
+  while (running) {
+    clock.restart();
 
-		running = server->Tick();
+    running = server->Tick();
 
-		// Sleep up to 33ms
-		sf::Time time = clock.getElapsedTime();
-		int ms = time.asMilliseconds();
-		if (ms < 33) {
-			sf::sleep(sf::milliseconds(33 - ms));
-		}
-	}
+    // Sleep up to 33ms
+    sf::Time time = clock.getElapsedTime();
+    int ms = time.asMilliseconds();
+    if (ms < 33) {
+      sf::sleep(sf::milliseconds(33 - ms));
+    }
+  }
 
-	Server::FreeInstance();
+  Server::FreeInstance();
 
-	std::cout << "Exiting normally." << std::endl;
+  std::cout << "Exiting normally." << std::endl;
 
-	return 0;
+  return 0;
 }
