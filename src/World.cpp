@@ -225,7 +225,7 @@ void World::OnBlock(Client* client, struct Protocol::cblockp clientBlock)
 	try {
 		m_map.SetBlock(clientBlock.pos, type);
 	} catch(std::runtime_error const& e) {
-		LOG(LogLevel::kWarning, "Exception in LuaPlaceBlock: %s", e.what());
+		LOG(LogLevel::kWarning, "Exception in World::OnBlock ('%s'): %s", m_name, e.what());
 
 		Protocol::SendBlock(client, position, 0x00); // Invalid block, tell client to destroy it
 		return;
