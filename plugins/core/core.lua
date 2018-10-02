@@ -13,11 +13,20 @@ CorePlugin.ServerInfoCommand = function(client, args)
 	Server.SendMessage(client, "&eWritten in &3C++ &eand &3Lua &efor plugins");
 	Server.SendMessage(client, "&eGithub Repo: https://github.com/vexyl/MCHawk");
 
+	local pluginCount = #CorePlugin.pluginNames
+
+	local message = "are &f" .. pluginCount .. " &eplugins"
+	if (pluginCount == 1) then
+		message = "is &f" .. pluginCount .. " &eplugin"
+	end
+
+	Server.SendMessage(client, "&eThere " .. message .. " loaded. (Type &a/plugins &efor more info)")
+
 	local playerCount = #Server.GetClients()
 
-	local message = "are &a" .. playerCount .. " &eplayers"
+	message = "are &f" .. playerCount .. " &eplayers"
 	if (playerCount == 1) then
-		message = "is &a" .. playerCount .. " &eplayer"
+		message = "is &f" .. playerCount .. " &eplayer"
 	end
 
 	Server.SendMessage(client, "&eThere " .. message .. " logged in.")
